@@ -279,7 +279,7 @@ const NAV_ITEMS = [
       {
         label: 'Sell Milk',
         // subLabel: 'Find your dream design job',
-        href: '#',
+        href: '/sellmilk',
       },
       {
         label: 'Purchase Milk',

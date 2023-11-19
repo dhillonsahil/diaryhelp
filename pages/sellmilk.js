@@ -1,16 +1,26 @@
 import WithSubnavigation from '@/components/navbar';
 import React, { useEffect, useState } from 'react';
-// import { Select, initTE } from "tw-elements";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
 
 const sellMilk = () => {
     const [username, setUsername] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [price,setPrice] = useState('');
     const [consumerCode, setConsumerCode] = useState('');
-  const [selectedConsumer, setSelectedConsumer] = useState(null);
+    const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
     const [weight,setWeight] = useState('');
-    
+    const [fat,setFat]=useState('');
+    const [snf,setSnf]=useState('');
+    const [startDate, setStartDate] = useState(new Date());
+    const [selectedShift, setselectedShift] = useState('Morning');
+    const [selectedType,setSelectedtype]=useState('Sell')
+    const [priceType,setPriceType]=useState('Regular')
+
+
         // get All Customers of MilkMan
         useEffect(() => {
             const user = localStorage.getItem('myUser');
@@ -137,6 +147,20 @@ const sellMilk = () => {
               </div> */}
             </div>
             <div className="px-5 pb-5">
+ <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
+                            
+                            <RadioGroup className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
+                                setPriceType(e);
+                               }}>
+                              <Stack spacing={5} direction='row'>
+                                <Radio colorScheme='green' value='Regular'>
+                                  Regular
+                                </Radio>
+                                <Radio colorScheme='red' value='FatSnf'>
+                                  Fat/Snf
+                                </Radio>
+                              </Stack>
+                            </RadioGroup></div>
               <input
                 placeholder="Customer Code"
                 value={consumerCode}
@@ -146,7 +170,7 @@ const sellMilk = () => {
                 className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
               />
                <input
-                placeholder="Search"
+                placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
@@ -168,13 +192,32 @@ const sellMilk = () => {
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
           </option>
           ))}
-</select>
+</select> 
+           
               <input
                 placeholder="Weight"
                 onChange={handleWeight}
                 value={weight}
                 className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
               />
+             {
+              priceType!='Regular' && (
+                <div className="flex flex-row">
+                <input
+                  placeholder="Fat"
+                  onChange={(e)=>setFat(e.target.value)}
+                  value={fat}
+                  className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                />
+                 <input
+                  placeholder="Snf"
+                  onChange={(e)=>setSnf(e.target.value)}
+                  value={snf}
+                  className="ml-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                />
+                </div>
+              )
+             }
               <div className="flex">
                 <div className="flex-grow w-1/4 pr-2">
                   <input
@@ -185,84 +228,46 @@ const sellMilk = () => {
                     className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                   />
                 </div>
-                <div className="flex-grow">
-                  <input
-                    placeholder="City"
-                    className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-                  />
-                </div>
+                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
+              <DatePicker className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={(date) => setStartDate(date)} />
+
+               
               </div>
-              <div className="flex items-center pt-3">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 text-black bg-gray-300 border-none rounded-md focus:ring-transparent"
-                />
-                <label
-                  htmlFor="safeAdress"
-                  className="block ml-2 text-sm text-gray-900"
-                >
-                  Save as default address
-                </label>
-              </div>
+              <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
+              
+              
+              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedShift} onChange={(e)=>{
+               setselectedShift(e);
+              }}>
+             <Stack spacing={5} direction='row'>
+               <Radio colorScheme='green' value='Morning'>
+                 Morning
+               </Radio>
+               <Radio colorScheme='red' value='Evening'>
+                 Evening
+               </Radio>
+             </Stack>
+           </RadioGroup></div>
+
+   <div className="flex flex-row">
+   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
+                            
+                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
+                                setSelectedtype(e);
+                               }}>
+                              <Stack spacing={5} direction='row'>
+                                <Radio colorScheme='green' value='Sell'>
+                                  Sell
+                                </Radio>
+                                <Radio colorScheme='red' value='Buy'>
+                                  Buy
+                                </Radio>
+                              </Stack>
+                            </RadioGroup>
+   </div>
             </div>
-            <div className="flex">
-              <div className="flex-1 py-5 pl-5 overflow-hidden">
-                <svg
-                  className="inline align-text-top"
-                  width="21"
-                  height="20.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#000000"
-                >
-                  <g>
-                    <path
-                      d="m4.88889,2.07407l14.22222,0l0,20l-14.22222,0l0,-20z"
-                      fill="none"
-                      id="svg_1"
-                      stroke="null"
-                    ></path>
-                    <path
-                      d="m7.07935,0.05664c-3.87,0 -7,3.13 -7,7c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zm-5,7c0,-2.76 2.24,-5 5,-5s5,2.24 5,5c0,2.88 -2.88,7.19 -5,9.88c-2.08,-2.67 -5,-7.03 -5,-9.88z"
-                      id="svg_2"
-                    ></path>
-                    <circle
-                      cx="7.04807"
-                      cy="6.97256"
-                      r="2.5"
-                      id="svg_3"
-                    ></circle>
-                  </g>
-                </svg>
-                <h1 className="inline text-2xl font-semibold leading-none">
-                  Receiver
-                </h1>
-              </div>
-              <div className="flex-none pt-2.5 pr-2.5 pl-1"></div>
-            </div>
-            <div className="px-5 pb-5">
-              <input
-                placeholder="Name"
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-              />
-              <input
-                placeholder="Address"
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-              />
-              <div className="flex">
-                <div className="flex-grow w-1/4 pr-2">
-                  <input
-                    placeholder="PLZ"
-                    className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <input
-                    placeholder="City"
-                    className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-                  />
-                </div>
-              </div>
-            </div>
+            
+            
             <hr className="mt-4" />
             <div className="flex flex-row-reverse p-3">
               <div className="flex-initial pl-3">
