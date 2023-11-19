@@ -4,6 +4,7 @@ import { FormControl, FormLabel, Input, Stack } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link'
 const addcustomer = () => {
 
   const [name, setName] = useState('');
@@ -111,6 +112,11 @@ const addcustomer = () => {
             />
       {/* Navbar */}
       <WithSubnavigation />
+      <div className="flex flex-row my-3 mx-2">
+        <Link href={'/addcustomer'}>
+        <span className='p-3 rounded-lg mx-1 bg-red-300'>Add Customers</span></Link>
+        <Link href={'/viewcustomers'}><span className='p-3 rounded-lg mx-1 hover:bg-green-300'>View Customers</span></Link>
+      </div>
       {/*  Form */}
       <div className="lg:mx-16 mx-3 mt-4">
         <form onSubmit={handleSubmit} >

@@ -12,7 +12,7 @@ import {
     TableContainer,
   } from '@chakra-ui/react'
 import { SearchBar } from '@/components/seachbar';
-
+import Link from 'next/link'
 const viewcustomers = () => {
     const [username, setUsername] = useState('');
     const [customers,setCustomers]=useState([]);
@@ -54,6 +54,11 @@ const viewcustomers = () => {
     <div className=''>
         {/* Navbar */}
       <WithSubnavigation />
+      <div className="flex flex-row my-3 mx-2">
+        <Link href={'/addcustomer'}>
+        <span className='p-3 rounded-lg mx-1 hover:bg-green-300'>Add Customers</span></Link>
+        <Link href={'/viewcustomers'}><span className='p-3 rounded-lg mx-1 bg-red-300'>View Customers</span></Link>
+      </div>
      <div className="flex mx-4 justify-center items-center align-middle">
         <h1 className='text-xl my-4'>All Added Customers</h1>
      </div>
