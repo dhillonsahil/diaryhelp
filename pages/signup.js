@@ -87,7 +87,7 @@ export default function Signup() {
   }
   useEffect(() => {
     if(localStorage.getItem("myUser")){
-        router.push('/')
+        router.push('/dashboard')
     }
       toast.info('New Users will get a free trial of 3 Days!', {
         position: "top-center",

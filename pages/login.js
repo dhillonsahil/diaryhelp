@@ -29,9 +29,8 @@ export default function Login() {
         })
 
         let response = await res.json()
-        console.log(response)
         if(response.success==true){
-            localStorage.setItem("myUser",JSON.stringify({token : response.token , email:response.email}))
+            localStorage.setItem("myUser",JSON.stringify({token : response.token , email:response.email,username:email.split('@')[0]}))
             toast.success('Logged In!', {
                 position: "top-left",
                 autoClose: 3000,
@@ -42,7 +41,7 @@ export default function Login() {
                 progress: undefined,
                 theme: "light",
             });
-            router.push("/")
+            router.push("/dashboard")
         }else if(response.success=="Check Your Credentials"){
             toast.error('Check Your Credentials !', {
                 position: "top-left",
@@ -73,7 +72,7 @@ export default function Login() {
 
     useEffect(() => {
         if(localStorage.getItem("myUser")){
-            router.push('/')
+            router.push('/dashboard')
         }
     },[])
     

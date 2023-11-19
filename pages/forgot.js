@@ -28,13 +28,14 @@ export default function Forgot() {
   }
 
   const sendLink = async (e) => {
+    const customerMail =email.toLowerCase()
     e.preventDefault();
     let sent = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/forgot`, {
       method: "POST",
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify(email.toLowerCase())
+      body: JSON.stringify({customerMail})
     })
 
     let res = await sent.json()
