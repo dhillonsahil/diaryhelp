@@ -23,7 +23,7 @@ const viewcustomers = () => {
     // get All Customers of MilkMan
     useEffect(() => {
       const user = localStorage.getItem('myUser');
-      setUsername(JSON.parse(user).username);
+      setUsername(JSON.parse(user).username.toLowerCase());
     }, []);
     
     useEffect(() => {
@@ -35,7 +35,7 @@ const viewcustomers = () => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username:username})
+            body: JSON.stringify({username:username.toLowerCase()})
           })
           const resp = await response.json();
           setCustomers(resp.data);

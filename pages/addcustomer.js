@@ -39,7 +39,7 @@ const addcustomer = () => {
 
   useEffect(() => {
     const user = localStorage.getItem('myUser');
-    setUsername(JSON.parse(user).username);
+    setUsername(JSON.parse(user).username.toLowerCase());
   }, []);
 
   const handleSubmit = async (e) => {
@@ -51,7 +51,7 @@ const addcustomer = () => {
       fatherName: fatherName,
       mobile: mobile,
       address: address,
-      username: username,
+      username: username.toLowerCase(),
       generatedString:generatedString
     }
 

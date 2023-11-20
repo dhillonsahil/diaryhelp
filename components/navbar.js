@@ -259,7 +259,9 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'Dialy Price',
+    label: 'Daily Price',
+    
+    href:"/dailyprice",
     children: [
       {
         label: 'Fat/SNF Price',

@@ -1,27 +1,107 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Radio, RadioGroup , Stack } from '@chakra-ui/react'
 import WithSubnavigation from '@/components/navbar'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const DialyPrice = () => {
   const [value, setValue] = useState('Regular')
-  const [cattle,setCattle]= useState('Cow')
+  const [cattle,setCattle]= useState('Buffalo')
   const [price,setPrice]= useState('');
+  const [IV,setIV]= useState('Edit')
+  const [username,setUsername]= useState('')
+
   const reset =()=>{
     setValue('Regular')
-    setCattle('Cow')
+    setCattle('Buffalo')
     setPrice('');
   }
 
+  const handleInsert =async()=>{
+    // data
+    const data = {
+      type:'insert',
+      mtype:value,
+      ctype:cattle=='Cow'?'cow':'',
+      price:Number(price),
+      username:username.toLowerCase()
+    }
+
+    const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    const response = await resp.json();
+
+    if(response.success==true){
+      toast.success('Inserted Successfully', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+    reset()
+
+    }else{
+      toast.error('Oops ! An Error Occurred', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+    }
+    
+  }
+
+  useEffect(() => {
+    const user = localStorage.getItem('myUser');
+    setUsername(JSON.parse(user).username.toLowerCase());
+  }, []);
+  
   return (
     <div>
       <WithSubnavigation />
-      {/* <InsertPrice title='Insert Milk' price={price} setPrice={setPrice} reset={reset} cattle={cattle} setCattle={setCattle} value={value} setValue={setValue} /> */}
-      <ViewPrice />
+      <ToastContainer
+                position="top-left"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+      <RadioGroup className='text-black' onChange={setIV} value={IV}>
+      <Stack direction='row'>
+        <Radio borderColor={'GrayText'} colorScheme={'red'} value='Insert'>Add Price</Radio>
+        <Radio borderColor={'GrayText'} colorScheme={'green'} value='Edit'>View / Update Price</Radio>
+      </Stack>
+    </RadioGroup>
+      {
+        IV=="Insert" && <InsertPrice handleInsert={handleInsert} title='Insert Milk' price={price} setPrice={setPrice} reset={reset} cattle={cattle} setCattle={setCattle} value={value} setValue={setValue} />
+      }
+      {
+        IV=='Edit' && <ViewPrice />
+      }
     </div>
   )
 }
 
-const InsertPrice = ({value,setValue,cattle,setCattle,reset,price,setPrice,title})=>{
+const InsertPrice = ({value,setValue,cattle,setCattle,reset,price,setPrice,title,handleInsert})=>{
     return (
 <section className="py-40 bg-gray-100  bg-opacity-50 h-screen">
       <div className="mx-auto container max-w-2xl md:w-3/4 shadow-md">
@@ -60,7 +140,7 @@ const InsertPrice = ({value,setValue,cattle,setCattle,reset,price,setPrice,title
         <Radio borderColor={'GrayText'} colorScheme={'red'} value='Regular'>Regular</Radio>
         <Radio borderColor={'GrayText'} colorScheme={'green'} value='Fat'>Fat</Radio>
         <Radio borderColor={'GrayText'} colorScheme='red' value='Snf'>Snf</Radio>
-        <Radio borderColor={'GrayText'} colorScheme='green' value='Company'>Company</Radio>
+        {/* <Radio borderColor={'GrayText'} colorScheme='green' value='Company'>Company</Radio> */}
       </Stack>
     </RadioGroup>
               </div>
@@ -81,7 +161,7 @@ const InsertPrice = ({value,setValue,cattle,setCattle,reset,price,setPrice,title
           <div className="md:inline-flex w-full space-y-4 md:space-y-0 p-8 text-gray-500 items-center">
                        
             <div className="md:w-3/12 lg:w-9/12 text-center md:pl-6 flex-row flex">
-              <button className="mx-2 text-white w-full  max-w-sm rounded-md text-center bg-indigo-400 py-2 px-4 inline-flex items-center focus:outline-none md:float-right">
+              <button onClick={handleInsert} className="mx-2 text-white w-full  max-w-sm rounded-md text-center bg-indigo-400 py-2 px-4 inline-flex items-center focus:outline-none md:float-right">
                 <svg
                   fill="none"
                   className="w-4 text-white mr-2"
@@ -127,40 +207,41 @@ const ViewPrice = ({title})=>{
     <>
  
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-2">
+<div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-2">
   <h2 className='w-full text-center text-xl font-bold py-4'>View or Update Prices</h2>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-200 ">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-200 ">
             <tr>
                 
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Sr. No.
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Type
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Price
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Action
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b hover:bg-gray-50 text-black">
+            <tr className="bg-white border-b hover:bg-gray-50 text-black">
                
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     1
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Cowfat
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     $2999
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 hover:underline mx-2">Edit</a>
+                    <a href="#" className="font-medium text-red-600  hover:underline mx-2">Delete</a>
                 </td>
             </tr>
         </tbody>

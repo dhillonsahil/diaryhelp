@@ -5,55 +5,60 @@ const handler = async(req,res)=>{
         const {type, username}= req.body;
         // if inserting price
         if(type=='insert'){
+            console.log("trying it")
             const {mtype,price,ctype} = req.body;
             if(mtype=='Regular'){
                 if(ctype==''){
-                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,type unique varchar(20) ,price float)`,(error,row,fields)=>{
+                    console.log(type + " "+ ctype + " "+username + " "+price+ " "+mtype +" ")
+                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,mtype varchar(20) unique,price float)`,(error,row,fields)=>{
                         if(error){
+                            console.log('error', error)
                             return res.status(400).json({success:false,message:'Unable to insert '})
                         }
-                        pool.query(`Insert into ${username}_milkprice (type,price) values('regular',?)`,[price],(error,row,fields)=>{
+                        pool.query(`Insert into ${username}_milkprice (mtype,price) values('regular',?)`,[price],(error,row,fields)=>{
                             if(error){
                                 return res.status(400).json({success:false,message:'Unable to insert '})
                             }
-                            return res.staus(200).json({success:true,message:'Data inserted successfully'})
+                            return res.status(200).json({success:true,message:'Data inserted successfully'})
                         })
                     })
                 }else{
-                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,type unique varchar(20) ,price float)`,(error,row,fields)=>{
-                        if(error){
-                            return res.status(400).json({success:false,message:'Unable to insert '})
-                        }
-                        pool.query(`Insert into ${username}_milkprice (type,price) values(?,?)`,[`${ctype.toLowerCase()}regular`,price],(error,row,fields)=>{
+                    console.log('Cow')
+                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,mtype varchar(20) unique,price float)`,(error,row,fields)=>{
                             if(error){
                                 return res.status(400).json({success:false,message:'Unable to insert '})
                             }
-                            return res.staus(200).json({success:true,message:'Data inserted successfully'})
-                        })
+                            pool.query(`Insert into ${username}_milkprice (mtype,price) values(?,?)`,[`cowregular`,price],(error,row,fields)=>{
+                                if(error){
+                                    return res.status(400).json({success:false,message:'Unable to insert '})
+                                }
+                                return res.status(200).json({success:true,message:'Data inserted successfully'})
+                            })
                     })
+                    
                 }
             } else if(mtype=='Fat'){
-                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,type unique varchar(20) ,price float)`,(error,row,fields)=>{
+                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,mtype varchar(20) unique,price float)`,(error,row,fields)=>{
                         if(error){
                             return res.status(400).json({success:false,message:'Unable to insert '})
                         }
-                        pool.query(`Insert into ${username}_milkprice (type,price) values(?,?)`,[`${ctype.toLowerCase()}fat`,price],(error,row,fields)=>{
+                        pool.query(`Insert into ${username}_milkprice (mtype,price) values(?,?)`,[`${ctype==''?'buffalo':ctype.toLowerCase()}fat`,price],(error,row,fields)=>{
                             if(error){
                                 return res.status(400).json({success:false,message:'Unable to insert '})
                             }
-                            return res.staus(200).json({success:true,message:'Data inserted successfully'})
+                            return res.status(200).json({success:true,message:'Data inserted successfully'})
                         })
                     })  
             }else if(mtype=='Snf'){
-                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,type unique varchar(20) ,price float)`,(error,row,fields)=>{
+                    pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,mtype varchar(20) unique,price float)`,(error,row,fields)=>{
                         if(error){
                             return res.status(400).json({success:false,message:'Unable to insert '})
                         }
-                        pool.query(`Insert into ${username}_milkprice (type,price) values(?,?)`,[`${ctype.toLowerCase()}snf`,price],(error,row,fields)=>{
+                        pool.query(`Insert into ${username}_milkprice (mtype,price) values(?,?)`,[`${ctype==''?'buffalo':ctype.toLowerCase()}snf`,price],(error,row,fields)=>{
                             if(error){
                                 return res.status(400).json({success:false,message:'Unable to insert '})
                             }
-                            return res.staus(200).json({success:true,message:'Data inserted successfully'})
+                            return res.status(200).json({success:true,message:'Data inserted successfully'})
                         })
                     })  
             }
@@ -61,21 +66,22 @@ const handler = async(req,res)=>{
         // else if type == update price
         else if(type=='update') {
             const {updateType}= req.body;
-            pool.query(`update ${username}_milkprice set price=? where type=?`,[price,updateType],(error,row,fields)=>{
+            pool.query(`update ${username}_milkprice set price=? where mtype=?`,[price,updateType],(error,row,fields)=>{
                 if(error){
                     return res.status(400).json({success:false,message:'Unable to insert '})
                 }
-                return res.staus(200).json({success:true,message:'Data inserted successfully'})
+                return res.status(200).json({success:true,message:'Data inserted successfully'})
             })
         }else if(type=='view'){
             pool.query(`select * ${username}_milkprice`,(error,row,fields)=>{
                 if(error){
                     return res.status(400).json({success:false,message:'Unable to insert '})
                 }
-                return res.staus(200).json({success:true,message:'Data Fetched successfully'})
+                return res.status(200).json({success:true,message:'Data Fetched successfully'})
             })
         }
     } catch (error) {
+        console.log(error)
         return res.status(500).json({success:false, message:"Internal Server error"})
     }
 }
