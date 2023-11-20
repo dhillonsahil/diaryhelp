@@ -5,6 +5,7 @@ import { Button } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link'
+import { useRouter } from 'next/navigation/';
 const addcustomer = () => {
 
   const [name, setName] = useState('');
@@ -12,6 +13,7 @@ const addcustomer = () => {
   const [mobile, setMobile] = useState('');
   const [address, setAddress] = useState('');
   const [username, setUsername] = useState('');
+  const router = useRouter();
 
   const onchange = (e) => {
     if (e.target.name == 'name') {
@@ -37,11 +39,18 @@ const addcustomer = () => {
     setAddress('');
   }
 
-  useEffect(() => {
-    const user = localStorage.getItem('myUser');
+   useEffect(() => {
+    try {
+      if(localStorage.getItem('myUser')){
+        const user = localStorage.getItem('myUser');
     setUsername(JSON.parse(user).username.toLowerCase());
+      }else{
+        router.push('/')
+      }
+    } catch (error) {
+      
+    }
   }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const generatedString = generateUniqueString();

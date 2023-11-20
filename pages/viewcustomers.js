@@ -13,17 +13,23 @@ import {
   } from '@chakra-ui/react'
 import { SearchBar } from '@/components/seachbar';
 import Link from 'next/link'
+import { useRouter } from 'next/navigation';
 const viewcustomers = () => {
     const [username, setUsername] = useState('');
     const [customers,setCustomers]=useState([]);
     const [searchInput,setSearchInput]=useState('');
+    const router = useRouter();
 
   
 
     // get All Customers of MilkMan
     useEffect(() => {
-      const user = localStorage.getItem('myUser');
+      if(localStorage.getItem('myUser')){
+        const user = localStorage.getItem('myUser');
       setUsername(JSON.parse(user).username.toLowerCase());
+      }else{
+        router.push('/')
+      }
     }, []);
     
     useEffect(() => {

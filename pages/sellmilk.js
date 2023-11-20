@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 const sellMilk = () => {
     const [username, setUsername] = useState('');
@@ -19,12 +20,16 @@ const sellMilk = () => {
     const [selectedShift, setselectedShift] = useState('Morning');
     const [selectedType,setSelectedtype]=useState('Sell')
     const [priceType,setPriceType]=useState('Regular')
-
+    const router = useRouter();
 
         // get All Customers of MilkMan
         useEffect(() => {
-            const user = localStorage.getItem('myUser');
+            if(localStorage.getItem('myUser')){
+              const user = localStorage.getItem('myUser');
             setUsername(JSON.parse(user).username);
+            }else{
+              router.push('/');
+            }
           }, []);
           
           useEffect(() => {

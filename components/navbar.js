@@ -50,13 +50,15 @@ export default function WithSubnavigation() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+          <Link href={'/dashboard'}>
           <Text
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}>
+            fontWeight={'bold'}
+            color={useColorModeValue('gray.900', 'white')}>
             Diary Help
           </Text>
-
+          </Link>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
           </Flex>
@@ -67,22 +69,32 @@ export default function WithSubnavigation() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'}>
-            Sign In
-          </Button>
-          <Button
-            as={'a'}
+            <Link href={'/login'}>
+            <Button
             display={{ base: 'none', md: 'inline-flex' }}
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
             bg={'pink.400'}
-            href={'#'}
+            _hover={{
+              bg: 'pink.300',
+            }}>
+            Sign In
+          </Button>
+          </Link>
+          <Link href={'/signup'}>
+          <Button
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
             _hover={{
               bg: 'pink.300',
             }}>
             Sign Up
           </Button>
+          </Link>
         </Stack>
       </Flex>
 
@@ -183,7 +195,7 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
 
 const MobileNav = () => {
   return (
-    <Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ md: 'none' }}>
+    <Stack bg={useColorModeValue('white', 'gray.900')} p={4} display={{ md: 'none' }}>
       {NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
@@ -206,7 +218,7 @@ const MobileNavItem = ({ label, children, href }) => {
         _hover={{
           textDecoration: 'none',
         }}>
-        <Text fontWeight={600} color={useColorModeValue('gray.600', 'gray.200')}>
+        <Text fontWeight={600} className='text-black' color={useColorModeValue('gray.900', 'gray.800')}>
           {label}
         </Text>
         {children && (
@@ -245,6 +257,7 @@ const MobileNavItem = ({ label, children, href }) => {
 const NAV_ITEMS = [
   {
     label: 'Customers',
+    href:'/addcustomer',
     children: [
       {
         label: 'Add Customer',
@@ -262,18 +275,6 @@ const NAV_ITEMS = [
     label: 'Daily Price',
     
     href:"/dailyprice",
-    children: [
-      {
-        label: 'Fat/SNF Price',
-        // subLabel: 'Find your dream design job',
-        href: '#',
-      },
-      {
-        label: 'View Price',
-        // subLabel: 'An exclusive list for contract work',
-        href: '#',
-      },
-    ],
   },
   {
     label: 'Milk',

@@ -3,13 +3,17 @@ import { Radio, RadioGroup , Stack } from '@chakra-ui/react'
 import WithSubnavigation from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useRouter} from 'next/navigation'
 const DialyPrice = () => {
+  const router = useRouter();
   const [value, setValue] = useState('Regular')
   const [cattle,setCattle]= useState('Buffalo')
   const [price,setPrice]= useState('');
   const [IV,setIV]= useState('Edit')
   const [username,setUsername]= useState('')
+  const [fetchedPrice,setFetchedPrice]=useState([]);
+  const [updateId,setUpdateId]= useState('Update');
+  const [updatedPrice,setUpdatedPrice]= useState('');
 
   const reset =()=>{
     setValue('Regular')
@@ -17,6 +21,7 @@ const DialyPrice = () => {
     setPrice('');
   }
 
+  // handle insert
   const handleInsert =async()=>{
     // data
     const data = {
@@ -65,10 +70,112 @@ const DialyPrice = () => {
     
   }
 
+  // handle Update
+  const handleUpdate =async()=>{
+    const data = {
+      type:'update',
+      updateType:updateId.mtype.toLowerCase(),
+      price:Number(updatedPrice),
+      username:username.toLowerCase()
+    }
+    // update request
+    const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    const response = await resp.json();
+    if(response.success==true){
+      toast.success('Updated Successfully', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"})
+
+        setIV('Edit');
+        fetchprice();
+        
+    }else{
+      toast.error('An Error Occurred', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"})
+    }
+
+  }
+
+  // get username
   useEffect(() => {
-    const user = localStorage.getItem('myUser');
-    setUsername(JSON.parse(user).username.toLowerCase());
+    try {
+      if(localStorage.getItem('myUser')){
+        const user = localStorage.getItem('myUser');
+      setUsername(JSON.parse(user).username.toLowerCase());
+      }else{
+        router.push('/')
+      }
+    } catch (error) {
+      
+    }
   }, []);
+
+
+  // set Fetched Price
+  useEffect(()=>{
+    
+    try {
+      if(username.length>0){
+        fetchprice();
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },[username])
+
+  // fetch price
+  const fetchprice=async()=>{
+    try {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type:'view',
+          username:username.toLowerCase()
+        })
+      })
+
+      const response = await resp.json();
+      if(response.success==true){
+        setFetchedPrice(response.data)
+      }else{
+        toast.error('Unable to fetch Error ! Try Reloading', {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+      });
+      }
+  }catch(error){
+    console.log(error)
+  }
+}
   
   return (
     <div>
@@ -95,7 +202,10 @@ const DialyPrice = () => {
         IV=="Insert" && <InsertPrice handleInsert={handleInsert} title='Insert Milk' price={price} setPrice={setPrice} reset={reset} cattle={cattle} setCattle={setCattle} value={value} setValue={setValue} />
       }
       {
-        IV=='Edit' && <ViewPrice />
+        IV=='Edit' && <ViewPrice updateId={updateId} setUpdateId={setUpdateId} setIV={setIV} fetchedPrice={fetchedPrice} />
+      }
+      {
+        IV=='Update' && <UpdatePrice handleUpdate={handleUpdate} UpdatePrice={UpdatePrice} setIV={setIV} setUpdatedPrice={setUpdatedPrice} />
       }
     </div>
   )
@@ -202,11 +312,10 @@ const InsertPrice = ({value,setValue,cattle,setCattle,reset,price,setPrice,title
     )
 }
 
-const ViewPrice = ({title})=>{
+const ViewPrice = ({fetchedPrice,setIV,setUpdateId})=>{
   return (
     <>
  
-
 <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-2">
   <h2 className='w-full text-center text-xl font-bold py-4'>View or Update Prices</h2>
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -228,22 +337,31 @@ const ViewPrice = ({title})=>{
             </tr>
         </thead>
         <tbody>
-            <tr className="bg-white border-b hover:bg-gray-50 text-black">
+          {
+           fetchedPrice && 
+            fetchedPrice.map((item)=>{
+              return (
+                <tr className="bg-white border-b hover:bg-gray-50 text-black">
                
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    1
-                </th>
-                <td className="px-6 py-4">
-                    Cowfat
-                </td>
-                <td className="px-6 py-4">
-                    $2999
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 hover:underline mx-2">Edit</a>
-                    <a href="#" className="font-medium text-red-600  hover:underline mx-2">Delete</a>
-                </td>
-            </tr>
+               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                   {item.id}
+               </th>
+               <td className="px-6 py-4">
+                   {item.mtype}
+               </td>
+               <td className="px-6 py-4">
+                   {item.price}
+               </td>
+               <td className="px-6 py-4">
+                   <span onClick={()=>{
+                    setIV('Update');
+                    setUpdateId(item);
+                   }} className="font-medium text-blue-600 hover:underline mx-2">Edit</span>
+               </td>
+           </tr>
+              )
+            })
+          }
         </tbody>
     </table>
 </div>
@@ -251,6 +369,35 @@ const ViewPrice = ({title})=>{
 
 </>
 
+  )
+}
+
+
+const UpdatePrice = ({updatedPrice,setUpdatedPrice,setIV,handleUpdate})=>{
+  return (
+    <div class="relative flex min-h-screen text-gray-800 antialiased flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
+      <div class="relative py-3 sm:w-96 mx-auto text-center">
+        <span class="text-2xl font-light">Update Price</span>
+        <div class="mt-4 bg-white shadow-md rounded-lg text-left">
+          <div class="h-2 bg-purple-400 rounded-t-md"></div>
+          <div class="px-8 py-6">
+            <label class="block font-semibold">New Price</label>
+            <input type="text" placeholder="Price" value={updatedPrice} onChange={(e)=>setUpdatedPrice(e.target.value)} class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" />
+            
+            <div class="flex justify-between items-baseline">
+              <button onClick={()=>{
+                handleUpdate();
+              }} type="submit" class="mt-4 bg-purple-500 text-white py-2 px-6 rounded-md hover:bg-purple-600">Update Price</button>
+              <button onClick={()=>{
+                setIV('Edit')
+              }}  type="submit" class="mt-4 bg-purple-500 text-white py-2 px-6 rounded-md hover:bg-purple-600">Cancel</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
   )
 }
 
