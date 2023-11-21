@@ -144,7 +144,7 @@ export default function ThreeTierPricing() {
                 ₹
                 </Text>
                 <Text fontSize="5xl" fontWeight="900">
-                  6000
+                  5000
                 </Text>
                 <Text fontSize="3xl" color="gray.500">
                   /year
@@ -205,7 +205,7 @@ export default function ThreeTierPricing() {
                 ₹
               </Text>
               <Text fontSize="5xl" fontWeight="900">
-                8000
+                6000
               </Text>
               <Text fontSize="3xl" color="gray.500">
                 /year 
