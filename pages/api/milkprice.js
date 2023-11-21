@@ -80,6 +80,15 @@ const handler = async(req,res)=>{
                 }
                 return res.status(200).json({success:true,message:'Data Fetched successfully',data:rows})
             })
+        }else if(type=='specific'){
+            const {stype}=req.body;
+            pool.query(`select * from ${username}_milkprice where mtype=?`,[stype],(error,rows,fields)=>{
+                if(error){
+                    console.log(error)
+                    return res.status(400).json({success:false,message:'Unable to insert '})
+                }
+                return res.status(200).json({success:true,message:'Data Fetched successfully',data:rows})
+            })
         }
     } catch (error) {
         return res.status(500).json({success:false, message:"Internal Server error"})

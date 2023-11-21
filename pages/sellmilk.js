@@ -20,9 +20,13 @@ const sellMilk = () => {
     const [selectedShift, setselectedShift] = useState('Morning');
     const [selectedType,setSelectedtype]=useState('Sell')
     const [priceType,setPriceType]=useState('Regular')
+    const [fetchedPrice,setFetchedPrice] = useState([]);
+    const [milkrate,setMilkRate]=useState(0);
+    const [totalPrice,setTotalPrice]=useState(0);
+    const [remarks,setRemarks]=  useState('');
     const router = useRouter();
 
-        // get All Customers of MilkMan
+        // get All Customers of MilkMan and milk prices
         useEffect(() => {
             if(localStorage.getItem('myUser')){
               const user = localStorage.getItem('myUser');
@@ -45,9 +49,10 @@ const sellMilk = () => {
                 })
                 const resp = await response.json();
                 setCustomers(resp.data);
-                console.log(resp.data)
               }
               user();
+              handlePrice();
+              
             }
           }, [username]); 
 
@@ -67,6 +72,42 @@ const sellMilk = () => {
 
           const handleWeight =(e)=>{
             setWeight(e.target.value);
+           if(priceType=='Regular'){
+            if(price==0){
+              setTotalPrice(milkrate*Number(e.target.value));
+            }else{
+              setTotalPrice(price*Number(e.target.value));
+            }
+           }
+          }
+
+          const handlSnfFatPrice = async(wt)=>{
+              const fattype = (Number(fat) >= 30 && Number(fat) <= 45) ? 'cowfat' : 'buffalofat';
+              const snftype = (Number(fat) >= 30 && Number(fat) <= 45) ? 'cowsnf' : 'buffalosnf';
+              const fatmilk = await priceFetcher(fattype);
+              const snfmilk = await priceFetcher(snftype);
+              
+              const cprice = price == '' ? (fattype === 'cowfat' ? snfmilk[0].price : fatmilk[0].price) : Number(price);
+              let fatrate, snfrate, fatprice;
+    if (fattype === 'cowfat') {
+        fatrate =await fatmilk[0].price;
+        snfrate =await cprice === '' ? snfmilk[0].price : cprice;
+        fatprice = ((snfrate + (Number(fat) - 30) * fatrate) * Number(snf)) / 85;
+        setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100     )
+        let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100  ;
+        let calcPrice = roundedValue *Number(wt);
+        setTotalPrice(calcPrice)
+    } else if (fattype === 'buffalofat') {
+        fatrate = cprice === '' ? fatmilk[0].price : cprice;
+        snfrate = snfmilk[0].price;
+        fatprice = ((fatrate + ((snf==''?90:Number(snf)) - 90) * snfrate) * Number(fat)) / 100;
+        setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100        )
+        let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100     ;
+        
+        const calcPrice = roundedValue *Number(wt);
+        setTotalPrice(calcPrice)
+    }
+            
           }
 
           const filteredConsumers = customers.filter((consumer) => {
@@ -80,12 +121,59 @@ const sellMilk = () => {
             );
           });
 
-          useEffect(() => {
-            import('tw-elements').then(({ Select, initTE }) => {
-                initTE({ Select });
-              });
-           }, [username]);
+          const getPrices =async (stype)=>{
+                
+            const data={
+              type:'specific',
+              username:username.toLowerCase(),
+              stype:stype
+            }
+            
+            const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+            method:"POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            })
+            const resp = await fetchPrices.json();
+            setFetchedPrice(resp.data)
+          }
+
+          const priceFetcher =async (stype)=>{
+                
+            const data={
+              type:'specific',
+              username:username.toLowerCase(),
+              stype:stype
+            }
+            
+            const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+            method:"POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            })
+            const resp = await fetchPrices.json();
+            return resp.data;
+          }
+
+
+
+        const handlePrice=()=>{
+          if(priceType=='Regular'){
+            getPrices('regular');
+          }else if(priceType!='Regular'){ 
+          }
+        }
     
+        useEffect(()=>{
+          if(fetchedPrice.length>0){
+            const price = fetchedPrice[0];
+            setMilkRate(price.price);
+          }
+        },[fetchedPrice])
           
   return (
     <div>
@@ -156,7 +244,9 @@ const sellMilk = () => {
                             
                             <RadioGroup className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
                                 setPriceType(e);
-                               }}>
+                                handlePrice();
+
+;                               }}>
                               <Stack spacing={5} direction='row'>
                                 <Radio colorScheme='green' value='Regular'>
                                   Regular
@@ -193,12 +283,12 @@ const sellMilk = () => {
 }}>
      <option value={""}>Select Consumers</option>
          {filteredConsumers.map((consumer) => (
-          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} selected={selectedConsumer?.id === consumer.id}>
+          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
           </option>
           ))}
 </select> 
-           
+
               <input
                 placeholder="Weight"
                 onChange={handleWeight}
@@ -210,13 +300,26 @@ const sellMilk = () => {
                 <div className="flex flex-row">
                 <input
                   placeholder="Fat"
-                  onChange={(e)=>setFat(e.target.value)}
+                  onChange={(e)=>{
+                    setFat(e.target.value);
+                    // if( Number(snf) >10 && Number( e.target.value)>10){
+                    //   handlSnfFatPrice(Number(weight));
+                    // }
+                  }}
                   value={fat}
                   className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
                  <input
                   placeholder="Snf"
-                  onChange={(e)=>setSnf(e.target.value)}
+                  onChange={(e)=>{
+                    {
+                      setSnf(e.target.value)
+                      // if(Number(fat)>10 && Number(e.target.value)>10){
+                      //   // alert("weight "+weight + "snf "+e.target.value + "fat "+fat)
+                      //   handlSnfFatPrice(Number(weight))
+                      // }
+                    }
+                  }}
                   value={snf}
                   className="ml-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
@@ -227,17 +330,40 @@ const sellMilk = () => {
                 <div className="flex-grow w-1/4 pr-2">
                   <input
                     placeholder="Price"
-                    onChange={(e)=>[
-                        setPrice(e.target.value)
-                    ]}
+                    onChange={(e)=>{
+                      setPrice(e.target.value)
+                    }}
+                    value={price}
                     className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                   />
                 </div>
+                
                 <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
               <DatePicker className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={(date) => setStartDate(date)} />
 
                
               </div>
+             {
+              fat>10 && snf >10 && handlSnfFatPrice(weight) && (
+               <>
+                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+              )
+             }
+              {
+              fat>45 && handlSnfFatPrice(weight) && (
+               <>
+                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+              )
+             }
+             {
+              priceType=="Regular"  && (
+               <>
+                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+              )
+             }
               <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
               
               
@@ -259,6 +385,7 @@ const sellMilk = () => {
                             
                             <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
                                 setSelectedtype(e);
+                                handlePrice();
                                }}>
                               <Stack spacing={5} direction='row'>
                                 <Radio colorScheme='green' value='Sell'>
@@ -270,6 +397,12 @@ const sellMilk = () => {
                               </Stack>
                             </RadioGroup>
    </div>
+   <input
+                placeholder="Remarks"
+                onChange={(e)=>setRemarks(e.target.value)}
+                value={remarks}
+                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+              />
             </div>
             
             
