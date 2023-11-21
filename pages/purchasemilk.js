@@ -2,7 +2,7 @@ import WithSubnavigation from '@/components/navbar';
 import React, { useEffect, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { format } from 'date-fns';
 import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
@@ -18,8 +18,8 @@ const sellMilk = () => {
     const [snf,setSnf]=useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [selectedShift, setselectedShift] = useState('Morning');
-    const [selectedType,setSelectedtype]=useState('Sell')
-    const [priceType,setPriceType]=useState('Regular')
+    const [selectedType,setSelectedtype]=useState('Buy')
+    const [priceType,setPriceType]=useState('FatSnf')
     const [fetchedPrice,setFetchedPrice] = useState([]);
     const [milkrate,setMilkRate]=useState(0);
     const [totalPrice,setTotalPrice]=useState(0);
@@ -70,6 +70,20 @@ const sellMilk = () => {
 
           };
 
+          const handleDateChange = (date) => {
+            setStartDate(date);
+    
+            // Example: If you want to use the formatted date in an SQL query
+            const formattedDateForSQL = formatDateForSQL(date);
+            console.log("Formatted date for SQL:", formattedDateForSQL);
+    
+        };
+
+          const formatDateForSQL = (date) => {
+            return format(date, "yyyy-MM-dd");
+        };
+    
+
           const handleWeight =(e)=>{
             setWeight(e.target.value);
            if(priceType=='Regular'){
@@ -103,7 +117,6 @@ const sellMilk = () => {
         fatprice = ((fatrate + ((snf==''?90:Number(snf)) - 90) * snfrate) * Number(fat)) / 100;
         setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100        )
         let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100     ;
-        
         const calcPrice = roundedValue *Number(wt);
         setTotalPrice(calcPrice)
     }
@@ -164,7 +177,6 @@ const sellMilk = () => {
         const handlePrice=()=>{
           if(priceType=='Regular'){
             getPrices('regular');
-          }else if(priceType!='Regular'){ 
           }
         }
     
@@ -339,21 +351,21 @@ const sellMilk = () => {
                 </div>
                 
                 <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
-              <DatePicker className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={(date) => setStartDate(date)} />
+              <DatePicker dateFormat={'yyyy-MM-dd'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleDateChange} />
 
                
               </div>
              {
-              fat>10 && snf >10 && handlSnfFatPrice(weight) && (
+              fat>10 && fat<=45 && snf >10 && handlSnfFatPrice(weight) && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
                 <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
               )
              }
               {
               fat>45 && handlSnfFatPrice(weight) && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
                 <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
               )
              }

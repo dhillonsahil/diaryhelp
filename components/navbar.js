@@ -287,7 +287,7 @@ const NAV_ITEMS = [
       {
         label: 'Purchase Milk',
         // subLabel: 'An exclusive list for contract work',
-        href: '#',
+        href: '/purchasemilk',
       },{
         label: 'View Milk',
         // subLabel: 'An exclusive list for contract work',
