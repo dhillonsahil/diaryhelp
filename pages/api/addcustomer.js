@@ -3,7 +3,10 @@ import pool from "@/lib/db";
 const handler = async (req, res) => {
     const {name,fatherName,mobile,address,username,generatedString}= req.body;
     try {
-        pool.query(`create table if not exists ${username}_customers( id int auto_increment primary key ,c_name varchar(50),father_name varchar(50),mobile varchar(10) , address varchar(200), uid varchar(8) unique );
+        pool.query(`create table if not exists ${username}_customers( id int auto_increment primary key ,c_name varchar(50),father_name varchar(50),mobile varchar(10) , address varchar(200), uid varchar(8) unique ,INDEX(c_name),
+        INDEX(father_name),
+        INDEX(id),
+        INDEX(uid) );
         `,(error,rows,fields)=>{
             if(error){
                 console.log("error ",error)

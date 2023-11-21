@@ -5,6 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const sellMilk = () => {
     const [username, setUsername] = useState('');
@@ -95,7 +97,7 @@ const sellMilk = () => {
            }
           }
 
-          const handlSnfFatPrice = async(wt)=>{
+          const handleSnfFatPrice = async(wt)=>{
               const fattype = (Number(fat) >= 30 && Number(fat) <= 45) ? 'cowfat' : 'buffalofat';
               const snftype = (Number(fat) >= 30 && Number(fat) <= 45) ? 'cowsnf' : 'buffalosnf';
               const fatmilk = await priceFetcher(fattype);
@@ -150,7 +152,7 @@ const sellMilk = () => {
             body: JSON.stringify(data)
             })
             const resp = await fetchPrices.json();
-            setFetchedPrice(resp.data)
+            setMilkRate(resp.data[0].price)
           }
 
           const priceFetcher =async (stype)=>{
@@ -172,6 +174,7 @@ const sellMilk = () => {
             return resp.data;
           }
 
+        
 
 
         const handlePrice=()=>{
@@ -179,17 +182,78 @@ const sellMilk = () => {
             getPrices('regular');
           }
         }
-    
-        useEffect(()=>{
-          if(fetchedPrice.length>0){
-            const price = fetchedPrice[0];
-            setMilkRate(price.price);
+
+
+        const handleSave= async ()=>{
+          try {
+            // data
+
+            const data ={
+              type:"BuySell",
+              username:username.toLowerCase(),
+              ptype:selectedType,
+              cid:selectedConsumer.id,
+              pdate:formatDateForSQL(startDate),
+              pprice:milkrate,
+              pshift:selectedShift,
+              totalprice:totalPrice,
+              cuid:selectedConsumer.uid,
+              cname:selectedConsumer.c_name,
+              fname:selectedConsumer.father_name,
+              fat:Number(fat),
+              snf:Number(snf),
+              remarks:remarks,
+              weight:Number(weight)
+            }
+
+            const resp  = fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkconsume`,{
+              method:"POST",
+              headers:{
+                'Content-Type': 'application/json'
+              },body:JSON.stringify(data)
+            })
+
+            const response = await resp.json();
+            if(response.success==true){
+              toast.success('Inserted Entry!', {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            }
+
+          } catch (error) {
+            console.log("An Error Occurred")
           }
-        },[fetchedPrice])
+        }
+    
+        // useEffect(()=>{
+        //   if(fetchedPrice.length>0){
+        //     const price = fetchedPrice[0];
+        //     setMilkRate(price.price);
+        //   }
+        // },[fetchedPrice])
           
   return (
     <div>
         <WithSubnavigation />
+        <ToastContainer
+                position="top-left"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         <div className="flex h-screen bg-gray-100">
       <div className="m-auto">
         <div>
@@ -217,47 +281,18 @@ const sellMilk = () => {
             <span className="pl-2 mx-1">Consumer's Details</span>
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
-            <div className="flex">
-              {/* <div className="flex-1 py-5 pl-5 overflow-hidden">
-                <svg
-                  className="inline align-text-top"
-                  height="24px"
-                  viewBox="0 0 24 24"
-                  width="24px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#000000"
-                >
-                  <g>
-                    <path
-                      d="m4.88889,2.07407l14.22222,0l0,20l-14.22222,0l0,-20z"
-                      fill="none"
-                      id="svg_1"
-                      stroke="null"
-                    ></path>
-                    <path
-                      d="m7.07935,0.05664c-3.87,0 -7,3.13 -7,7c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zm-5,7c0,-2.76 2.24,-5 5,-5s5,2.24 5,5c0,2.88 -2.88,7.19 -5,9.88c-2.08,-2.67 -5,-7.03 -5,-9.88z"
-                      id="svg_2"
-                    ></path>
-                    <circle
-                      cx="7.04807"
-                      cy="6.97256"
-                      r="2.5"
-                      id="svg_3"
-                    ></circle>
-                  </g>
-                </svg>
-                <h1 className="inline text-2xl font-semibold leading-none">
-                  Sender
-                </h1>
-              </div> */}
-            </div>
             <div className="px-5 pb-5">
  <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
                             
                             <RadioGroup className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
                                 setPriceType(e);
-                                handlePrice();
-
+                              if(e=="Regular"){
+                                getPrices('regular')
+                                setFat('');
+                                setSnf('');
+                                setWeight('')
+                                setTotalPrice(0)
+                              }
 ;                               }}>
                               <Stack spacing={5} direction='row'>
                                 <Radio colorScheme='green' value='Regular'>
@@ -314,9 +349,7 @@ const sellMilk = () => {
                   placeholder="Fat"
                   onChange={(e)=>{
                     setFat(e.target.value);
-                    // if( Number(snf) >10 && Number( e.target.value)>10){
-                    //   handlSnfFatPrice(Number(weight));
-                    // }
+                    
                   }}
                   value={fat}
                   className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
@@ -326,10 +359,7 @@ const sellMilk = () => {
                   onChange={(e)=>{
                     {
                       setSnf(e.target.value)
-                      // if(Number(fat)>10 && Number(e.target.value)>10){
-                      //   // alert("weight "+weight + "snf "+e.target.value + "fat "+fat)
-                      //   handlSnfFatPrice(Number(weight))
-                      // }
+                    
                     }
                   }}
                   value={snf}
@@ -356,14 +386,14 @@ const sellMilk = () => {
                
               </div>
              {
-              fat>10 && fat<=45 && snf >10 && handlSnfFatPrice(weight) && (
+              fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight) && (
                <>
                 <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
                 <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
               )
              }
               {
-              fat>45 && handlSnfFatPrice(weight) && (
+              fat>45 && handleSnfFatPrice(weight) && (
                <>
                 <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
                 <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
@@ -421,7 +451,7 @@ const sellMilk = () => {
             <hr className="mt-4" />
             <div className="flex flex-row-reverse p-3">
               <div className="flex-initial pl-3">
-                <button
+                <button onClick={handleSave}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out"
                 >
