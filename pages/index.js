@@ -1,9 +1,10 @@
+import NavHome from '@/components/navHome'
 import React from 'react'
 
 const index = () => {
   return (
     <div>
-      Hello
+      <NavHome />
     </div>
   )
 }
