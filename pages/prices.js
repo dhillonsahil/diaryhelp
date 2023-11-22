@@ -17,6 +17,7 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { IoIosCloseCircle } from "react-icons/io";
 import Link from 'next/link'
 import NavHome from '@/components/navHome';
+import AppHeader from '@/components/appheader';
 function PriceWrapper(props) {
   const { children } = props
 
@@ -36,7 +37,7 @@ function PriceWrapper(props) {
 export default function ThreeTierPricing() {
   return (
     <>
-    <NavHome />
+    <AppHeader />
     <Box py={12}>
       <VStack spacing={2} textAlign="center">
         <Heading as="h1" fontSize="4xl">

@@ -28,14 +28,16 @@ import {
 } from 'react-icons/md'
 import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs'
 import NavHome from '@/components/navHome'
+import AppHeader from '@/components/appheader'
 
 export default function Contact() {
   return (
     <>
-    <NavHome />
+    <AppHeader />
     <Container className='min-h-screen' bg="#9DC4FB" maxW="full" mt={0} centerContent overflow="hidden">
-      <Flex>
+      <Flex  marginTop={2} >
         <Box
+        marginTop={12}
           bg="#02054B"
           color="white"
           borderRadius="lg"
@@ -83,7 +85,7 @@ export default function Contact() {
                       </Button>
                     </VStack>
                   </Box>
-                  <HStack
+                  {/* <HStack
                     mt={{ lg: 10, md: 10 }}
                     spacing={5}
                     px={5}
@@ -115,7 +117,7 @@ export default function Contact() {
                       _hover={{ bg: '#c1121f' }}
                       icon={<BsDiscord size="28px" />}
                     />
-                  </HStack>
+                  </HStack> */}
                 </Box>
               </WrapItem>
               <WrapItem>
