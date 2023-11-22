@@ -236,7 +236,9 @@ const purchaseMilk = () => {
             setSnf('');
             setPrice('');
             setTotalPrice(0);
+            setSelectedConsumer(null)
             // setMilkRate(0);
+            setConsumerCode('')
             }else{
               toast.error('Oops ! Try again Or Contact Us', {
                 position: "top-left",
