@@ -2,7 +2,7 @@ import WithSubnavigation from '@/components/navbar';
 import React, { useEffect, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import jwt from 'jsonwebtoken'
 import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
@@ -28,13 +28,26 @@ const sellMilk = () => {
 
         // get All Customers of MilkMan and milk prices
         useEffect(() => {
-            if(localStorage.getItem('myUser')){
-              const user = localStorage.getItem('myUser');
-            setUsername(JSON.parse(user).username);
+          const tok =async()=>{
+            let store = JSON.parse(localStorage.getItem('myUser'));
+            if(store && store.token){
+              let key = process.env.NEXT_PUBLIC_JWT_SECRET
+              if(key ){
+                jwt.verify(store.token, key, function(err, decoded) {
+                 setUsername(decoded.email.toLowerCase().split('@')[0]);
+                });
+                
+              }
             }else{
-              router.push('/');
+              router.push('/')
             }
-          }, []);
+          }
+          try {
+           tok();
+          } catch (error) {
+            
+          }
+        }, []);
           
           useEffect(() => {
             if(username.length>0){

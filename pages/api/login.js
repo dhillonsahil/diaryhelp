@@ -14,7 +14,7 @@ const handler = async (req, res) => {
                   var token = jwt.sign({email:emailLower,name:rows[0].name},process.env.JWT_SECRET,{
                     expiresIn:"2d"
                   })
-                    return res.status(200).json({ success: true, token,email:emailLower });
+                    return res.status(200).json({ success: true, token});
                 }else{
                   return res.status(400).json({ success: false, error: "Invalid password" });
                 }

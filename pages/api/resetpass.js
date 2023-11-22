@@ -12,13 +12,10 @@ const handler = async (req, res) => {
 
         // If the reset token has already expired, return an error
         if (currentTime<tokenRecord.resetTokenExpiration) {
-          console.log("Current time: " + currentTime);
-          console.log(tokenRecord.email)
           pool.query(`UPDATE users SET password = ? WHERE email = ?`,[encryptedPassword,tokenRecord.email],(error,rows,fields)=>{
             if(error){
               res.status(400).json({success: false, message:"Failed"})
             }
-            console.log("added")
             res.status(400).json({success: true, message:"Changed password"})
             
          });   

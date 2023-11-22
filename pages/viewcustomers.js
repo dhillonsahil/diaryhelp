@@ -14,8 +14,10 @@ import {
 import { SearchBar } from '@/components/seachbar';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
+import jwt from 'jsonwebtoken'
+
 const viewcustomers = () => {
-    const [username, setUsername] = useState('');
+    const [token, setToken] = useState('');
     const [customers,setCustomers]=useState([]);
     const [searchInput,setSearchInput]=useState('');
     const router = useRouter();
@@ -24,16 +26,23 @@ const viewcustomers = () => {
 
     // get All Customers of MilkMan
     useEffect(() => {
-      if(localStorage.getItem('myUser')){
-        const user = localStorage.getItem('myUser');
-      setUsername(JSON.parse(user).username.toLowerCase());
-      }else{
-        router.push('/')
+      const tok =async()=>{
+        let store = JSON.parse(localStorage.getItem('myUser'));
+        if(store && store.token){
+          setToken(store.token)          
+        }else{
+          router.push('/')
+        }
+      }
+      try {
+       tok();
+      } catch (error) {
+        
       }
     }, []);
     
     useEffect(() => {
-      if(username.length>0){
+      if(token.length>0){
 
         const user = async(req,res)=>{
           const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewcustomers`,{
@@ -41,14 +50,14 @@ const viewcustomers = () => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username:username.toLowerCase()})
+            body: JSON.stringify({token})
           })
           const resp = await response.json();
           setCustomers(resp.data);
         }
         user();
       }
-    }, [username]); 
+    }, [token]); 
 
     useEffect(()=>{
       

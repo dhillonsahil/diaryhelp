@@ -30,7 +30,7 @@ export default function Login() {
 
         let response = await res.json()
         if(response.success==true){
-            localStorage.setItem("myUser",JSON.stringify({token : response.token , email:response.email,username:emailLower.split('@')[0]}))
+            localStorage.setItem("myUser",JSON.stringify({token : response.token }))
             toast.success('Logged In!', {
                 position: "top-left",
                 autoClose: 3000,
@@ -41,7 +41,7 @@ export default function Login() {
                 progress: undefined,
                 theme: "light",
             });
-            router.push("/sellmilk")
+            router.push("/dashboard")
         }else if(response.success=="Check Your Credentials"){
             toast.error('Check Your Credentials !', {
                 position: "top-left",

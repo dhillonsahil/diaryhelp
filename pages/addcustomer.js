@@ -6,13 +6,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation/';
+import jwt from 'jsonwebtoken';
+
+// import  from 'jsonwebtoken'
+
 const addcustomer = () => {
 
   const [name, setName] = useState('');
   const [fatherName, setFatherName] = useState('');
   const [mobile, setMobile] = useState('');
   const [address, setAddress] = useState('');
-  const [username, setUsername] = useState('');
+  const [token, setToken] = useState('');
   const router = useRouter();
 
   const onchange = (e) => {
@@ -40,13 +44,16 @@ const addcustomer = () => {
   }
 
    useEffect(() => {
-    try {
-      if(localStorage.getItem('myUser')){
-        const user = localStorage.getItem('myUser');
-    setUsername(JSON.parse(user).username.toLowerCase());
+    const tok =async()=>{
+      let store = JSON.parse(localStorage.getItem('myUser'));
+      if(store && store.token){
+        setToken(store.token)
       }else{
         router.push('/')
       }
+    }
+    try {
+     tok();
     } catch (error) {
       
     }
@@ -60,11 +67,10 @@ const addcustomer = () => {
       fatherName: fatherName,
       mobile: mobile,
       address: address,
-      username: username.toLowerCase(),
+      token: token,
       generatedString:generatedString
     }
 
-    console.log(username)
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/addcustomer`,{
       method:"POST",

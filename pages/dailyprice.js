@@ -4,13 +4,15 @@ import WithSubnavigation from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter} from 'next/navigation'
+import jwt from 'jsonwebtoken'
+
 const DialyPrice = () => {
   const router = useRouter();
   const [value, setValue] = useState('Regular')
   const [cattle,setCattle]= useState('Buffalo')
   const [price,setPrice]= useState('');
   const [IV,setIV]= useState('Edit')
-  const [username,setUsername]= useState('')
+  const [token,setToken]= useState('')
   const [fetchedPrice,setFetchedPrice]=useState([]);
   const [updateId,setUpdateId]= useState('Update');
   const [updatedPrice,setUpdatedPrice]= useState('');
@@ -29,7 +31,7 @@ const DialyPrice = () => {
       mtype:value,
       ctype:cattle=='Cow'?'cow':'',
       price:Number(price),
-      username:username.toLowerCase()
+      token:token
     }
 
     const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
@@ -76,7 +78,7 @@ const DialyPrice = () => {
       type:'update',
       updateType:updateId.mtype.toLowerCase(),
       price:Number(updatedPrice),
-      username:username.toLowerCase()
+      token:token
     }
     // update request
     const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
@@ -118,13 +120,16 @@ const DialyPrice = () => {
 
   // get username
   useEffect(() => {
-    try {
-      if(localStorage.getItem('myUser')){
-        const user = localStorage.getItem('myUser');
-      setUsername(JSON.parse(user).username.toLowerCase());
+    const tok =async()=>{
+      let store = JSON.parse(localStorage.getItem('myUser'));
+      if(store && store.token){
+       setToken(store.token)
       }else{
         router.push('/')
       }
+    }
+    try {
+     tok();
     } catch (error) {
       
     }
@@ -135,13 +140,13 @@ const DialyPrice = () => {
   useEffect(()=>{
     
     try {
-      if(username.length>0){
+      if(token.length>0){
         fetchprice();
       }
     } catch (error) {
       console.log(error)
     }
-  },[username])
+  },[token])
 
   // fetch price
   const fetchprice=async()=>{
@@ -153,7 +158,7 @@ const DialyPrice = () => {
         },
         body: JSON.stringify({
           type:'view',
-          username:username.toLowerCase()
+          token:token,
         })
       })
 

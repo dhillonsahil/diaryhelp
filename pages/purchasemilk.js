@@ -7,9 +7,10 @@ import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import jwt from 'jsonwebtoken'
 
 const sellMilk = () => {
-    const [username, setUsername] = useState('');
+    const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [price,setPrice] = useState('');
     const [consumerCode, setConsumerCode] = useState('');
@@ -22,24 +23,29 @@ const sellMilk = () => {
     const [selectedShift, setselectedShift] = useState('Morning');
     const [selectedType,setSelectedtype]=useState('Buy')
     const [priceType,setPriceType]=useState('FatSnf')
-    const [fetchedPrice,setFetchedPrice] = useState([]);
     const [milkrate,setMilkRate]=useState(0);
     const [totalPrice,setTotalPrice]=useState(0);
     const [remarks,setRemarks]=  useState('');
     const router = useRouter();
 
-        // get All Customers of MilkMan and milk prices
-        useEffect(() => {
-            if(localStorage.getItem('myUser')){
-              const user = localStorage.getItem('myUser');
-            setUsername(JSON.parse(user).username);
-            }else{
-              router.push('/');
-            }
-          }, []);
+    useEffect(() => {
+      const tok =async()=>{
+        let store = JSON.parse(localStorage.getItem('myUser'));
+        if(store && store.token){
+          setToken(store.token);
+        }else{
+          router.push('/')
+        }
+      }
+      try {
+       tok();
+      } catch (error) {
+        
+      }
+    }, []);
           
           useEffect(() => {
-            if(username.length>0){
+            if(token.length>0){
       
               const user = async(req,res)=>{
                 const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewcustomers`,{
@@ -47,7 +53,7 @@ const sellMilk = () => {
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({username:username})
+                  body: JSON.stringify({token})
                 })
                 const resp = await response.json();
                 setCustomers(resp.data);
@@ -56,7 +62,7 @@ const sellMilk = () => {
               handlePrice();
               
             }
-          }, [username]); 
+          }, [token]); 
 
           
           // handle functions
@@ -74,10 +80,6 @@ const sellMilk = () => {
 
           const handleDateChange = (date) => {
             setStartDate(date);
-    
-            // Example: If you want to use the formatted date in an SQL query
-            const formattedDateForSQL = formatDateForSQL(date);
-            console.log("Formatted date for SQL:", formattedDateForSQL);
     
         };
 
@@ -140,7 +142,7 @@ const sellMilk = () => {
                 
             const data={
               type:'specific',
-              username:username.toLowerCase(),
+              token:token,
               stype:stype
             }
             
@@ -159,7 +161,7 @@ const sellMilk = () => {
                 
             const data={
               type:'specific',
-              username:username.toLowerCase(),
+              token:token,
               stype:stype
             }
             
@@ -190,7 +192,7 @@ const sellMilk = () => {
 
             const data ={
               type:"BuySell",
-              username:username.toLowerCase(),
+              token:token,
               ptype:selectedType,
               cid:selectedConsumer.id,
               pdate:formatDateForSQL(startDate),
@@ -206,7 +208,7 @@ const sellMilk = () => {
               weight:Number(weight)
             }
 
-            const resp  = fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkconsume`,{
+            const resp  =await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkconsume`,{
               method:"POST",
               headers:{
                 'Content-Type': 'application/json'
@@ -215,7 +217,7 @@ const sellMilk = () => {
 
             const response = await resp.json();
             if(response.success==true){
-              toast.success('Inserted Entry!', {
+              toast.error('Inserted Entry!', {
                 position: "top-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -225,8 +227,24 @@ const sellMilk = () => {
                 progress: undefined,
                 theme: "light",
             });
+            setWeight('');
+            setFat('');
+            setSnf('');
+            setPrice('');
+            setTotalPrice(0);
+            setMilkRate(0);
+            }else{
+              toast.error('Oops ! Try again Or Contact Us', {
+                position: "top-left",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
             }
-
           } catch (error) {
             console.log("An Error Occurred")
           }

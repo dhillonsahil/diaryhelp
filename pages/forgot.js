@@ -39,7 +39,6 @@ export default function Forgot() {
     })
 
     let res = await sent.json()
-    console.log("res", res)
     if (res.success) {
       toast.success('Link sent Successfully', {
         position: "top-left",

@@ -1,11 +1,12 @@
 import pool from "@/lib/db";
-
+import jwt from 'jsonwebtoken'
 const handler = async(req,res)=>{
     try {
-        const {type, username}= req.body;
+        const {type, token}= req.body;
+        let key = process.env.JWT_SECRET;
+        const username = jwt.verify(token,key).email.split('@')[0];
         // if inserting price
         if(type=='insert'){
-            console.log("trying it")
             const {mtype,price,ctype} = req.body;
             if(mtype=='Regular'){
                 if(ctype==''){
@@ -23,7 +24,6 @@ const handler = async(req,res)=>{
                         })
                     })
                 }else{
-                    console.log('Cow')
                     pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,mtype varchar(20) unique,price float)`,(error,rows,fields)=>{
                             if(error){
                                 return res.status(400).json({success:false,message:'Unable to insert '})
@@ -91,6 +91,7 @@ const handler = async(req,res)=>{
             })
         }
     } catch (error) {
+        console.log(error)
         return res.status(500).json({success:false, message:"Internal Server error"})
     }
 }

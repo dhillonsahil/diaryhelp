@@ -1,8 +1,17 @@
 import pool from "@/lib/db";
+import jwt from 'jsonwebtoken'
 
 const handler = async (req, res) => {
-    const {name,fatherName,mobile,address,username,generatedString}= req.body;
+    const {name,fatherName,mobile,address,token,generatedString}= req.body;
+    let username=''
     try {
+        let key = process.env.JWT_SECRET
+    if(key ){
+       jwt.verify(token, key, function(err, decoded) {
+        username=decoded.email.toLowerCase().split('@')[0].toLowerCase();
+      });          
+    }
+       if(username.length>0){
         pool.query(`create table if not exists ${username}_customers( id int auto_increment primary key ,c_name varchar(50),father_name varchar(50),mobile varchar(10) , address varchar(200), uid varchar(8) unique ,INDEX(c_name),
         INDEX(father_name),
         INDEX(id),
@@ -23,6 +32,7 @@ const handler = async (req, res) => {
 
            })
         });  
+       }
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error"});
     }    
