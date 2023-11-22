@@ -221,7 +221,7 @@ const sellMilk = () => {
 
             const response = await resp.json();
             if(response.success==true){
-              toast.error('Inserted Entry!', {
+              toast.success('Inserted Entry!', {
                 position: "top-left",
                 autoClose: 3000,
                 hideProgressBar: false,

@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
 
 
-const sellMilk = () => {
+const purchaseMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [price,setPrice] = useState('');
@@ -221,7 +221,7 @@ const sellMilk = () => {
 
             const response = await resp.json();
             if(response.success==true){
-              toast.error('Inserted Entry!', {
+              toast.success('Inserted Entry!', {
                 position: "top-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -236,7 +236,7 @@ const sellMilk = () => {
             setSnf('');
             setPrice('');
             setTotalPrice(0);
-            setMilkRate(0);
+            // setMilkRate(0);
             }else{
               toast.error('Oops ! Try again Or Contact Us', {
                 position: "top-left",
@@ -519,4 +519,4 @@ const sellMilk = () => {
   );
 };
 
-export default sellMilk;
+export default purchaseMilk;
