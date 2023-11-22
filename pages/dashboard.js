@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import WithSubnavigation from '@/components/navbar'
 import { useRouter } from 'next/navigation';
 import jwt from 'jsonwebtoken'
+import expiryCheck from '@/components/expiryCheck';
 const dashboard = () => {
   const router = useRouter();
   const [username,setUsername]=useState('')
@@ -22,6 +23,7 @@ const dashboard = () => {
       }
     }
     try {
+      expiryCheck();
      tok();
     } catch (error) {
       

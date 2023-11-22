@@ -4,8 +4,7 @@ import WithSubnavigation from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter} from 'next/navigation'
-import jwt from 'jsonwebtoken'
-
+import expiryCheck from '@/components/expiryCheck';
 const DialyPrice = () => {
   const router = useRouter();
   const [value, setValue] = useState('Regular')
@@ -129,6 +128,7 @@ const DialyPrice = () => {
       }
     }
     try {
+      expiryCheck();
      tok();
     } catch (error) {
       

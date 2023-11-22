@@ -6,8 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation/';
-import jwt from 'jsonwebtoken';
-
+import expiryCheck from '@/components/expiryCheck';
 // import  from 'jsonwebtoken'
 
 const addcustomer = () => {
@@ -53,7 +52,8 @@ const addcustomer = () => {
       }
     }
     try {
-     tok();
+     expiryCheck()
+      tok();
     } catch (error) {
       
     }

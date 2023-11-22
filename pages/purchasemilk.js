@@ -7,7 +7,8 @@ import { RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import jwt from 'jsonwebtoken'
+import expiryCheck from '@/components/expiryCheck';
+
 
 const sellMilk = () => {
     const [token, setToken] = useState('');
@@ -28,6 +29,8 @@ const sellMilk = () => {
     const [remarks,setRemarks]=  useState('');
     const router = useRouter();
 
+    
+
     useEffect(() => {
       const tok =async()=>{
         let store = JSON.parse(localStorage.getItem('myUser'));
@@ -38,6 +41,7 @@ const sellMilk = () => {
         }
       }
       try {
+        expiryCheck();
        tok();
       } catch (error) {
         
