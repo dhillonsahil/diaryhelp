@@ -18,6 +18,7 @@ import { IoIosCloseCircle } from "react-icons/io";
 import Link from 'next/link'
 import NavHome from '@/components/navHome';
 import AppHeader from '@/components/appheader';
+import AppFooter from '@/components/appfooter';
 function PriceWrapper(props) {
   const { children } = props
 
@@ -259,6 +260,7 @@ export default function ThreeTierPricing() {
           </VStack>
         </PriceWrapper>
       </Stack>
+      <AppFooter />
     </Box></>
   )
 }

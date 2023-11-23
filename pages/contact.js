@@ -29,6 +29,7 @@ import {
 import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs'
 import NavHome from '@/components/navHome'
 import AppHeader from '@/components/appheader'
+import AppFooter from '@/components/appfooter'
 
 export default function Contact() {
   return (
@@ -166,6 +167,7 @@ export default function Contact() {
         </Box>
       </Flex>
     </Container>
+    <AppFooter />
     </>
   )
 }

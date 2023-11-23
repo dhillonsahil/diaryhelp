@@ -7,9 +7,18 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  useDisclosure,Modal,ModalOverlay,ModalContent,ModalHeader,ModalCloseButton,ModalBody,ModalFooter,Button,
+  TableContainer,
+} from '@chakra-ui/react'
 
-
-const purchaseMilk = () => {
+const ViewMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [consumerCode, setConsumerCode] = useState('');
@@ -17,9 +26,21 @@ const purchaseMilk = () => {
     const [customers,setCustomers]=useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [fetched,setFetched]=useState([]);
+    const [ visible,setVisible ]=useState('userInput');
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selectedRow,setSelectedRow]=useState({});
+    const [modelVisible,setModelVisible] = useState(false)
+    const [confirmDelete,setConfirmDelete] = useState(false);
     const router = useRouter();
 
-    
+    let id=1;
+
+    const handleViewAnother=()=>{
+      setVisible('userInput');
+      setConsumerCode('')
+      setSelectedConsumer(null);
+    }
 
     useEffect(() => {
       const tok =async()=>{
@@ -96,59 +117,70 @@ const purchaseMilk = () => {
             );
           });
 
-          const getPrices =async (stype)=>{
-                
-            const data={
-              type:'specific',
-              token:token,
-              stype:stype
-            }
-            
-            const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
-            method:"POST",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+
+          const handleDelete =async()=>{
+            setModelVisible(false);
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/modifymilk`,{
+              method:"POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({token,type:'delete',mid:selectedRow.id,ptype : selectedRow.ptype,totalPrice : selectedRow.totalprice ,cuid :selectedConsumer.uid ,cid:selectedConsumer.id})
             })
-            const resp = await fetchPrices.json();
-            setMilkRate(resp.data[0].price)
+
+            const response = await resp.json();
+
+            if(response.success==true){
+              toast.success('Deleted Successfully !', {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            }else{
+              toast.error('Unable to delete !', {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            }
+
+            setModelVisible(false)
           }
 
-          const priceFetcher =async (stype)=>{
-                
-            const data={
-              type:'specific',
-              token:token,
-              stype:stype
-            }
-            
-            const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
-            method:"POST",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-            })
-            const resp = await fetchPrices.json();
-            return resp.data;
-          }
+          // const handleDelete = async()=>{
+          //   console.log("Setted row: ",selectedRow)
+          // }
 
-        
-
-
-
+          
 
         const handleSubmit= async ()=>{
-          
+          const data={
+            token:token,
+            cid:selectedConsumer.id,
+            startDate:formatDateForSQL(startDate),
+            endDate:formatDateForSQL(endDate)
+          }
+          const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewmilk`,{
+          method:"POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+          })
+          const resp = await fetchPrices.json();
+          setFetched(resp.data);  
+          setVisible('showData');        
         }
-    
-        // useEffect(()=>{
-        //   if(fetchedPrice.length>0){
-        //     const price = fetchedPrice[0];
-        //     setMilkRate(price.price);
-        //   }
-        // },[fetchedPrice])
           
   return (
     <div>
@@ -165,8 +197,10 @@ const purchaseMilk = () => {
                 pauseOnHover
                 theme="light"
             />
-        <div className="flex h-screen bg-gray-100">
-      <div className="m-auto">
+        <div className={`${visible=='userInput'?'flex':''} h-screen`}>
+          {/*  Get User Data Form */}
+      {
+        visible=='userInput' && <div className="m-auto">
         <div>
           <button
             type="button"
@@ -200,7 +234,7 @@ const purchaseMilk = () => {
                 onChange={handleInputChange}
                 name='consumerCode'
                 id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" required
               />
                <input
                 placeholder="Search Customer"
@@ -261,11 +295,14 @@ const purchaseMilk = () => {
                     <path d="M5 5v14h14V7.83L16.17 5H5zm7 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-8H6V6h9v4z" opacity=".3"></path>
                     <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"></path>
                   </svg>
-                  <span className="pl-2 mx-1">Save</span>
+                  <span className="pl-2 mx-1">Submit</span>
                 </button>
               </div>
               <div className="flex-initial">
-                <button
+                <button onClick={()=>{
+                  setConsumerCode('');
+                  setSelectedConsumer(null);
+                }}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-black capitalize rounded-md hover:bg-red-200 hover:fill-current hover:text-red-600 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"
                 >
@@ -279,7 +316,7 @@ const purchaseMilk = () => {
                     <path d="M8 9h8v10H8z" opacity=".3"></path>
                     <path d="M15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"></path>
                   </svg>
-                  <span className="pl-2 mx-1">Delete</span>
+                  <span  className="pl-2 mx-1">Delete</span>
                 </button>
               </div>
             </div>
@@ -287,9 +324,173 @@ const purchaseMilk = () => {
          
         </div>
       </div>
+      }
+      {/*  Show Data and Edit option form */}
+      {
+        visible=='showData' && ( <>
+          <div className='text-2xl text-black font-bold text-center my-2 p-2 flex justify-between'>Milk Entries for {selectedConsumer.c_name} <span  className=' flex justify-center align-middle'>
+  <div onClick={handleViewAnother} className="bg-pink-400 rounded-lg text-center text-lg py-3 px-4">View Another</div></span></div>
+<section className="container px-4 mx-auto">
+    <div className="flex flex-col">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <div className="flex items-center gap-x-3">
+                                       
+                                        <button className="flex items-center gap-x-2">
+                                            <span>Sr No.</span>
+                                        </button>
+                                    </div>
+                                </th>
+
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    Date
+                                </th>
+
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                Shift
+                                </th>
+
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                Weight
+                                </th>
+
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    Price
+                                </th>
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                Type
+                                </th>
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                Fat
+                                </th>
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                Snf
+                                </th>
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                Total
+                                </th>
+
+                                <th scope="col" className="relative py-3.5 px-4">
+                                    <span className="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                            {
+                              fetched.map((item,index)=>{
+                                return (
+                                  <tr key={index}>
+                                <td className="px-4 py-4 text-sm font-medium text-black  whitespace-nowrap">
+                                    <div className="inline-flex items-center gap-x-3">
+                                        <span>{id++}</span>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-4 text-sm text-black dark:text-gray-300 whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td>
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                    <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                       
+
+                                        <h2 className="text-sm font-normal">{item.pshift}</h2>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-4 text-sm text-black whitespace-nowrap">
+                                    <div className="flex items-center gap-x-2">
+                                        <div>
+                                            <h2 className="text-sm font-medium text-black dark:text-white ">{item.weight}</h2>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.pprice}</td>
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                    <div className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${item.ptype=='Buy'?'bg-emerald-300/60':'bg-red-300/60'} dark:bg-gray-800`}>
+                                       
+
+                                        <h2 className="text-sm font-normal">{item.ptype}</h2>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.fat}</td>
+                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.snf}</td>
+                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.totalprice}</td>
+                                <td className="px-4 py-4 text-sm whitespace-nowrap">
+                                    <div className="flex items-center gap-x-6">
+                                        <button className="text-blue-500 transition-colors duration-200 ">
+                                            Edit
+                                        </button>
+
+                                        <button onClick={()=>{
+                                          setSelectedRow(item);
+                                          setModelVisible(true);
+                                        }} className="text-red-500 transition-colors duration-200  focus:outline-none">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                                )
+                              })
+                            }                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+
+   
+</section>
+
+</>
+        )
+      }
+     
+
+      
+    </div>
+     {
+      modelVisible ==true && (
+        <div class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"  id="modal-id">
+        <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
+       <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+        
+         <div class="">
+           <div class="text-center p-5 flex-auto justify-center">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 -m-1 flex items-center text-red-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                   </svg>
+                   <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+     <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+   </svg>
+                           <h2 class="text-xl font-bold py-4 ">Are you sure?</h2>
+                           <p class="text-sm text-gray-500 px-8">Do you really want to delete the entry?
+                   This process cannot be undone</p>    
+           </div>
+           <div class="p-3  mt-2 text-center space-x-4 md:block">
+               <button onClick={()=>{
+                setModelVisible(false);
+                setSelectedRow({});
+               }} class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+                   Cancel
+               </button>
+               <button onClick={()=>{
+                handleDelete();
+               }} class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600">Delete</button>
+           </div>
+         </div>
+       </div>
+     </div>
+      
+      )
+     }
     </div>
   );
 };
 
-export default purchaseMilk;
+
+
+
+export default ViewMilk;
