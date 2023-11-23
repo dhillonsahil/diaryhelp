@@ -41,7 +41,7 @@ const sellMilk = () => {
         }
       }
       try {
-        expiryCheck();
+        // expiryCheck();
        tok();
       } catch (error) {
         
@@ -405,7 +405,7 @@ const sellMilk = () => {
                 </div>
                 
                 <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
-              <DatePicker dateFormat={'yyyy-MM-dd'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleDateChange} />
+              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleDateChange} />
 
                
               </div>
@@ -494,7 +494,16 @@ const sellMilk = () => {
                 </button>
               </div>
               <div className="flex-initial">
-                <button
+                <button onClick={()=>{
+                   setWeight('');
+                   setFat('');
+                   setSnf('');
+                   setPrice('');
+                   setTotalPrice(0);
+                   setSelectedConsumer(null)
+                   // setMilkRate(0);
+                   setConsumerCode('')
+                }}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-black capitalize rounded-md hover:bg-red-200 hover:fill-current hover:text-red-600 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"
                 >

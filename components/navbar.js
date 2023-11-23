@@ -291,7 +291,7 @@ const NAV_ITEMS = [
       },{
         label: 'View Milk',
         // subLabel: 'An exclusive list for contract work',
-        href: '#',
+        href: '/viewmilk',
       },
     ],
   },
