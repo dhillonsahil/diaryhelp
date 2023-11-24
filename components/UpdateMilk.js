@@ -10,29 +10,36 @@ import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
 
 
-const sellMilk = () => {
+const UpdateMilk = (props) => {
     const [token, setToken] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
     const [price,setPrice] = useState('');
-    const [consumerCode, setConsumerCode] = useState('');
-    const [selectedConsumer, setSelectedConsumer] = useState(null);
-    const [customers,setCustomers]=useState([]);
-    const [weight,setWeight] = useState('');
-    const [fat,setFat]=useState('');
-    const [snf,setSnf]=useState('');
-    const [startDate, setStartDate] = useState(new Date());
-    const [selectedShift, setselectedShift] = useState('Morning');
-    const [selectedType,setSelectedtype]=useState('Sell')
-    const [priceType,setPriceType]=useState('Regular')
-    const [milkrate,setMilkRate]=useState(0);
-    const [totalPrice,setTotalPrice]=useState(0);
-    const [remarks,setRemarks]=  useState('');
+    const [consumerCode,setConsumerCode]=useState(props.cid)
+    const [weight,setWeight] = useState(props.weight);
+    const [fat,setFat]=useState(props.fat==0?'':String(props.fat));
+    const [snf,setSnf]=useState(props.snf==0?'':String(props.snf));
+    const [startDate, setStartDate] = useState(new Date(props.pdate));
+    const [selectedShift, setselectedShift] = useState(props.pshift);
+    const [selectedType,setSelectedtype]=useState(props.ptype)
+    const [priceType,setPriceType]=useState(props.fat==0?'Regular':'FatSnf')
+    const [milkrate,setMilkRate]=useState(props.pprice);
+    const [totalPrice,setTotalPrice]=useState(props.totalprice);
+    const [previousPrice,setPreviousPrice]=useState(props.totalprice)
+    const [remarks,setRemarks]=  useState(props.remarks);
     const router = useRouter();
-
     
 
     useEffect(() => {
-      const tok =async()=>{
+      
+      try {
+        // expiryCheck();
+       tok();
+    //    alert("Fetched")
+      } catch (error) {
+        alert("Error")
+      }
+    }, []);
+      
+    const tok =async()=>{
         let store = JSON.parse(localStorage.getItem('myUser'));
         if(store && store.token){
           setToken(store.token);
@@ -40,47 +47,11 @@ const sellMilk = () => {
           router.push('/')
         }
       }
-      try {
-        // expiryCheck();
-       tok();
-      } catch (error) {
-        
-      }
-    }, []);
-          
-          useEffect(() => {
-            if(token.length>0){
-      
-              const user = async(req,res)=>{
-                const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewcustomers`,{
-                  method:"POST",
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({token})
-                })
-                const resp = await response.json();
-                setCustomers(resp.data);
-              }
-              user();
-              handlePrice();
-              
-            }
-          }, [token]); 
-
           
           // handle functions
 
-        const handleInputChange = (e) => {
-            setConsumerCode(e.target.value);
-            const selected = customers.find((consumer) => consumer.id === parseInt(e.target.value));
-            setSelectedConsumer(selected);
-          };
-
-          const handleSearchChange = (e) => {
-            setSearchQuery(e.target.value);
-
-          };
+      
+         
 
           const handleDateChange = (date) => {
             setStartDate(date);
@@ -109,39 +80,31 @@ const sellMilk = () => {
               const fatmilk = await priceFetcher(fattype);
               const snfmilk = await priceFetcher(snftype);
               
-              const cprice = price == '' ? (fattype === 'cowfat' ? snfmilk[0].price : fatmilk[0].price) : Number(price);
-              let fatrate, snfrate, fatprice;
-    if (fattype === 'cowfat') {
-        fatrate =await fatmilk[0].price;
-        snfrate =await cprice === '' ? snfmilk[0].price : cprice;
-        fatprice = ((snfrate + (Number(fat) - 30) * fatrate) * Number(snf)) / 85;
-        setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100     )
-        let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100  ;
-        let calcPrice = roundedValue *Number(wt);
-        setTotalPrice(calcPrice)
-    } else if (fattype === 'buffalofat') {
-        fatrate = cprice === '' ? fatmilk[0].price : cprice;
-        snfrate = snfmilk[0].price;
-        fatprice = ((fatrate + ((snf==''?90:Number(snf)) - 90) * snfrate) * Number(fat)) / 100;
-        setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100        )
-        let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100     ;
-        const calcPrice = roundedValue *Number(wt);
-        setTotalPrice(calcPrice)
-    }
+             if(fatmilk && snfmilk){
+                const cprice = price == '' ? (fattype === 'cowfat' ? snfmilk[0].price : fatmilk[0].price) : Number(price);
+                let fatrate, snfrate, fatprice;
+      if (fattype === 'cowfat') {
+          fatrate =await fatmilk[0].price;
+          snfrate =await cprice === '' ? snfmilk[0].price : cprice;
+          fatprice = ((snfrate + (Number(fat) - 30) * fatrate) * Number(snf)) / 85;
+          setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100     )
+          let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100  ;
+          let calcPrice = roundedValue *Number(wt);
+          setTotalPrice(calcPrice)
+      } else if (fattype === 'buffalofat') {
+          fatrate = cprice === '' ? fatmilk[0].price : cprice;
+          snfrate = snfmilk[0].price;
+          fatprice = ((fatrate + ((snf==''?90:Number(snf)) - 90) * snfrate) * Number(fat)) / 100;
+          setMilkRate(Math.round((fatprice + Number.EPSILON) * 100) / 100        )
+          let roundedValue=Math.round((fatprice + Number.EPSILON) * 100) / 100     ;
+          const calcPrice = roundedValue *Number(wt);
+          setTotalPrice(calcPrice)
+      }
+             }
             
           }
 
-          const filteredConsumers = customers.filter((consumer) => {
-            const { c_name, father_name, mobile, id } = consumer;
-            const query = searchQuery.toLowerCase();
-            return (
-              c_name.toLowerCase().includes(query) ||
-              father_name.toLowerCase().includes(query) ||
-              mobile.includes(query) ||
-              id.toString().includes(query)
-            );
-          });
-
+         
           const getPrices =async (stype)=>{
                 
             const data={
@@ -190,82 +153,69 @@ const sellMilk = () => {
         }
 
 
-        const handleSave= async ()=>{
+
+        const handleUpdate =async()=>{
+
           try {
-            // data
-
-            const data ={
-              type:"BuySell",
-              token:token,
-              ptype:selectedType,
-              cid:selectedConsumer.id,
-              pdate:formatDateForSQL(startDate),
-              pprice:milkrate,
-              pshift:selectedShift,
-              totalprice:totalPrice,
-              cuid:selectedConsumer.uid,
-              cname:selectedConsumer.c_name,
-              fname:selectedConsumer.father_name,
-              fat:Number(fat),
-              snf:Number(snf),
-              remarks:remarks,
-              weight:Number(weight)
-            }
-
-            const resp  =await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkconsume`,{
-              method:"POST",
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/modifymilk`,{
+              method:"PUT",
               headers:{
                 'Content-Type': 'application/json'
-              },body:JSON.stringify(data)
-            })
+              },body:JSON.stringify({
+                token:token,
+                type:"update",
+                tid:props.tid,
+                cid:consumerCode,
+                utype:selectedType,
+                uprice:milkrate,
+                upshift:selectedShift,
+                ufat:Number(fat),
+                usnf:Number(snf),
+                utotalprice:totalPrice,
+                update:formatDateForSQL(startDate),
+                uweight:Number(weight),
+                uremarks:remarks
 
-            const response = await resp.json();
-            if(response.success==true){
-              toast.success('Inserted Entry!', {
-                position: "top-left",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            setWeight('');
-            setFat('');
-            setSnf('');
-            setPrice('');
-            setTotalPrice(0);
-            setSelectedConsumer(null)
-            // setMilkRate(0);
-            setConsumerCode('')
-            }else{
-              toast.error('Oops ! Try again Or Contact Us', {
-                position: "top-left",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            }
+              })
+,            })
+
+          const response = await resp.json();
+
+          if(response.success==true){
+            toast.success('Updated Successfully !', {
+              position: "top-left",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+          });
+          
+          router.refresh();
+
+          }else{
+            toast.error('An Error Occurred !', {
+              position: "top-left",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+          });
+          }
+
+
           } catch (error) {
-            console.log("An Error Occurred")
+            
           }
         }
-    
-        // useEffect(()=>{
-        //   if(fetchedPrice.length>0){
-        //     const price = fetchedPrice[0];
-        //     setMilkRate(price.price);
-        //   }
-        // },[fetchedPrice])
           
   return (
     <div>
-        <WithSubnavigation />
         <ToastContainer
                 position="top-left"
                 autoClose={3000}
@@ -302,7 +252,7 @@ const sellMilk = () => {
                 </g>
               </g>
             </svg>
-            <span className="pl-2 mx-1">Consumer's Details</span>
+            <span className="pl-2 mx-1">Update Milk Entry</span>
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
@@ -327,39 +277,9 @@ const sellMilk = () => {
                                 </Radio>
                               </Stack>
                             </RadioGroup></div>
-              <input
-                placeholder="Customer Code"
-                value={consumerCode}
-                onChange={handleInputChange}
-                name='consumerCode'
-                id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-              />
-               <input
-                placeholder="Search Customer"
-                value={searchQuery}
-                id='searchQuery'
-                onChange={handleSearchChange}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-              />
-
+              
                 
-              <label htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
-
-     <select  onChange={handleInputChange} size={6} style= {{
-  width: '100%',
-  padding: '0.5rem',
-  boxSizing: 'border-box',
-  border:'1px solid black'
-}}>
-     <option value={""}>Select Consumers</option>
-         {filteredConsumers.map((consumer) => (
-          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
-           {consumer.id} - {consumer.c_name} - {consumer.father_name}
-          </option>
-          ))}
-</select> 
-
+              
               <input
                 placeholder="Weight"
                 onChange={handleWeight}
@@ -401,6 +321,7 @@ const sellMilk = () => {
                       if(e.target.value!=0){
                         setTotalPrice(Number(weight)*e.target.value)
                       }else{
+                        
                         setTotalPrice(milkrate*Number(weight))
                       }
                     }}
@@ -415,17 +336,20 @@ const sellMilk = () => {
                
               </div>
              {
-              fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight) && (
+              fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight==''?props.weight:Number(weight)) && (
                <>
                 <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
+                <label htmlFor="price" className='text-red-500 mx-3'>Saved Price :{previousPrice}</label>
                 <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
               )
              }
               {
-              fat>45 && handleSnfFatPrice(weight) && (
+              fat>45 && handleSnfFatPrice(weight==''?props.weight:Number(weight)) && (
                <>
                 <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+                <label htmlFor="price" className='text-red-500 mx-3'>Saved Price :{previousPrice}</label>
+                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}
+                </label></>
               )
              }
              {
@@ -480,7 +404,9 @@ const sellMilk = () => {
             <hr className="mt-4" />
             <div className="flex flex-row-reverse p-3">
               <div className="flex-initial pl-3">
-                <button onClick={handleSave}
+                <button 
+                // onClick={handleSave}
+                onClick={handleUpdate}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out"
                 >
@@ -500,14 +426,7 @@ const sellMilk = () => {
               </div>
               <div className="flex-initial">
                 <button onClick={()=>{
-                   setWeight('');
-                   setFat('');
-                   setSnf('');
-                   setPrice('');
-                   setTotalPrice(0);
-                   setSelectedConsumer(null)
-                   // setMilkRate(0);
-                   setConsumerCode('')
+                   router.refresh();
                 }}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-black capitalize rounded-md hover:bg-red-200 hover:fill-current hover:text-red-600 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"
@@ -522,7 +441,7 @@ const sellMilk = () => {
                     <path d="M8 9h8v10H8z" opacity=".3"></path>
                     <path d="M15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"></path>
                   </svg>
-                  <span className="pl-2 mx-1">Delete</span>
+                  <span className="pl-2 mx-1">Cancel</span>
                 </button>
               </div>
             </div>
@@ -535,4 +454,4 @@ const sellMilk = () => {
   );
 };
 
-export default sellMilk;
+export default UpdateMilk;

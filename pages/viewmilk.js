@@ -7,16 +7,8 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  useDisclosure,Modal,ModalOverlay,ModalContent,ModalHeader,ModalCloseButton,ModalBody,ModalFooter,Button,
-  TableContainer,
-} from '@chakra-ui/react'
+import UpdateMilk from '@/components/UpdateMilk';
+
 
 const ViewMilk = () => {
     const [token, setToken] = useState('');
@@ -27,11 +19,10 @@ const ViewMilk = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [fetched,setFetched]=useState([]);
+    // const [ visible,setVisible ]=useState('userInput');
     const [ visible,setVisible ]=useState('userInput');
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedRow,setSelectedRow]=useState({});
     const [modelVisible,setModelVisible] = useState(false)
-    const [confirmDelete,setConfirmDelete] = useState(false);
     const router = useRouter();
 
     let id=1;
@@ -40,6 +31,7 @@ const ViewMilk = () => {
       setVisible('userInput');
       setConsumerCode('')
       setSelectedConsumer(null);
+      setSelectedRow({});
     }
 
     useEffect(() => {
@@ -141,6 +133,7 @@ const ViewMilk = () => {
                 progress: undefined,
                 theme: "light",
             });
+            setFetched((prevFetched) => prevFetched.filter(item => item.id !== selectedRow.id));
             }else{
               toast.error('Unable to delete !', {
                 position: "top-left",
@@ -197,10 +190,13 @@ const ViewMilk = () => {
                 pauseOnHover
                 theme="light"
             />
-        <div className={`${visible=='userInput'?'flex':''} h-screen`}>
+            {/* User input */}
+        {
+          visible=='userInput' && (
+            <div className={`${visible=='userInput'?'flex':''} h-screen`}>
           {/*  Get User Data Form */}
-      {
-        visible=='userInput' && <div className="m-auto">
+      
+         <div className="m-auto">
         <div>
           <button
             type="button"
@@ -324,7 +320,52 @@ const ViewMilk = () => {
          
         </div>
       </div>
-      }
+      
+     
+
+      {/* Update Data */}
+
+    </div>
+          )
+        }
+    {/*  Modal to confirm delete */}
+     {
+      modelVisible ==true && (
+        <div className="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"  id="modal-id">
+        <div className="absolute bg-black opacity-80 inset-0 z-0"></div>
+       <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+        
+         <div className="">
+           <div className="text-center p-5 flex-auto justify-center">
+                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 -m-1 flex items-center text-red-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                   </svg>
+                   <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+     <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+   </svg>
+                           <h2 className="text-xl font-bold py-4 ">Are you sure?</h2>
+                           <p className="text-sm text-gray-900 px-8">Do you really want to delete the entry?
+                   This process cannot be undone</p>    
+           </div>
+           <div className="p-3  mt-2 text-center space-x-4 md:block">
+               <button onClick={()=>{
+                setModelVisible(false);
+                setSelectedRow({});
+               }} className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+                   Cancel
+               </button>
+               <button onClick={()=>{
+                handleDelete();
+               }} className="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600">Delete</button>
+           </div>
+         </div>
+       </div>
+     </div>
+      
+      )
+     }
+
+     {/*  Update Price */}
       {/*  Show Data and Edit option form */}
       {
         visible=='showData' && ( <>
@@ -338,7 +379,7 @@ const ViewMilk = () => {
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead className="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                     <div className="flex items-center gap-x-3">
                                        
                                         <button className="flex items-center gap-x-2">
@@ -347,31 +388,31 @@ const ViewMilk = () => {
                                     </div>
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                     Date
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Shift
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Weight
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    Price
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                  Milk Rate
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Type
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Fat
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Snf
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Total
                                 </th>
 
@@ -390,7 +431,7 @@ const ViewMilk = () => {
                                         <span>{id++}</span>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-black dark:text-gray-300 whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td>
+                                <td className="px-4 py-4 text-sm text-black  whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td>
                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                                     <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                                        
@@ -405,7 +446,7 @@ const ViewMilk = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.pprice}</td>
+                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.pprice}</td>
                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                                     <div className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${item.ptype=='Buy'?'bg-emerald-300/60':'bg-red-300/60'} dark:bg-gray-800`}>
                                        
@@ -413,12 +454,15 @@ const ViewMilk = () => {
                                         <h2 className="text-sm font-normal">{item.ptype}</h2>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.fat}</td>
-                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.snf}</td>
-                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{item.totalprice}</td>
+                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.fat}</td>
+                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.snf}</td>
+                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.totalprice}</td>
                                 <td className="px-4 py-4 text-sm whitespace-nowrap">
                                     <div className="flex items-center gap-x-6">
-                                        <button className="text-blue-500 transition-colors duration-200 ">
+                                        <button onClick={()=>{
+                                          setSelectedRow(item);
+                                          setVisible("Edit")
+                                        }} className="text-blue-500 transition-colors duration-200 ">
                                             Edit
                                         </button>
 
@@ -447,45 +491,17 @@ const ViewMilk = () => {
 </>
         )
       }
-     
 
-      
-    </div>
+     {/*  Edit Price */}
      {
-      modelVisible ==true && (
-        <div class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"  id="modal-id">
-        <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
-       <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
-        
-         <div class="">
-           <div class="text-center p-5 flex-auto justify-center">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 -m-1 flex items-center text-red-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                   </svg>
-                   <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-     <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-   </svg>
-                           <h2 class="text-xl font-bold py-4 ">Are you sure?</h2>
-                           <p class="text-sm text-gray-500 px-8">Do you really want to delete the entry?
-                   This process cannot be undone</p>    
-           </div>
-           <div class="p-3  mt-2 text-center space-x-4 md:block">
-               <button onClick={()=>{
-                setModelVisible(false);
-                setSelectedRow({});
-               }} class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
-                   Cancel
-               </button>
-               <button onClick={()=>{
-                handleDelete();
-               }} class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600">Delete</button>
-           </div>
-         </div>
-       </div>
-     </div>
-      
+      visible=='Edit' && (
+        <>
+        <UpdateMilk setVisible={setVisible} setSelectedRow={setSelectedRow} setSelectedConsumer={setSelectedConsumer} tid={selectedRow.id} cid={selectedConsumer.id} weight={selectedRow.weight} fat ={selectedRow.fat} snf={selectedRow.snf} pdate={selectedRow.pdate} pshift={selectedRow.pshift} ptype={selectedRow.ptype} pprice={selectedRow.pprice} totalprice={selectedRow.totalprice} remarks={selectedRow.remarks} />
+        </>
       )
      }
+
+     {/*  End */}
     </div>
   );
 };

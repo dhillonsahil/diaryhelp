@@ -1,5 +1,5 @@
 import pool from "@/lib/db";
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 const handler = async(req,res)=>{
     try {
         const {type, token}= req.body;
@@ -82,6 +82,7 @@ const handler = async(req,res)=>{
             })
         }else if(type=='specific'){
             const {stype}=req.body;
+            console.log("Stype : "+stype)
             pool.query(`select * from ${username}_milkprice where mtype=?`,[stype],(error,rows,fields)=>{
                 if(error){
                     console.log(error)
