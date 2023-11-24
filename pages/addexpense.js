@@ -13,17 +13,17 @@ import expiryCheck from '@/components/expiryCheck';
 const purchaseMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [price,setPrice] = useState('');
+    const [price,setPrice] = useState(0);
     const [consumerCode, setConsumerCode] = useState('');
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
-    
+    const [selecteditem,setSelectedItem]=useState(null);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedType,setSelectedtype]=useState('Sell')
     const [remarks,setRemarks]=  useState('');
     const [items,setItems]=useState([]);
     const router = useRouter();
-
+    const [quant,setQuant]=useState(1)
     
 
     useEffect(() => {
@@ -59,27 +59,104 @@ const purchaseMilk = () => {
               }
 
               // fetch items
-    const fetchItems =async()=>{
-        const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json",
-          },
-          body:JSON.stringify({
-            token:token,
-            type:"viewAll"
-          })
-        })
-  
-        const response = await resp.json();
-        setItems(response.data);
-      }
+    
 
               user();
+              fetchItems();
               
             }
           }, [token]); 
 
+          const fetchItems =async()=>{
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
+              method:"POST",
+              headers:{
+                "Content-Type":"application/json",
+              },
+              body:JSON.stringify({
+                token:token,
+                type:"viewAll"
+              })
+            })
+      
+            const response = await resp.json();
+            setItems(response.data);
+          }
+
+
+          const handleSubmit=async()=>{
+            if(selectedConsumer!=null ){
+              const data={
+                token:token,
+                type:"BuySell",
+                ptype:selectedType
+                , cid:selectedConsumer.id,
+                 pdate:formatDateForSQL(startDate), 
+                 pprice : Number(price)==0?selecteditem.itemprice:price, 
+                 pshift:"", 
+                 totalprice : Number(quant)*(Number(price)==0?selecteditem.itemprice:price),
+                  cuid : selectedConsumer.uid, 
+                  cname : selectedConsumer.c_name, fname : selectedConsumer.father_name, fat:0, snf:0, weight:quant, 
+                  remarks:remarks
+              }
+
+              const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkconsume`,{
+                method:"POST",
+                headers:{
+                  "Content-Type":"application/json",
+                },
+                body:JSON.stringify(data)
+              })
+
+              const response = await resp.json();
+              if(response.success){
+                // update stock
+                const dt={
+                  type:'updateStock',
+                  newStock:selectedType=='Sell'?selecteditem.itemquantity-Number(quant):selecteditem.itemquantity+Number(quant),
+                  id:selecteditem.id,
+                  token:token
+                };
+
+                const resp=  await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
+                  method:"POST",
+                  headers:{
+                    "Content-Type":"application/json",
+                  },
+                  body:JSON.stringify(dt)
+                });
+
+                const response = await resp.json();
+                if(response.success){
+                  toast.success('Added Successfully !', {
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                router.refresh();
+                }else{
+                  toast.error('An Error occurred !', {
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                }
+
+              }else{
+                
+              }
+            }
+          }
           
           // handle functions
 
@@ -103,6 +180,12 @@ const purchaseMilk = () => {
             return format(date, "yyyy-MM-dd");
         };
     
+        const handleItemChange = (e) => {
+          const itemId = e.target.value;
+          const selected = items.find((item) => item.id === parseInt(itemId));
+          setSelectedItem(selected);
+          setRemarks(selected.itemName)
+        };
 
         
     const filteredConsumers = customers.filter((consumer) => {
@@ -159,7 +242,7 @@ const purchaseMilk = () => {
                 </g>
               </g>
             </svg>
-            <span className="pl-2 mx-1">Consumer's Details</span>
+            <span className="pl-2 mx-1">Add Expense</span>
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
@@ -170,7 +253,7 @@ const purchaseMilk = () => {
                 onChange={handleInputChange}
                 name='consumerCode'
                 id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" required
               />
                <input
                 placeholder="Search Customer"
@@ -203,11 +286,12 @@ const purchaseMilk = () => {
                 <div className="flex-grow w-1/4 pr-2">
                   <input
                     placeholder="Price"
+                    type='number'
                     onChange={(e)=>{
                       setPrice(e.target.value);
                     //   pending
                     }}
-                    value={price}
+                    value={price==0?'':price}
                     className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                   />
                 </div>
@@ -228,32 +312,40 @@ const purchaseMilk = () => {
                                }}>
                               <Stack spacing={5} direction='row'>
                                 <Radio colorScheme='green' value='Sell'>
-                                  Debit
+                                  Debit (बेचा)
                                 </Radio>
                                 <Radio colorScheme='red' value='Buy'>
-                                  Credit
+                                  Credit (लिया)
                                 </Radio>
                               </Stack>
                             </RadioGroup>
    </div>
 
   
-   <label htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
+   <label htmlFor="consumerSelect">Selected Item: {selecteditem!=null ? selecteditem.itemName :""}</label>
 
-<select  onChange={handleInputChange} size={6} style= {{
+<select  onChange={handleItemChange} size={5} style= {{
 width: '100%',
 padding: '0.5rem',
 boxSizing: 'border-box',
 border:'1px solid black'
 }}>
 <option value={""}>Select Item</option>
-    {items.map((consumer) => (
-     <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
-      {items.id} - {items.itemName} - {items.itemprice}
+    {items.map((item) => (
+     <option className='hover:bg-green-200' key={item.id} value={item.id} defaultValue={selecteditem?.id === item.id}>
+      {item.id} - {item.itemName} - ₹{item.itemprice} - Left Quantity : {item.itemquantity}
      </option>
      ))}
 </select> 
 
+<label htmlFor="consumerSelect">Enter quantity (default 1): {selecteditem!=null ? selecteditem.itemName :""}</label>
+
+ <input
+                placeholder="Quantity"
+                onChange={(e)=>setQuant(e.target.value)}
+                value={quant==0?'':quant}
+                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+              />
    <input
                 placeholder="Remarks"
                 onChange={(e)=>setRemarks(e.target.value)}
@@ -268,6 +360,7 @@ border:'1px solid black'
               <div className="flex-initial pl-3">
                 <button 
                   type="button"
+                  onClick={handleSubmit}
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out"
                 >
                   <svg
@@ -287,7 +380,7 @@ border:'1px solid black'
               <div className="flex-initial">
                 <button onClick={()=>{
                   
-                   setPrice('');
+                   setPrice(0);
                    setSelectedConsumer(null)
                    // setMilkRate(0);
                    setConsumerCode('')

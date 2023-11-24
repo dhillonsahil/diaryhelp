@@ -17,7 +17,7 @@ const handler =async(req,res)=>{
                 return res.status(200).json({ success: true, message: 'Table does not exist', data: [] });
             }
 
-            pool.query(`select * from ${username}_milk where cid=? and pdate>=? and pdate <=? ORDER BY pdate ASC`,[cid,startDate,endDate],(error,rows)=>{
+            pool.query(`select * from ${username}_milk where cid=? and pshift!='' and pdate>=? and pdate <=? ORDER BY pdate ASC`,[cid,startDate,endDate],(error,rows)=>{
                 if(error){
                     res.status(500).json({error:error.message,success:false})
                 }else{
