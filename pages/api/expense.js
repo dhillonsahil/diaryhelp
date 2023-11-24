@@ -1,41 +1,34 @@
 import pool from "@/lib/db";
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 
-const handler = async(req,res)=>{
-    const { type, token } = req.body;
+const handler =async(req,res)=>{
+    const {token}= req.body;
     let key = process.env.JWT_SECRET;
-    const username = jwt.verify(token, key).email.split('@')[0].toLowerCase();
+    const username = jwt.verify(token,key).email.split('@')[0];
     try {
-        const {ptype,cid, pdate, pprice,totalprice, cuid, cname, fname,quant}=req.body;
-        pool.getConnection((err, connection) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).json({ success: false, message: "An error occurred" });
+        const {startDate,endDate,cid} =req.body;
+        //  if table exists
+        pool.query(`SHOW TABLES LIKE '${username}_milk'`, (error, rows) => {
+            if (error) {
+                console.log(" error aagya ji")
+                return res.status(400).json({ success: false, message: 'Unable to check table existence' });
+            }
+            if (rows.length == 0) {
+                // Table does not exist, return empty array
+                console.log("0 length")
+                return res.status(200).json({ success: true, message: 'Table does not exist', data: [] });
             }
 
-            // transaction begins;
-            connection.beginTransaction((err) => {
-                if (err) {
-                    console.log(err);
-                    connection.release();
-                    return res.status(500).json({ success: false, message: "An error occurred" });
+            pool.query(`select * from ${username}_milk where cid=? and pshift='' and pdate>=? and pdate <=? ORDER BY pdate ASC`,[cid,startDate,endDate],(error,rows)=>{
+                if(error){
+                    console.log(error)
+                    res.status(500).json({error:error.message,success:false})
+                }else{
+                    res.status(200).json({success:true,data:rows})
                 }
-
-                // query area
-                connection.query(`create table if not exists ${username}_milk(id int primary key auto_increment ,ptype varchar(10) , cid int , pdate date , pprice float, pshift varchar(10),totalprice float,cuid varchar(8) , cname varchar(100) , fname varchar(100), fat int , snf int,weight float , remarks varchar(100),foreign key(cname) references ${username}_customers(c_name) , foreign key(fname) references ${username}_customers(father_name), foreign key(cid) references ${username}_customers (id), foreign key (cuid) references ${username}_customers(uid) )`, (error, rows, fields) => {
-                    if (error) {
-                        console.log(error);
-                        connection.rollback(() => {
-                            connection.release();
-                            return res.status(500).json({ success: false, message: "An error occurred" });
-                        });
-                    }
-                    // now inserting data
-
-                })
-
             })
         })
+        
     } catch (error) {
         
     }

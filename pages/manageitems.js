@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Card, CardHeader, CardBody, CardFooter ,Stack,Heading,Divider,ButtonGroup,Button ,Text} from '@chakra-ui/react'
 import UpdatePrice from '@/components/UpdatePrice';
 import UpdateStock from '@/components/UpdateStock';
+import expiryCheck from '@/components/expiryCheck';
 
 const ManageItems = () => {
     const [itemName,setItemName]=useState('');
@@ -35,6 +36,7 @@ const ManageItems = () => {
 
     useEffect(()=>{
       if(token.length>0){
+        expiryCheck();
         fetchItems();
       }
     },[token])

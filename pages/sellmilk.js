@@ -41,7 +41,7 @@ const sellMilk = () => {
         }
       }
       try {
-        // expiryCheck();
+        expiryCheck();
        tok();
       } catch (error) {
         

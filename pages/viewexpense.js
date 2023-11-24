@@ -7,10 +7,9 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
-import UpdateMilk from '@/components/UpdateMilk';
 
 
-const ViewMilk = () => {
+const ViewExpense = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [consumerCode, setConsumerCode] = useState('');
@@ -19,7 +18,6 @@ const ViewMilk = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [fetched,setFetched]=useState([]);
-    // const [ visible,setVisible ]=useState('userInput');
     const [ visible,setVisible ]=useState('userInput');
     const [selectedRow,setSelectedRow]=useState({});
     const [modelVisible,setModelVisible] = useState(false)
@@ -163,7 +161,7 @@ const ViewMilk = () => {
             startDate:formatDateForSQL(startDate),
             endDate:formatDateForSQL(endDate)
           }
-          const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewmilk`,{
+          const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/expense`,{
           method:"POST",
           headers: {
             'Content-Type': 'application/json'
@@ -190,7 +188,9 @@ const ViewMilk = () => {
                 pauseOnHover
                 theme="light"
             />
+           
             {/* User input */}
+
         {
           visible=='userInput' && (
             <div className={`${visible=='userInput'?'flex':''} h-screen`}>
@@ -219,7 +219,7 @@ const ViewMilk = () => {
                 </g>
               </g>
             </svg>
-            <span className="pl-2 mx-1">Milk Details</span>
+            <span className="pl-2 mx-1">Expenses Details</span>
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
@@ -291,7 +291,7 @@ const ViewMilk = () => {
                     <path d="M5 5v14h14V7.83L16.17 5H5zm7 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-8H6V6h9v4z" opacity=".3"></path>
                     <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"></path>
                   </svg>
-                  <span className="pl-2 mx-1">Submit</span>
+                  <span className="pl-2 mx-1">View Expenses</span>
                 </button>
               </div>
               <div className="flex-initial">
@@ -369,8 +369,10 @@ const ViewMilk = () => {
       {/*  Show Data and Edit option form */}
       {
         visible=='showData' && ( <>
-          <div className='text-2xl text-black font-bold text-center my-2 p-2 flex justify-between'>Milk Entries for {selectedConsumer.c_name} <span  className=' flex justify-center align-middle'>
-  <div onClick={handleViewAnother} className="bg-pink-400 rounded-lg text-center text-lg py-3 px-4">View Another</div></span></div>
+          <div className='text-2xl text-black font-bold text-center my-2 p-2 flex justify-between'>Expense Entries for {selectedConsumer.c_name} <span  className=' flex justify-center align-middle'>
+  <div onClick={handleViewAnother} className="bg-pink-400 rounded-lg text-center text-lg py-3 px-4">View Another</div></span>
+  
+  </div>
 <section className="container px-4 mx-auto">
     <div className="flex flex-col">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -393,7 +395,7 @@ const ViewMilk = () => {
                                 </th>
 
                                 <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
-                                Shift
+                                Remarks
                                 </th>
 
                                 <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
@@ -422,7 +424,7 @@ const ViewMilk = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                            { fetched && 
+                            { fetched &&
                               fetched.map((item,index)=>{
                                 return (
                                   <tr key={index}>
@@ -436,7 +438,7 @@ const ViewMilk = () => {
                                     <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                                        
 
-                                        <h2 className="text-sm font-normal">{item.pshift}</h2>
+                                        <h2 className="text-sm font-normal">{item.remarks}</h2>
                                     </div>
                                 </td>
                                 <td className="px-4 py-4 text-sm text-black whitespace-nowrap">
@@ -459,12 +461,7 @@ const ViewMilk = () => {
                                 <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.totalprice}</td>
                                 <td className="px-4 py-4 text-sm whitespace-nowrap">
                                     <div className="flex items-center gap-x-6">
-                                        <button onClick={()=>{
-                                          setSelectedRow(item);
-                                          setVisible("Edit")
-                                        }} className="text-blue-500 transition-colors duration-200 ">
-                                            Edit
-                                        </button>
+                                       
 
                                         <button onClick={()=>{
                                           setSelectedRow(item);
@@ -492,14 +489,7 @@ const ViewMilk = () => {
         )
       }
 
-     {/*  Edit Price */}
-     {
-      visible=='Edit' && (
-        <>
-        <UpdateMilk setVisible={setVisible} setSelectedRow={setSelectedRow} setSelectedConsumer={setSelectedConsumer} tid={selectedRow.id} cid={selectedConsumer.id} weight={selectedRow.weight} fat ={selectedRow.fat} snf={selectedRow.snf} pdate={selectedRow.pdate} pshift={selectedRow.pshift} ptype={selectedRow.ptype} pprice={selectedRow.pprice} totalprice={selectedRow.totalprice} remarks={selectedRow.remarks} />
-        </>
-      )
-     }
+    
 
      {/*  End */}
     </div>
@@ -509,4 +499,4 @@ const ViewMilk = () => {
 
 
 
-export default ViewMilk;
+export default ViewExpense;

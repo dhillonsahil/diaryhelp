@@ -278,6 +278,7 @@ const NAV_ITEMS = [
   },
   {
     label: 'Milk',
+    href:'/sellmilk',
     children: [
       {
         label: 'Sell Milk',
@@ -297,6 +298,7 @@ const NAV_ITEMS = [
   },
   {
     label: 'Expenses',
+    href:'/addexpense',
     children: [
       {
         label: 'Add Expenses',
@@ -306,7 +308,7 @@ const NAV_ITEMS = [
       {
         label: 'View Expenses',
         // subLabel: 'An exclusive list for contract work',
-        href: '#',
+        href: '/viewexpense',
       },{
         label: 'Manage Items',
         // subLabel: 'An exclusive list for contract work',

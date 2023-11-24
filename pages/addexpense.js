@@ -36,7 +36,7 @@ const purchaseMilk = () => {
         }
       }
       try {
-        // expiryCheck();
+        expiryCheck();
        tok();
       } catch (error) {
         
@@ -138,7 +138,20 @@ const purchaseMilk = () => {
                     progress: undefined,
                     theme: "light",
                 });
-                router.refresh();
+                // router.refresh();
+                const updatedItems = items.map((item) => {
+                  if (item.id === selecteditem.id) {
+                    // Update the quantity for the selected item
+                    return {
+                      ...item,
+                      itemquantity: selectedType === 'Sell' ? item.itemquantity - Number(quant) : item.itemquantity + Number(quant),
+                    };
+                  }
+                  return item;
+                });
+          
+                // Set the updated items state
+                setItems(updatedItems);
                 }else{
                   toast.error('An Error occurred !', {
                     position: "top-left",

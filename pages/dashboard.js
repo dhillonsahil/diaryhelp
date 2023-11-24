@@ -20,7 +20,7 @@ const dashboard = () => {
       }
     }
     try {
-      // expiryCheck();
+      expiryCheck();
      tok();
     } catch (error) {
       

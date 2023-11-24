@@ -15,6 +15,7 @@ import { SearchBar } from '@/components/seachbar';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import jwt from 'jsonwebtoken'
+import expiryCheck from '@/components/expiryCheck';
 
 const viewcustomers = () => {
     const [token, setToken] = useState('');
@@ -35,6 +36,7 @@ const viewcustomers = () => {
         }
       }
       try {
+        expiryCheck();
        tok();
       } catch (error) {
         
