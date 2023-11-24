@@ -7,13 +7,26 @@ const handler = async(req,res)=>{
         if(key && token ){
           jwt.verify(token, key, function(err, decoded) {
            const username =decoded.email.split('@')[0].toLowerCase();
-           pool.query(`select * from ${username}_customers`,(error , rows,fields)=>{
-            if(error){
-                console.log("error ",error)
-                return res.status(500).json({ success: false, message: "Error occurred while adding a customer" });
+           // if table not exists
+           pool.query(`SHOW TABLES LIKE '${username}_customers'`, (error, rows) => {
+            if (error) {
+                return res.status(400).json({ success: false, message: 'Unable to check table existence' });
             }
-            return res.status(200).json({ success: true, data: rows });
+            if (rows.length == 0) {
+                // Table does not exist, return empty array
+                return res.status(200).json({ success: true, message: 'Table does not exist', data: [] });
+            }
+        
+            pool.query(`select * from ${username}_customers`,(error , rows,fields)=>{
+                if(error){
+                    console.log("error ",error)
+                    return res.status(500).json({ success: false, message: "Error occurred while adding a customer" });
+                }
+                return res.status(200).json({ success: true, data: rows });
+            })
+
         })
+          
           });
           
         }else{

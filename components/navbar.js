@@ -301,12 +301,16 @@ const NAV_ITEMS = [
       {
         label: 'Add Expenses',
         // subLabel: 'Find your dream design job',
-        href: '#',
+        href: '/addexpense',
       },
       {
         label: 'View Expenses',
         // subLabel: 'An exclusive list for contract work',
         href: '#',
+      },{
+        label: 'Manage Items',
+        // subLabel: 'An exclusive list for contract work',
+        href: '/manageitems',
       }
     ],
   },
