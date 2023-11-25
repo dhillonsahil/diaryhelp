@@ -1,5 +1,5 @@
 import WithSubnavigation from '@/components/navbar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
+import { useReactToPrint } from 'react-to-print';
+
 import {
   Table,
   Thead,
@@ -18,6 +20,7 @@ import {
   TableCaption,
   TableContainer,
 } from '@chakra-ui/react'
+import PrintDoc from '@/components/PrintDoc';
 
 const ViewExpense = () => {
     const [token, setToken] = useState('');
@@ -35,6 +38,17 @@ const ViewExpense = () => {
   
     const router = useRouter();
 
+    useEffect(() => {
+      console.log('PrintDoc component rendered');
+      console.log('Ref value:', componentRef.current);
+    }, [fetched]);
+    
+    const componentRef = useRef(null);
+
+    const handlePrint = useReactToPrint({
+      content: () => componentRef.current,
+    });
+  
     let id=1;
     const handleNextPage = () => {
       setCurrentPage((prevPage) => prevPage + 1);
@@ -45,6 +59,8 @@ const ViewExpense = () => {
         setCurrentPage((prevPage) => prevPage - 1);
       }
     };
+
+    
 
     useEffect(() => {
       const tok =async()=>{
@@ -332,47 +348,47 @@ const ViewExpense = () => {
             </svg>
             <span className="pl-2 mx-1">All Milk Entries</span>
           </button>
-          <div class="flex flex-col">
-  <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-      <div class="overflow-hidden">
+          <div className="flex flex-col">
+  <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+      <div className="overflow-hidden">
         <table
-          class="min-w-full border text-center text-sm font-light dark:border-neutral-500">
-          <thead class="border-b font-medium dark:border-neutral-500">
+          className="min-w-full border text-center text-sm font-light dark:border-neutral-500">
+          <thead className="border-b font-medium dark:border-neutral-500">
             <tr>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Sr No.
               </th>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Date & Shift
               </th>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Weight
               </th>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Fat
               </th>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Snf
               </th>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Milk Rate
               </th>
               <th
                 scope="col"
-                class="border-r px-2 py-4 dark:border-neutral-500">
+                className="border-r px-2 py-4 dark:border-neutral-500">
                 <div className="flex flex-col">
                   <div className="">Credit</div>
                   <div className="text-sm">(दूध वाले ने खरीदा)</div>
@@ -380,7 +396,7 @@ const ViewExpense = () => {
               </th>
               <th
                 scope="col"
-                class="border-r px-2 py-4 dark:border-neutral-500">
+                className="border-r px-2 py-4 dark:border-neutral-500">
                 <div className="flex flex-col">
                   <div className="">Debit</div>
                   <div className="text-sm">(दूध वाले ने बेचा)</div>
@@ -388,7 +404,7 @@ const ViewExpense = () => {
               </th>
               <th
                 scope="col"
-                class="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 dark:border-neutral-500">
                 Remarks
               </th>
             </tr>
@@ -401,41 +417,41 @@ const ViewExpense = () => {
             )
 .map((item)=>{
               return (
-                <tr class="text-black border-b font-bold">
+                <tr className="text-black border-b font-bold">
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 font-medium ">
+                  className="whitespace-nowrap border-r px-6 py-4 font-medium ">
                   {id++}
                 </td>
                 <td
-                  class="whitespace-nowrap text-black border-r px-6 py-4">
-                  {String(formatDateForSQL(new Date(item.pdate)))} {item.pshift!=""?"-":''} {item.pshift=="Morning"?"M":""} {item.pshift=="Evening"?"E":""}
+                  className="whitespace-nowrap text-black border-r px-6 py-4">
+                  {String(fdate(new Date(item.pdate)))} {item.pshift!=""?"-":''} {item.pshift=="Morning"?"M":""} {item.pshift=="Evening"?"E":""}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.weight}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.fat}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.snf}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.pprice}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td
-                  class="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
                   {item.remarks}
                 </td>
               </tr>
@@ -463,6 +479,10 @@ const ViewExpense = () => {
               Next
             </button>
           </div>
+          <button onClick={() => setTimeout(() => handlePrint(), 100)}>Print this out!</button>
+          {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
+          {fetched.length>0 && <PrintDoc fetched={fetched} ref={(el) => (componentRef.current = el)} />}
+          
       </div>
     </div>
   </div>

@@ -54,7 +54,7 @@ const CallToAction = () => {
       <div className="mt-6 m-auto space-y-6 md:w-8/12 lg:w-7/12">
         <h1 className="text-center text-4xl font-bold text-gray-800 dark:text-white md:text-5xl">Get Started now</h1>
         <p className="text-center text-xl text-gray-600 dark:text-gray-300">
-          Be part of hundreds of people around the world using our services to scale buisness.
+          Be part of thousands of people around the world using our services to scale buisness.
         </p>
         {/* <div className="flex flex-wrap justify-center gap-6">
           <a

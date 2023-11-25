@@ -80,15 +80,15 @@ export default function ThreeTierPricing() {
             
             <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                 Add / View Customers
+                 Manage Customers
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  Sell / Purchase Milk
+                  Manage Sales and Purchases
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  Add Expense
+                  Manage Stock and Expenses
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
@@ -160,15 +160,15 @@ export default function ThreeTierPricing() {
               <List spacing={3} textAlign="start" px={12}>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                 Add / View Customers
+                 Manage Customers
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  Sell / Purchase Milk
+                  Manage Sales and Purchases
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  Add Expense
+                  Manage Stock and Expenses
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
@@ -222,16 +222,16 @@ export default function ThreeTierPricing() {
             
             <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                 Add / View Customers
+                 Manage Customers
                 </ListItem>
                 
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  Sell / Purchase Milk
+                  Manage Sales and Purchases
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  Add Expense
+                  Manage Stock and Expenses
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
