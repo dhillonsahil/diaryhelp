@@ -113,7 +113,7 @@ export default function Contact() {
                 pauseOnHover
                 theme="light"
             />
-    <Container className='min-h-screen' bg="#9DC4FB" maxW="full" mt={0} centerContent overflow="hidden">
+    <Container className='min-h-screen' maxW="full" mt={0} centerContent overflow="hidden">
       <Flex  marginTop={2} >
         <Box
         marginTop={12}

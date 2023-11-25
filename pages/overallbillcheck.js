@@ -128,8 +128,8 @@ const ViewExpense = () => {
         }
       }
       try {
+        tok();
         expiryCheck();
-       tok();
       } catch (error) {
         console.log("Error: " , error)
       }

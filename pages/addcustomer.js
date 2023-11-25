@@ -52,8 +52,8 @@ const addcustomer = () => {
       }
     }
     try {
-     expiryCheck()
       tok();
+      expiryCheck()
     } catch (error) {
       
     }

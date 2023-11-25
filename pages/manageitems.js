@@ -27,8 +27,8 @@ const ManageItems = () => {
         }
       }
       try {
-        // expiryCheck();
-       tok();
+        tok();
+        expiryCheck();
       } catch (error) {
         
       }
@@ -36,7 +36,6 @@ const ManageItems = () => {
 
     useEffect(()=>{
       if(token.length>0){
-        expiryCheck();
         fetchItems();
       }
     },[token])

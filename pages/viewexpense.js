@@ -42,8 +42,8 @@ const ViewExpense = () => {
         }
       }
       try {
+        tok();
         expiryCheck();
-       tok();
       } catch (error) {
         
       }

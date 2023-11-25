@@ -38,11 +38,11 @@ const AppHeader = () => {
                                     <span>Contact</span>
                                 </Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link href="/viewbill" className="block md:px-4 transition hover:text-primary">
                                     <span>View Bill</span>
                                 </Link>
-                            </li>
+                            </li> */}
                            
                             {/* <li>
                                 <Link href="" className="block md:px-4 transition hover:text-primary">

@@ -36,8 +36,8 @@ const viewcustomers = () => {
         }
       }
       try {
+        tok();
         expiryCheck();
-       tok();
       } catch (error) {
         
       }

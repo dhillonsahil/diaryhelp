@@ -141,8 +141,8 @@ const DialyPrice = () => {
       }
     }
     try {
+      tok();
       expiryCheck();
-     tok();
     } catch (error) {
       
     }

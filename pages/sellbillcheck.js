@@ -82,8 +82,8 @@ const SellBill = () => {
         }
       }
       try {
+        tok();
         expiryCheck();
-       tok();
       } catch (error) {
         console.log("Error: " , error)
       }

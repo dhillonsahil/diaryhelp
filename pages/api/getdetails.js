@@ -5,7 +5,6 @@ const handler = async(req,res)=>{
     const {token,type}= req.body;
    
     let key = process.env.JWT_SECRET;
-    console.log(key)
     const email = jwt.verify(token,key).email;
     
     try {
