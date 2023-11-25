@@ -11,12 +11,12 @@ import pool from '@/lib/db'
 const forgot = async (req, res) => {
   // check if user exists
   let {customerMail}= req.body;
-  console.log("Customer mail is " + customerMail)
+  // console.log("Customer mail is " + customerMail)
 
   try {
     pool.query(`select * from users where email = ?`,[customerMail],(error,rows,fields)=>{
       if(rows.length==0){return res.status(400).json({success:false,message:"No User fond"})}
-      else {console.log("found a user ::"+rows[0].email)}
+      
   })
   } catch (error) {
     console.log("some error")

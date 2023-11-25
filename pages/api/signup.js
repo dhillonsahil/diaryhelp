@@ -1,6 +1,6 @@
 import pool from "@/lib/db";
 var CryptoJS = require("crypto-js");
-
+const jwt = require("jsonwebtoken");
 //  Create table using this syntax
 
 // create table users(id int primary key auto_increment not null ,p_name varchar(30), d_name varchar(50) ,email varchar(60) , password varchar(30) , mobile varchar(20) , payment varchar(20) default 'trial');
@@ -21,7 +21,10 @@ const handler = async (req, res) => {
                     if(error){
                         return res.status(500).json({success:false,error:"Internal server error"})
                     }else{
-                        return res.status(200).json({success:true,message:"Account Created Successfully!"})
+                      var token = jwt.sign({email:emailLower,name:rows[0].name},process.env.JWT_SECRET,{
+                        expiresIn:"2d"
+                      })
+                        return res.status(200).json({success:true,message:"Account Created Successfully!",token})
                     }
                 })
             }

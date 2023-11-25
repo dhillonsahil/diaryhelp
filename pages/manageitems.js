@@ -61,7 +61,6 @@ const ManageItems = () => {
     
     // handle add item
     const handleAdd =async(e)=>{
-      console.log("Hello")
       e.preventDefault();
       const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
         method:'POST',

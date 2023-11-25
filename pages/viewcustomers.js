@@ -61,10 +61,10 @@ const viewcustomers = () => {
       }
     }, [token]); 
 
-    useEffect(()=>{
+    // useEffect(()=>{
       
-      console.log(customers)
-    },[customers])
+    //   // console.log(customers)
+    // },[customers])
 
 
   return (

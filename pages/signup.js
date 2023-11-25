@@ -41,7 +41,7 @@ export default function Signup() {
     })
 
     let response = await res.json()
-     if(response.success==true){
+     if(response.success==true && response.message=='Account Created Successfully!'){
       toast.success('Account Created Successfully!', {
         position: "top-left",
         autoClose: 3000,
@@ -52,7 +52,9 @@ export default function Signup() {
         progress: undefined,
         theme: "light",
         });
-      }else if(response.success=="Account Already Exist"){
+       localStorage.setItem("myUser",JSON.stringify({token : response.token }));
+       router.push('/diarydetails')
+      }else if(response.message=="Account Already Exist"){
         toast.error('Account Already Exist', {
           position: "top-left",
           autoClose: 3000,

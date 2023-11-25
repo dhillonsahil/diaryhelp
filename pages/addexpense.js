@@ -111,62 +111,74 @@ const purchaseMilk = () => {
               const response = await resp.json();
               if(response.success){
                 // update stock
-                const dt={
-                  type:'updateStock',
-                  newStock:selectedType=='Sell'?selecteditem.itemquantity-Number(quant):selecteditem.itemquantity+Number(quant),
-                  id:selecteditem.id,
-                  token:token
-                };
-
-                const resp=  await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
-                  method:"POST",
-                  headers:{
-                    "Content-Type":"application/json",
-                  },
-                  body:JSON.stringify(dt)
-                });
-
-                const response = await resp.json();
-                if(response.success){
-                  toast.success('Added Successfully !', {
-                    position: "top-left",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                // router.refresh();
-                const updatedItems = items.map((item) => {
-                  if (item.id === selecteditem.id) {
-                    // Update the quantity for the selected item
-                    return {
-                      ...item,
-                      itemquantity: selectedType === 'Sell' ? item.itemquantity - Number(quant) : item.itemquantity + Number(quant),
-                    };
+                if(selecteditem){
+                  const dt={
+                    type:'updateStock',
+                    newStock:selectedType=='Sell'?selecteditem.itemquantity-Number(quant):selecteditem.itemquantity+Number(quant),
+                    id:selecteditem.id,
+                    token:token
+                  };
+  
+                  const resp=  await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
+                    method:"POST",
+                    headers:{
+                      "Content-Type":"application/json",
+                    },
+                    body:JSON.stringify(dt)
+                  });
+  
+                  const response = await resp.json();
+                  if(response.success){
+                    toast.success('Added Successfully !', {
+                      position: "top-left",
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                  });
+                  // router.refresh();
+                  const updatedItems = items.map((item) => {
+                    if (item.id === selecteditem.id) {
+                      // Update the quantity for the selected item
+                      return {
+                        ...item,
+                        itemquantity: selectedType === 'Sell' ? item.itemquantity - Number(quant) : item.itemquantity + Number(quant),
+                      };
+                    }
+                    return item;
+                  });
+            
+                  // Set the updated items state
+                  setItems(updatedItems);
+                  }else{
+                    toast.error('An Error occurred !', {
+                      position: "top-left",
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                  });
                   }
-                  return item;
-                });
-          
-                // Set the updated items state
-                setItems(updatedItems);
-                }else{
-                  toast.error('An Error occurred !', {
-                    position: "top-left",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
                 }
+               
 
               }else{
-                
+                toast.error('An Error occurred !', {
+                  position: "top-left",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+              });
               }
             }
           }

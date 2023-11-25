@@ -31,7 +31,7 @@ const handler = async(req,res)=>{
                         })
                       }else{
                         // if ptype buy then we have to reduce amountReceived
-                        console.log("Rows",rows)
+                        // console.log("Rows",rows)
                         pool.query(`update ${username}_totalcalc set amountReceived=? where cuid=? and cid=?`,[rows[0].amountReceived-totalPrice,cuid,cid],(error,rows)=>{
                             if(error){
                                 res.status(500).json({error:error.message,success:false})
@@ -45,9 +45,9 @@ const handler = async(req,res)=>{
                 }
             })
         } else if (type=='update'){
-            console.log("Update")
+            // console.log("Update")
             const {tid,cid,utype,uprice,upshift,ufat,usnf,update,utotalprice,uweight,uremarks }=req.body;
-            console.log(tid,cid,utype,uprice,upshift)
+            // console.log(tid,cid,utype,uprice,upshift)
             pool.getConnection((err, connection)=>{
                 if (err) {
                     console.log(err);

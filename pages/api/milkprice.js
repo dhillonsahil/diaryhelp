@@ -10,7 +10,7 @@ const handler = async(req,res)=>{
             const {mtype,price,ctype} = req.body;
             if(mtype=='Regular'){
                 if(ctype==''){
-                    console.log(type + " "+ ctype + " "+username + " "+price+ " "+mtype +" ")
+                    // console.log(type + " "+ ctype + " "+username + " "+price+ " "+mtype +" ")
                     pool.query(`CREATE table if not exists ${username}_milkprice(id int auto_increment primary key,mtype varchar(20) unique,price float)`,(error,rows,fields)=>{
                         if(error){
                             console.log('error', error)
@@ -82,7 +82,7 @@ const handler = async(req,res)=>{
             })
         }else if(type=='specific'){
             const {stype}=req.body;
-            console.log("Stype : "+stype)
+            // console.log("Stype : "+stype)
             pool.query(`select * from ${username}_milkprice where mtype=?`,[stype],(error,rows,fields)=>{
                 if(error){
                     console.log(error)

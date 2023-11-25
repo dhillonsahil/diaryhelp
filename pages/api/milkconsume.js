@@ -8,7 +8,7 @@ const handler = async (req, res) => {
         const username = jwt.verify(token, key).email.split('@')[0].toLowerCase();
 
         if (type === 'BuySell') {
-            console.log(username);
+            // console.log(username);
 
             // Start a transaction
             pool.getConnection((err, connection) => {

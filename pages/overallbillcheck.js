@@ -38,10 +38,8 @@ const ViewExpense = () => {
   
     const router = useRouter();
 
-    useEffect(() => {
-      console.log('PrintDoc component rendered');
-      console.log('Ref value:', componentRef.current);
-    }, [fetched]);
+    // useEffect(() => {
+    // }, [fetched]);
     
     const componentRef = useRef(null);
 
@@ -481,7 +479,7 @@ const ViewExpense = () => {
           </div>
           <button onClick={() => setTimeout(() => handlePrint(), 100)}>Print this out!</button>
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
-          {fetched.length>0 && <PrintDoc fetched={fetched} ref={(el) => (componentRef.current = el)} />}
+          {fetched.length>0 && <PrintDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           
       </div>
     </div>

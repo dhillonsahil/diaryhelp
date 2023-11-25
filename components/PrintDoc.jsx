@@ -1,52 +1,129 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
 const PrintDoc = forwardRef((props, ref) => {
   const [fetched, setFetched] = useState(props.fetched);
+  const [totalDue,setTotalDue]=useState(0);
+  const [totalReceived,setTotalReceived]=useState(0);
+  const [token,setToken]=useState(props.token);
+  const [diary,setDiary]=useState({});
+  const consumer=props.selectedConsumer;
+  const startDate=props.startDate
+  const endDate=props.endDate;
+
+  const router = useRouter();
+  
   const fdate = (date) => {
     return format(date, 'dd-MM-yyyy');
   };
   let id = 1;
 
+  useEffect(()=>{
+    try {
+        var due =0;
+        var received=0;
+        fetched.forEach(item => {
+            if(item.ptype=="Sell"){
+                due+=item.totalprice;
+            }else{
+                received+=item.totalprice;
+            }
+        });
+
+        setTotalDue(due);
+        setTotalReceived(received);
+    } catch (error) {
+        
+    }
+  },[fetched])
+
+  
+  useEffect(()=>{
+   if(token.length>0){
+    try {
+        const getDt =async()=>{
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getdetails`,{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                },body:JSON.stringify({token:token,type:'view'})
+            })
+
+            const response = await resp.json();
+          if(response.data.length==0){
+            router.push('/diarydetails')
+          }else{
+            setDiary(response.data)
+          }
+        }
+        getDt();
+    } catch (error) {
+        
+    }
+   }
+  },[token])
+  
+
   return (
-    <div ref={ref}>
+    <div className='mx-2 my-2' ref={ref}>
+       <div id='diarydetails' className="border-2 border-black">
+       <div className="text-center text-2xl font-bold">{diary.d_name}</div>
+       <div className="text-center text-xl font-medium">{diary.address}</div>
+       <div className="flex flex-row justify-between mx-2 py-1 ">
+       <div className="text-center text-xl font-medium">{diary.c_name}</div>
+       <div className="text-center text-xl font-medium">{diary.mobile}</div>
+       </div>
+       </div>
+       <div id='customerDetails' className="border-2 border-black">
+        <div className="flex flex-row justify-between font-semibold mx-2">
+        <div className="">Customer Name: {consumer.c_name} S/d/w {consumer.father_name}</div>
+        <div className="">Address : {consumer.address}</div>
+        </div>
+        <div className="flex flex-row justify-between font-semibold mx-2">
+        <div className="">Mobile : {consumer.mobile}</div>
+        <div className="">Customer Code : {consumer.id}</div>
+        </div>
+        <div className=" mx-2 font-semibold">Bill Date : {String(fdate(startDate))} to {String(fdate(endDate))}</div>
+       </div>
      <table
-          className="min-w-full border text-center text-sm font-light dark:border-neutral-500">
-          <thead className="border-b font-medium dark:border-neutral-500">
+          className="min-w-full border border-black text-center text-xs font-light "
+          style={{ fontSize: '0.75rem' }} >
+          <thead className="border-b  ">
             <tr>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Sr No.
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Date & Shift
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Weight
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Fat
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Snf
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Milk Rate
               </th>
               <th
                 scope="col"
-                className="border-r px-2 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 <div className="flex flex-col">
                   <div className="">Credit</div>
                   <div className="text-sm">(दूध वाले ने खरीदा)</div>
@@ -54,7 +131,7 @@ const PrintDoc = forwardRef((props, ref) => {
               </th>
               <th
                 scope="col"
-                className="border-r px-2 py-4 dark:border-neutral-500">
+                className="border-r  ">
                 <div className="flex flex-col">
                   <div className="">Debit</div>
                   <div className="text-sm">(दूध वाले ने बेचा)</div>
@@ -62,7 +139,7 @@ const PrintDoc = forwardRef((props, ref) => {
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r   ">
                 Remarks
               </th>
             </tr>
@@ -73,45 +150,63 @@ const PrintDoc = forwardRef((props, ref) => {
               return (
                 <tr key={i} className="text-black border-b font-bold">
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 font-medium ">
+                  className="whitespace-nowrap border-r   font-medium ">
                   {id++}
                 </td>
                 <td
-                  className="whitespace-nowrap text-black border-r px-6 py-4">
+                  className="whitespace-nowrap text-black border-r  ">
                   {String(fdate(new Date(item.pdate)))} {item.pshift!=""?"-":''} {item.pshift=="Morning"?"M":""} {item.pshift=="Evening"?"E":""}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r   ">
                   {item.weight}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
-                  {item.fat}
+                  className="whitespace-nowrap border-r   ">
+                  {item.pshift==""?'Expense':item.fat}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
-                  {item.snf}
+                  className="whitespace-nowrap border-r   ">
+                  {item.pshift==""?'Expense':item.snf}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
-                  {item.pprice}
+                  className="whitespace-nowrap border-r   ">
+                  {item.pshift==""?`Expense item value ${item.pprice}`:item.pprice}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r   ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r   ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r   ">
                   {item.remarks}
                 </td>
               </tr>
               )
             })
            }
+           <tr class="border-b ">
+              <td
+                class="whitespace-nowrap border-r px-6 py-4 font-medium text-sm text-black">
+                total
+              </td>
+              <td
+                colspan="2"
+                class="whitespace-nowrap border-r px-6 py-4  text-black font-bold text-sm">
+                Total Purchase : {Math.round(totalReceived)}
+              </td>
+              <td
+                colspan="2"
+                class="whitespace-nowrap border-r px-6 py-4 text-black font-bold text-sm">
+                Total Sell : {Math.round(totalDue)}
+              </td>
+              <td class="whitespace-nowrap px-6 py-4  text-black font-bold text-sm">Overall : {Math.round(totalDue)>Math.round(totalReceived)?`${Math.round(totalDue)-Math.round(totalReceived)} (ग्राहक देगा)`:`${Math.round(totalReceived-totalDue)}(ग्राहक लेगा)`} </td>
+
+            </tr>
             
           </tbody>
         </table>
