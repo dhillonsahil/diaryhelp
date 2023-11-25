@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
+import AppHeader from '@/components/appheader';
 
 export default function Signup() {
   const router = useRouter()
@@ -91,21 +92,12 @@ export default function Signup() {
     if(localStorage.getItem("myUser")){
         router.push('/dashboard')
     }
-      toast.info('New Users will get a free trial of 3 Days!', {
-        position: "top-center",
-        autoClose: 10000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
 },[])
 
   
   return (
     <>
+    <AppHeader />
       <ToastContainer
         position="top-left"
         autoClose={3000}

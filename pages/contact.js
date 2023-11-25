@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 
 import {
   Container,
@@ -25,15 +25,94 @@ import {
   MdLocationOn,
   MdFacebook,
   MdOutlineEmail,
+  MdOutlinePhone,
 } from 'react-icons/md'
 import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs'
 import AppHeader from '@/components/appheader'
 import AppFooter from '@/components/appfooter'
+import { useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Contact() {
+  const [name,setName]=useState('');
+  const [mobile,setMobile]=useState('');
+  const [message,setMessage]=useState('');
+
+  const handleSubmit = async () => {
+    if (name.length > 0 && mobile.length === 10 && message.length > 0) {
+      const data = { uname: name, mobile, message };
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/contact`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+  
+      const response = await res.json();
+      if (response.success === true) {
+        toast.success('Message Sent Successfully', {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error('An Error occurred !', {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } else {
+      toast.error(`An error`, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+  
+  const onchange = (e) => {
+    if (e.target.name == 'name') {
+        setName(e.target.value)
+    } else if (e.target.name == 'mobile') {
+        setMobile(e.target.value)
+    }else if(e.target.name == 'message'){
+      setMessage(e.target.value)
+    }
+}
+
   return (
     <>
     <AppHeader />
+    <ToastContainer
+                position="top-left"
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
     <Container className='min-h-screen' bg="#9DC4FB" maxW="full" mt={0} centerContent overflow="hidden">
       <Flex  marginTop={2} >
         <Box
@@ -130,21 +209,21 @@ export default function Contact() {
                           <InputLeftElement pointerEvents="none">
                             <BsPerson color="gray.800" />
                           </InputLeftElement>
-                          <Input type="text" size="md" />
+                          <Input name='name' value={name} onChange={onchange} type="text" size="md" />
                         </InputGroup>
                       </FormControl>
                       <FormControl id="name">
-                        <FormLabel>Mail</FormLabel>
+                        <FormLabel>Mobile</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                           <InputLeftElement pointerEvents="none">
-                            <MdOutlineEmail color="gray.800" />
+                            <MdOutlinePhone color="gray.800" />
                           </InputLeftElement>
-                          <Input type="text" size="md" />
+                          <Input value={mobile} name='mobile' onChange={onchange} type="number" size="md" />
                         </InputGroup>
                       </FormControl>
                       <FormControl id="name">
                         <FormLabel>Message</FormLabel>
-                        <Textarea
+                        <Textarea name='message' onChange={onchange} value={message}
                           borderColor="gray.300"
                           _hover={{
                             borderRadius: 'gray.300',
@@ -153,7 +232,7 @@ export default function Contact() {
                         />
                       </FormControl>
                       <FormControl id="name" float="right">
-                        <Button variant="solid" bg="#0D74FF" color="white" _hover={{}}>
+                        <Button onClick={()=>handleSubmit()} variant="solid" bg="#0D74FF" color="white" _hover={{}}>
                           Send Message
                         </Button>
                       </FormControl>

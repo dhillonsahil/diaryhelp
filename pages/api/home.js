@@ -32,6 +32,32 @@ const handler = async( req,res)=>{
 
 
         })
+    }else if(type=='getcalc'){
+        pool.query(`select * from ${username}_totalcalc`,(error,rows)=>{
+            if(error){
+                return res.status(400).json({success:false,message:'Unable to retrieve'})
+            }
+            return res.status(200).json({success:true,data:rows})
+        })
+    }else if(type=='todaysale'){
+        const {tdate}=req.body
+        pool.query(`select * from ${username}_milk where pdate=?`,[tdate],(error,rows)=>{
+            if(error){
+                console.log(error)
+                return res.status(400).json({success:false,message:'Unable to retrieve'})
+            }
+            // 
+            let sale=0,purchase=0;
+            rows.forEach(item => {
+                if(item.ptype=="Buy"){
+                    purchase+=item.totalprice;
+                }else{
+                    sale+=item.totalprice;
+                }
+            });
+
+            return res.status(200).json({success:true,message:"Data fetched successfully",sale,purchase})
+        })
     }
    } catch (error) {
     return res.status(500).json({success:false,message:"Add data to check dashboard"})

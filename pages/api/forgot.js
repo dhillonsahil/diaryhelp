@@ -15,8 +15,12 @@ const forgot = async (req, res) => {
 
   try {
     pool.query(`select * from users where email = ?`,[customerMail],(error,rows,fields)=>{
+      if(error){
+        console.log(error)
+        return res.status(500).json({success:false,error:"Internal server error"})
+      }
       if(rows.length==0){return res.status(400).json({success:false,message:"No User fond"})}
-      
+
   })
   } catch (error) {
     console.log("some error")
@@ -32,6 +36,19 @@ const forgot = async (req, res) => {
 
 
 try {
+
+  pool.query(`create table if not exists forgot(
+    id int primary key auto_increment,
+    token varchar(200) not null,
+    resetTokenExpiration datetime default null,
+    email varchar(255) not null
+    );
+`,(error,rows)=>{
+    if(error){
+        return res.status(500).json({success:false,error:"Internal server error"})
+    }
+  })
+
     pool.query(`INSERT INTO forgot (email,token,resetTokenExpiration) VALUES (?,?,?)`,[customerMail,resetToken,expirationTime],(error,rows,fields)=>{
         if(error){
           console.log(error)

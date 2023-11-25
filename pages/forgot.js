@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 import { useRouter } from 'next/router';
+import AppHeader from '@/components/appheader';
 export default function Forgot() {
   const router = useRouter()
   const { id } = router.query
@@ -115,6 +116,8 @@ export default function Forgot() {
   }
   return (
 
+    <>
+    <AppHeader />
     <div className='px-4'>
       <ToastContainer
 position="top-left"
@@ -185,5 +188,6 @@ theme="light"
         </div>
       </div>}
     </div>
+    </>
   )
 }

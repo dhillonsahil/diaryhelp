@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import expiryCheck from '@/components/expiryCheck';
 import HomeCard2 from '@/components/HomeCard2';
 import TotalCustomers from '@/components/TotalCustomers';
+import TotalResults from '@/components/TotalResults';
 const dashboard = () => {
   const router = useRouter();
   const [token,setToken]=useState('')
@@ -29,7 +30,9 @@ const dashboard = () => {
 
   useEffect(()=>{
     try {
-      getData();
+      if(token.length>0){
+        getData();
+      }
     } catch (error) {
       console.log(error)
     }
@@ -57,6 +60,7 @@ const dashboard = () => {
       <WithSubnavigation/>
      <HomeCard2 />
      <TotalCustomers  totalCust={custprice.totalCust} fatRate={custprice.fat} snfRate={custprice.snf} regularPrice={custprice.regular} />
+     {token.length>0 && <TotalResults token={token} />} 
     </div>
   )
 }

@@ -11,6 +11,13 @@ const handler = async (req, res) => {
       try {
         const {name,emailLower,diaryName,password,mobile}=req.body;
         const encPassword=CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString();
+
+        pool.query(`create table if not exists users(id int primary key auto_increment not null ,p_name varchar(30), d_name varchar(50) ,email varchar(60) , password varchar(30) , mobile varchar(20) , payment varchar(20) default 'trial')`,(error,rows)=>{
+          if(error){
+            return res.status(500).json({success:false,message:"Internal Server Error"})
+          }
+        })
+
         pool.query(`SELECT * FROM users where email = ?`,[emailLower],(error,rows,fields)=>{
           // if user EXISTS already
             if(rows.length>0){

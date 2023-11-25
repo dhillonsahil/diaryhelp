@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
+import AppHeader from '@/components/appheader';
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -91,6 +92,8 @@ export default function Login() {
     
 
     return (
+        <>
+        <AppHeader />
         <div className='px-4'>
             <ToastContainer
                 position="top-left"
@@ -144,6 +147,6 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div></>
     )
 }
