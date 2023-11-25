@@ -32,7 +32,7 @@ const handler = async(req,res)=>{
                     console.log(error)
                     return res.status(400).json({success:false,message:'Unable to insert '})
                 }
-                console.log('rows')
+                // console.log('rows')
                     if (rows.length == 0) {
                         console.log("No data")
                         // Table does not exist, return empty array

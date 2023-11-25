@@ -140,6 +140,11 @@ const purchaseMilk = () => {
                       theme: "light",
                   });
                   // router.refresh();
+                  setConsumerCode('');
+                  setSelectedConsumer(null);
+                  setSelectedItem(null);
+                  setSelectedtype('Sell')
+                  setRemarks('')
                   const updatedItems = items.map((item) => {
                     if (item.id === selecteditem.id) {
                       // Update the quantity for the selected item
@@ -165,6 +170,22 @@ const purchaseMilk = () => {
                       theme: "light",
                   });
                   }
+                }else{
+                  toast.success('Expense Added Successfully!', {
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setConsumerCode('');
+                  setSelectedConsumer(null);
+                  setSelectedItem(null);
+                  setSelectedtype('Sell');
+                  setRemarks('');
                 }
                
 

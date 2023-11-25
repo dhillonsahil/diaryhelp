@@ -27,7 +27,6 @@ import {
   MdOutlineEmail,
 } from 'react-icons/md'
 import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs'
-import NavHome from '@/components/navHome'
 import AppHeader from '@/components/appheader'
 import AppFooter from '@/components/appfooter'
 

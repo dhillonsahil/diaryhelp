@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 
-const PrintDoc = forwardRef((props, ref) => {
+const SellDoc = forwardRef((props, ref) => {
   const [fetched, setFetched] = useState(props.fetched);
   const [totalDue,setTotalDue]=useState(0);
   const [totalReceived,setTotalReceived]=useState(0);
@@ -123,14 +123,6 @@ const PrintDoc = forwardRef((props, ref) => {
               </th>
               <th
                 scope="col"
-                className="border-r   ">
-                <div className="flex flex-col">
-                  <div className="">Credit</div>
-                  <div className="text-xs">(दूध वाले ने खरीदा)</div>
-                </div>
-              </th>
-              <th
-                scope="col"
                 className="border-r  ">
                 <div className="flex flex-col">
                   <div className="">Debit</div>
@@ -173,10 +165,7 @@ const PrintDoc = forwardRef((props, ref) => {
                   className="whitespace-nowrap border-r   ">
                   {item.pprice}
                 </td>
-                <td
-                  className="whitespace-nowrap border-r   ">
-                  {item.ptype=="Buy"?item.totalprice:"-"}
-                </td>
+                
                 <td
                   className="whitespace-nowrap border-r   ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
@@ -193,13 +182,12 @@ const PrintDoc = forwardRef((props, ref) => {
             
           </tbody>
         </table>
-        <div className='flex border-2 border-black flex-row justify-between'>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Purchase : {Math.round(totalReceived)}</div>
+        <div className='flex border-2 border-black flex-row justify-center'>
           <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Sell : {Math.round(totalDue)}</div>
-          <div  className="whitespace-nowrap px-6 py-4  text-black font-bold text-sm"> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div>
+         
         </div>
     </div>
   );
 });
 
-export default PrintDoc;
+export default SellDoc;

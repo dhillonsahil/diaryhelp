@@ -10,20 +10,11 @@ import expiryCheck from '@/components/expiryCheck';
 import { useReactToPrint } from 'react-to-print';
 
 
-// import {
-//   Table,
-//   Thead,
-//   Tbody,
-//   Tfoot,
-//   Tr,
-//   Th,
-//   Td,
-//   TableCaption,
-//   TableContainer,
-// } from '@chakra-ui/react'
 import PrintDoc from '@/components/PrintDoc';
+import PurchaseDoc from '@/components/PurchasePrint';
+import SellDoc from '@/components/SellDoc';
 
-const ViewExpense = () => {
+const SellBill = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [consumerCode, setConsumerCode] = useState('');
@@ -59,50 +50,13 @@ const ViewExpense = () => {
       }
     };
 
-    // const handleDownloadPDF = () => {
-    //   const doc = new jsPDF();
-  
-    //   // Add content to the PDF
-      
-    //   // Replace the placeholder text with your actual content
-    //   doc.text(<PdfContent selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} />, 10, 10);
-  
-    //   // Save the PDF
-    //   doc.save('bill.pdf');
-    // };
-    
-    // const handleDownloadPDF = () => {
-    //   const doc = new jsPDF();
-    
-    //   if(fetched){
-    //     const pdfContentString = PdfContent({ selectedConsumer, startDate, endDate, token, fetched });
-    
-    //     // Convert the component content to a string
-    //     const contentString = pdfContentString.props.children.toString();
-      
-    //     doc.text(contentString, 10, 10);
-      
-    //     // Save the PDF
-    //     doc.save('bill.pdf');
-
-    //   }
-    //   // Add content to the PDF
-    //   // Replace the placeholder text with your actual content
-     
-    // };
-    
-    // const handleDownloadPDF = () => {
-    //   if (fetched && componentRef.current) {
-    //     const  html2pdf  =require('html2pdf.js')
-    //     html2pdf(componentRef.current);
-    //   }
-    // };
+   
     const handleDownloadPDF = () => {
       if (fetched && componentRef.current) {
             const  html2pdf  =require('html2pdf.js')
         // Specify the filename in the options
         const options = {
-          filename: 'bill.pdf',
+          filename: 'Sellbill.pdf',
           // margin: { top: 2, right: 2, bottom: 2, left: 2 },
           margin: [1,2,2,2],
           image: { type: 'jpeg', quality: 0.98 },
@@ -210,7 +164,7 @@ const ViewExpense = () => {
             cid:selectedConsumer.id,
             startDate:formatDateForSQL(startDate),
             endDate:formatDateForSQL(endDate),
-            type:'overall'
+            type:'Sell'
           }
 
           const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/billcheck`,{
@@ -286,7 +240,7 @@ const ViewExpense = () => {
                 </g>
               </g>
             </svg>
-            <span className="pl-2 mx-1">OverAll Bill Check</span>
+            <span className="pl-2 mx-1">Purchase Bill Check</span>
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
@@ -557,7 +511,7 @@ const ViewExpense = () => {
           <button className='bg-red-600 p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={handleDownloadPDF}
             >Download Pdf</button>
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
-          {fetched.length>0 && <PrintDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
+          {fetched.length>0 && <SellDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           
       </div>
     </div>
@@ -575,4 +529,4 @@ const ViewExpense = () => {
 
 
 
-export default ViewExpense;
+export default SellBill;

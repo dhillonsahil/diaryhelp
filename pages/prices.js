@@ -16,7 +16,6 @@ import {
 import { FaCheckCircle } from 'react-icons/fa'
 import { IoIosCloseCircle } from "react-icons/io";
 import Link from 'next/link'
-import NavHome from '@/components/navHome';
 import AppHeader from '@/components/appheader';
 import AppFooter from '@/components/appfooter';
 function PriceWrapper(props) {

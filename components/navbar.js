@@ -322,12 +322,12 @@ const NAV_ITEMS = [
       {
         label: 'Sells Bill Check',
         // subLabel: 'Find your dream design job',
-        href: '#',
+        href: '/sellbillcheck',
       },
       {
         label: 'Purchase Bill Check',
         // subLabel: 'An exclusive list for contract work',
-        href: '#',
+        href: '/purchasebillcheck',
       },
       {
         label: 'Overall Bill Check',
