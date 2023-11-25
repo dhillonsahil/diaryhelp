@@ -142,6 +142,9 @@ const ViewExpense = () => {
           
 
         const handleSubmit= async ()=>{
+          
+
+          if(consumerCode!=''){
           const data={
             token:token,
             cid:selectedConsumer.id,
@@ -163,6 +166,18 @@ const ViewExpense = () => {
             setFetched(response.data)
             // setVisible('Entries')
           }
+        }else{
+          toast.error('Select Customer!', {
+            position: "top-left",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        }
         }
         
           
@@ -477,7 +492,7 @@ const ViewExpense = () => {
               Next
             </button>
           </div>
-          <button onClick={() => setTimeout(() => handlePrint(), 100)}>Print this out!</button>
+          <button className='bg-black p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={() => setTimeout(() => handlePrint(), 100)}>Print Bill</button>
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
           {fetched.length>0 && <PrintDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           

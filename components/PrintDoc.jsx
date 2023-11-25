@@ -189,22 +189,22 @@ const PrintDoc = forwardRef((props, ref) => {
               )
             })
            }
-           <tr class="border-b ">
+           <tr className="border-b ">
               <td
-                class="whitespace-nowrap border-r px-6 py-4 font-medium text-sm text-black">
+                className="whitespace-nowrap border-r px-6 py-4 font-medium text-sm text-black">
                 total
               </td>
               <td
                 colspan="2"
-                class="whitespace-nowrap border-r px-6 py-4  text-black font-bold text-sm">
+                className="whitespace-nowrap border-r px-6 py-4  text-black font-bold text-sm">
                 Total Purchase : {Math.round(totalReceived)}
               </td>
               <td
                 colspan="2"
-                class="whitespace-nowrap border-r px-6 py-4 text-black font-bold text-sm">
+                className="whitespace-nowrap border-r px-6 py-4 text-black font-bold text-sm">
                 Total Sell : {Math.round(totalDue)}
               </td>
-              <td class="whitespace-nowrap px-6 py-4  text-black font-bold text-sm">Overall : {Math.round(totalDue)>Math.round(totalReceived)?`${Math.round(totalDue)-Math.round(totalReceived)} (ग्राहक देगा)`:`${Math.round(totalReceived-totalDue)}(ग्राहक लेगा)`} </td>
+              <td className="whitespace-nowrap px-6 py-4  text-black font-bold text-sm">Overall : {Math.round(totalDue)>Math.round(totalReceived)?`${Math.round(totalDue)-Math.round(totalReceived)} (ग्राहक देगा)`:`${Math.round(totalReceived-totalDue)}(ग्राहक लेगा)`} </td>
 
             </tr>
             

@@ -18,6 +18,7 @@ export default function Login() {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        if(email.length>0 && password.length > 0){
         const emailLower=email.toLowerCase()
         const data = { emailLower, password }
         let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
@@ -68,6 +69,18 @@ export default function Login() {
 
     setEmail('')
     setPassword('')
+}else{
+    toast.error('Enter Data!', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+}
     }
 
     useEffect(() => {

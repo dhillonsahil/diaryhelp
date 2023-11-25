@@ -17,9 +17,9 @@ const purchaseMilk = () => {
     const [consumerCode, setConsumerCode] = useState('');
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
-    const [weight,setWeight] = useState('');
-    const [fat,setFat]=useState('');
-    const [snf,setSnf]=useState('');
+    const [weight,setWeight] = useState(0);
+    const [fat,setFat]=useState(0);
+    const [snf,setSnf]=useState(0);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedShift, setselectedShift] = useState('Morning');
     const [selectedType,setSelectedtype]=useState('Buy')
@@ -193,7 +193,21 @@ const purchaseMilk = () => {
         const handleSave= async ()=>{
           try {
             // data
-
+            if(
+              weight == 0 || selectedConsumer == null || totalPrice==0  ||
+              (selectedType == 'FatSnf' &&   (fat==0 || (fat>45 && snf==0)))
+            ){
+              toast.error('Enter Data!', {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });            
+          }else{
             const data ={
               type:"BuySell",
               token:token,
@@ -251,8 +265,9 @@ const purchaseMilk = () => {
                 theme: "light",
             });
             }
+          }
           } catch (error) {
-            console.log("An Error Occurred")
+            console.log("An Error Occurred",error)
           }
         }
     
@@ -363,7 +378,8 @@ const purchaseMilk = () => {
               <input
                 placeholder="Weight"
                 onChange={handleWeight}
-                value={weight}
+                type='number'
+                value={weight==0?'':weight}
                 className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
               />
              {
@@ -371,22 +387,24 @@ const purchaseMilk = () => {
                 <div className="flex flex-row">
                 <input
                   placeholder="Fat"
+                  type='number'
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
                   }}
-                  value={fat}
+                  value={fat==0?'':fat}
                   className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
                  <input
                   placeholder="Snf"
+                  type='number'
                   onChange={(e)=>{
                     {
                       setSnf(e.target.value)
                     
                     }
                   }}
-                  value={snf}
+                  value={snf==0?'':snf}
                   className="ml-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
                 </div>

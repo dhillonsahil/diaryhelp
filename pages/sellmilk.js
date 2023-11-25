@@ -13,13 +13,13 @@ import expiryCheck from '@/components/expiryCheck';
 const sellMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [price,setPrice] = useState('');
-    const [consumerCode, setConsumerCode] = useState('');
+    const [price,setPrice] = useState(0);
+    const [consumerCode, setConsumerCode] = useState(0);
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
-    const [weight,setWeight] = useState('');
-    const [fat,setFat]=useState('');
-    const [snf,setSnf]=useState('');
+    const [weight,setWeight] = useState(0);
+    const [fat,setFat]=useState(0);
+    const [snf,setSnf]=useState(0);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedShift, setselectedShift] = useState('Morning');
     const [selectedType,setSelectedtype]=useState('Sell')
@@ -194,6 +194,23 @@ const sellMilk = () => {
           try {
             // data
 
+            if(
+              weight == 0 || selectedConsumer == null || totalPrice==0  ||
+              (selectedType == 'FatSnf' &&   (fat==0 || (fat>45 && snf==0)))
+            ){
+              toast.error('Enter Data!', {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            }); 
+            return;           
+          }
+
             const data ={
               type:"BuySell",
               token:token,
@@ -329,7 +346,8 @@ const sellMilk = () => {
                             </RadioGroup></div>
               <input
                 placeholder="Customer Code"
-                value={consumerCode}
+                type='number'
+                value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
                 id='consumerCode'
@@ -362,31 +380,34 @@ const sellMilk = () => {
 
               <input
                 placeholder="Weight"
+                type='number'
                 onChange={handleWeight}
-                value={weight}
+                value={weight==0?'':weight}
                 className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
               />
              {
               priceType!='Regular' && (
                 <div className="flex flex-row">
                 <input
+                type='number'
                   placeholder="Fat"
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
                   }}
-                  value={fat}
+                  value={fat==0?'':fat}
                   className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
                  <input
                   placeholder="Snf"
+                  type='number'
                   onChange={(e)=>{
                     {
                       setSnf(e.target.value)
                     
                     }
                   }}
-                  value={snf}
+                  value={snf==0?'':snf}
                   className="ml-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
                 </div>
@@ -396,6 +417,7 @@ const sellMilk = () => {
                 <div className="flex-grow w-1/4 pr-2">
                   <input
                     placeholder="Price"
+                    type='number'
                     onChange={(e)=>{
                       setPrice(e.target.value)
                       if(e.target.value!=0){
@@ -404,7 +426,7 @@ const sellMilk = () => {
                         setTotalPrice(milkrate*Number(weight))
                       }
                     }}
-                    value={price}
+                    value={price==0?'':price}
                     className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                   />
                 </div>

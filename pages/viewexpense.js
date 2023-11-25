@@ -155,6 +155,19 @@ const ViewExpense = () => {
           
 
         const handleSubmit= async ()=>{
+          if(consumerCode=='' ){
+            toast.error('Enter Data!', {
+              position: "top-left",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+          }); 
+            return;
+          }
           const data={
             token:token,
             cid:selectedConsumer.id,

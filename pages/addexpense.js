@@ -85,7 +85,7 @@ const purchaseMilk = () => {
 
 
           const handleSubmit=async()=>{
-            if(selectedConsumer!=null ){
+            if(selectedConsumer!=null && Number(quant)!=0 && (Number(price)!=0 || selecteditem.itemprice!=0)){
               const data={
                 token:token,
                 type:"BuySell",

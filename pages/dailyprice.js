@@ -25,6 +25,7 @@ const DialyPrice = () => {
   // handle insert
   const handleInsert =async()=>{
     // data
+    if(Number(price)!=0){
     const data = {
       type:'insert',
       mtype:value,
@@ -56,7 +57,19 @@ const DialyPrice = () => {
     });
     reset()
 
-    }else{
+    }else if(response.success==false && response.message=='Data already inserted'){
+      toast.error('Data Already Inserted!', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+    }
+    else{
       toast.error('Oops ! An Error Occurred', {
         position: "top-left",
         autoClose: 3000,
@@ -68,7 +81,7 @@ const DialyPrice = () => {
         theme: "light",
     });
     }
-    
+  }
   }
 
   // handle Update

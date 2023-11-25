@@ -60,6 +60,7 @@ const addcustomer = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(name.length>0 && mobile.length>0 && address.length>0 && fatherName.length>0){
     const generatedString = generateUniqueString();
 
     const data = {
@@ -108,7 +109,18 @@ const addcustomer = () => {
           theme: "light",
       });
   }
-
+}else{
+  toast.error('Enter Details', {
+    position: "top-left",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+});
+}
   }
 
   return (
