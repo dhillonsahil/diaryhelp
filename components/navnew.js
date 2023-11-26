@@ -3,7 +3,7 @@ import { Box, VStack ,Flex, Spacer, Text, Button, Menu, MenuButton, MenuList, Me
 import { ChevronDownIcon, HamburgerIcon } from '@chakra-ui/icons';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
-const Navbar = () => {
+const WithSubnavigation = () => {
   const { isOpen, onToggle } = useDisclosure();
   const router = useRouter();
   return (
@@ -197,4 +197,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default WithSubnavigation;

@@ -6,6 +6,8 @@ import expiryCheck from '@/components/expiryCheck';
 import HomeCard2 from '@/components/HomeCard2';
 import TotalCustomers from '@/components/TotalCustomers';
 import TotalResults from '@/components/TotalResults';
+import CowRateList from '@/components/CowRateList';
+import BuffaloRateList from '@/components/BuffalloRateList';
 const dashboard = () => {
   const router = useRouter();
   const [token,setToken]=useState('')
@@ -61,6 +63,9 @@ const dashboard = () => {
      <HomeCard2 />
      <TotalCustomers  totalCust={custprice.totalCust} fatRate={custprice.fat} snfRate={custprice.snf} regularPrice={custprice.regular} />
      {token.length>0 && <TotalResults token={token} />} 
+     {token.length>0 && <CowRateList token={token} snfRate={custprice.snf} />} 
+     {token.length>0 && <BuffaloRateList token={token} snfRate={custprice.snf} />} 
+     
     </div>
   )
 }
