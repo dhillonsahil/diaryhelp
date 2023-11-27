@@ -14,14 +14,27 @@ const forgot = async (req, res) => {
   // console.log("Customer mail is " + customerMail)
 
   try {
-    pool.query(`select * from users where email = ?`,[customerMail],(error,rows,fields)=>{
+    pool.query(`create table if not exists forgot(
+      id int primary key auto_increment,
+      token varchar(200) not null,
+      resetTokenExpiration datetime default null,
+      email varchar(255) not null
+      );
+  `,(error,rows)=>{
       if(error){
-        console.log(error)
-        return res.status(500).json({success:false,error:"Internal server error"})
+          return res.status(500).json({success:false,error:"Internal server error"})
       }
-      if(rows.length==0){return res.status(400).json({success:false,message:"No User fond"})}
-
-  })
+      pool.query(`select * from users where email = ?`,[customerMail],(error,rows,fields)=>{
+        if(error){
+          console.log(error)
+          return res.status(500).json({success:false,error:"Internal server error"})
+        }
+        if(rows.length==0){return res.status(400).json({success:false,message:"No User fond"})}
+  
+    })
+    })
+  
+  
   } catch (error) {
     console.log("some error")
   }
@@ -47,16 +60,17 @@ try {
     if(error){
         return res.status(500).json({success:false,error:"Internal server error"})
     }
+    pool.query(`INSERT INTO forgot (email,token,resetTokenExpiration) VALUES (?,?,?)`,[customerMail,resetToken,expirationTime],(error,rows,fields)=>{
+      if(error){
+        console.log(error)
+          return res.status(500).json({success:false,error:"Internal server error"})
+      }else{
+          return res.status(200).json({success:true,message:"Check Your email"})
+      }
+  })
   })
 
-    pool.query(`INSERT INTO forgot (email,token,resetTokenExpiration) VALUES (?,?,?)`,[customerMail,resetToken,expirationTime],(error,rows,fields)=>{
-        if(error){
-          console.log(error)
-            return res.status(500).json({success:false,error:"Internal server error"})
-        }else{
-            return res.status(200).json({success:true,message:"Check Your email"})
-        }
-    })
+   
 } catch (error) {
     
 }
@@ -68,7 +82,7 @@ try {
     service:'gmail',
     auth:{
       user:'sahil2002427@gmail.com',
-      pass:process.env.EMAIL_PASSWORD
+      pass:"qapmyiwfveewismq"
     }
   })
 
@@ -76,7 +90,7 @@ try {
     from :'sahil2002427@gmail.com',
     to:customerMail,
     subject :'Reset Password - Diary Help',
-    text:`To Reset Your Password Click on the Link ${process.env.NEXT_PUBLIC_HOST}/forgot?id=${resetToken}`
+    text:`To Reset Your Password Click on the Link https://diaryhelp.myrangolidesign.com/forgot?id=${resetToken}`
   }
 
   transporter.sendMail(option,async function(error,info){

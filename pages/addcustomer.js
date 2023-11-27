@@ -73,7 +73,7 @@ const addcustomer = () => {
     }
 
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/addcustomer`,{
+    const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/addcustomer`,{
       method:"POST",
       headers: {
         'Content-Type': 'application/json'

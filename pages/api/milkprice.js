@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const handler = async(req,res)=>{
     try {
         const {type, token}= req.body;
-        let key = process.env.JWT_SECRET;
+        let key = "Iam@User";
         const username = jwt.verify(token,key).email.split('@')[0];
         // if inserting price
         if(type=='insert'){

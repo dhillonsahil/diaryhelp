@@ -59,13 +59,13 @@ const AppFooter = () => {
   
             <span className="block text-gray-500 dark:text-gray-400">Diary Help &copy; <span id="year">2023</span></span>
   
-            <span className="flex justify-between text-gray-600 dark:text-white">
+            <span className="flex justify-between text-gray-600 ">
               <span  className="font-medium"> Made with ❤️ By Sahil Dhillon</span>
               {/* <span  className="font-medium"> Privacy Policy</span> */}
             </span>
   
             <span className="block text-gray-500 dark:text-gray-400"
-              >Need help? <Link href="/contact" className="font-semibold text-gray-600 dark:text-white"> Contact Us</Link></span
+              >Need help? <Link href="/contact" className="font-semibold text-gray-600 "> Contact Us</Link></span
             >
           </div>
         </div>

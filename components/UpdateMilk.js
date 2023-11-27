@@ -113,7 +113,7 @@ const UpdateMilk = (props) => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+            const fetchPrices= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -132,7 +132,7 @@ const UpdateMilk = (props) => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+            const fetchPrices= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -157,7 +157,7 @@ const UpdateMilk = (props) => {
         const handleUpdate =async()=>{
 
           try {
-            const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/modifymilk`,{
+            const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/modifymilk`,{
               method:"PUT",
               headers:{
                 'Content-Type': 'application/json'

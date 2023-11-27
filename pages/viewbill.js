@@ -77,7 +77,7 @@ const ViewExpense = () => {
 
 
     const getCustomers=async(num)=>{
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/custbill`,{
+      const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/custbill`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"
@@ -165,7 +165,7 @@ const ViewExpense = () => {
             type:'overall'
           }
 
-          const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/billcheck`,{
+          const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/billcheck`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'

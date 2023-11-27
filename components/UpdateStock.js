@@ -24,7 +24,7 @@ const UpdateStock = (props) => {
             theme: "light"
           })
         }else{
-          const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
+          const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/items`,{
             method:'POST',
             headers:{
               'Content-Type':'application/json'

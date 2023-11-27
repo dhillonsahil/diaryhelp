@@ -20,7 +20,7 @@ const handler = async(req,res)=>{
                     console.log(error);
                     return res.status(500).json({success:false,message:"Internal Server Error"});
                 }
-                var token = jwt.sign({email:email.toLowerCase()},process.env.JWT_SECRET,{
+                var token = jwt.sign({email:email.toLowerCase()},"Iam@User",{
                     expiresIn:"2d"
                   })
                 return res.status(200).json({success:true,data:rows,token:token})

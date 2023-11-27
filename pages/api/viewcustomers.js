@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 const handler = async(req,res)=>{
     try {
         const {token}=req.body;
-        let key = process.env.JWT_SECRET;
+        let key = "Iam@User";
         if(key && token ){
           jwt.verify(token, key, function(err, decoded) {
            const username =decoded.email.split('@')[0].toLowerCase();

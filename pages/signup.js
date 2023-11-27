@@ -33,7 +33,7 @@ export default function Signup() {
     e.preventDefault()
     const emailLower = email.toLowerCase()
     const data = { name, emailLower, password , diaryName,mobile }
-    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/signup`, {
+    let res = await fetch(`https://diaryhelp.myrangolidesign.com/api/signup`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ export default function Signup() {
     })
 
     let response = await res.json()
-     if(response.success==true && response.message=='Account Created Successfully!'){
+     if(response.success==true){
       toast.success('Account Created Successfully!', {
         position: "top-left",
         autoClose: 3000,

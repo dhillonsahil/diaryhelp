@@ -23,7 +23,7 @@ const TotalResults = (props) => {
     };
 
   const getCalcs=async()=>{
-    const resp  =await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/home`,{
+    const resp  =await fetch(`https://diaryhelp.myrangolidesign.com/api/home`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -42,7 +42,7 @@ const TotalResults = (props) => {
 
   const getDaily=async()=>{
     
-        const resp  =await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/home`,{
+        const resp  =await fetch(`https://diaryhelp.myrangolidesign.com/api/home`,{
           method:"POST",
           headers:{
             "Content-Type":"application/json",

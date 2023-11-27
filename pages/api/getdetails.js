@@ -4,7 +4,7 @@ const jwt=require('jsonwebtoken')
 const handler = async(req,res)=>{
     const {token,type}= req.body;
    
-    let key = process.env.JWT_SECRET;
+    let key = "Iam@User";
     const email = jwt.verify(token,key).email;
     
     try {

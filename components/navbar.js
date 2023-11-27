@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <Box bg="gray.800" py={4} px={8}>
       <Flex alignItems="center">
-        <Link href={'/'} >
+        <Link href={'/dashboard'} >
         <Text color="white" fontSize="xl" fontWeight="bold">
           Home
         </Text>

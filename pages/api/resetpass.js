@@ -8,11 +8,11 @@ const handler = async (req, res) => {
      if(rows.length>0){
         const tokenRecord = rows[0];
         const currentTime = Date.now();
-        const encryptedPassword = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString();
+        // const encryptedPassword = CryptoJS.AES.encrypt(req.body.password, "Helper@Diary").toString();
 
         // If the reset token has already expired, return an error
         if (currentTime<tokenRecord.resetTokenExpiration) {
-          pool.query(`UPDATE users SET password = ? WHERE email = ?`,[encryptedPassword,tokenRecord.email],(error,rows,fields)=>{
+          pool.query(`UPDATE users SET password = ? WHERE email = ?`,[req.body.password,tokenRecord.email],(error,rows,fields)=>{
             if(error){
               res.status(400).json({success: false, message:"Failed"})
             }

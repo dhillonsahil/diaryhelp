@@ -31,7 +31,7 @@ export default function Forgot() {
   const sendLink = async (e) => {
     const customerMail =email.toLowerCase()
     e.preventDefault();
-    let sent = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/forgot`, {
+    let sent = await fetch(`https://diaryhelp.myrangolidesign.com/api/forgot`, {
       method: "POST",
       headers: {
         'Content-type': 'application/json'
@@ -78,7 +78,7 @@ export default function Forgot() {
         theme: "light",
         });
     }else{
-      let updt= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/resetpass`,{
+      let updt= await fetch(`https://diaryhelp.myrangolidesign.com/api/resetpass`,{
         method:"POST",
         headers:{
           'Content-type':'application/json'

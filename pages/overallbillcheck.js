@@ -139,7 +139,7 @@ const ViewExpense = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewcustomers`,{
+                const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -213,7 +213,7 @@ const ViewExpense = () => {
             type:'overall'
           }
 
-          const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/billcheck`,{
+          const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/billcheck`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'

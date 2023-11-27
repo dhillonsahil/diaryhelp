@@ -42,7 +42,7 @@ const ManageItems = () => {
 
     // fetch items
     const fetchItems =async()=>{
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
+      const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/items`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json",
@@ -61,7 +61,7 @@ const ManageItems = () => {
     // handle add item
     const handleAdd =async(e)=>{
       e.preventDefault();
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/items`,{
+      const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/items`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json'

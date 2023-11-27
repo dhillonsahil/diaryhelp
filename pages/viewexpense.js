@@ -53,7 +53,7 @@ const ViewExpense = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/viewcustomers`,{
+                const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ const ViewExpense = () => {
 
           const handleDelete =async()=>{
             setModelVisible(false);
-            const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/modifymilk`,{
+            const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/modifymilk`,{
               method:"POST",
               headers: {
                 'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ const ViewExpense = () => {
             startDate:formatDateForSQL(startDate),
             endDate:formatDateForSQL(endDate)
           }
-          const fetchPrices= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/expense`,{
+          const fetchPrices= await fetch(`https://diaryhelp.myrangolidesign.com/api/expense`,{
           method:"POST",
           headers: {
             'Content-Type': 'application/json'

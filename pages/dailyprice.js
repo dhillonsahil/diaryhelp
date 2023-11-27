@@ -34,7 +34,7 @@ const DialyPrice = () => {
       token:token
     }
 
-    const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+    const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ const DialyPrice = () => {
       token:token
     }
     // update request
-    const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+    const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const DialyPrice = () => {
   // fetch price
   const fetchprice=async()=>{
     try {
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+      const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

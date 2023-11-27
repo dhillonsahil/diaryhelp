@@ -5,7 +5,7 @@ const handler = async (req, res) => {
     const {name,fatherName,mobile,address,token,generatedString}= req.body;
     let username=''
     try {
-        let key = process.env.JWT_SECRET
+        let key = "Iam@User"
     if(key ){
        jwt.verify(token, key, function(err, decoded) {
         username=decoded.email.toLowerCase().split('@')[0].toLowerCase();

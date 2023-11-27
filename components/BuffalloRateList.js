@@ -25,7 +25,7 @@ const BuffaloRateList = (props) => {
     },[token])
 
     const getVal =async(data)=>{
-        const resp= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+        const resp= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
@@ -44,7 +44,7 @@ const BuffaloRateList = (props) => {
             stype:'buffalosnf',
             token:token
         }
-        const resp= await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/milkprice`,{
+        const resp= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',

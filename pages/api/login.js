@@ -8,10 +8,12 @@ const handler = async (req, res) => {
         pool.query(`SELECT * FROM users where email = ?`,[emailLower],(error,rows,fields)=>{
             
             if(rows.length>0){
-              const bytes  = CryptoJS.AES.decrypt(rows[0].password, process.env.SECRET_KEY);
-              const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-                if(decryptedData === password){
-                  var token = jwt.sign({email:emailLower,name:rows[0].name},process.env.JWT_SECRET,{
+              // const bytes  = CryptoJS.AES.decrypt(rows[0].password, "Helper@Diary");
+              // const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+              // const bytes = CryptoJS.AES.decrypt(rows[0].password, "Helper@Diary");
+              // const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+                if(rows[0].password === password){
+                  var token = jwt.sign({email:emailLower,name:rows[0].name},"Iam@User",{
                     expiresIn:"2d"
                   })
                     return res.status(200).json({ success: true, token});

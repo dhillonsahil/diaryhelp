@@ -41,7 +41,7 @@ const dashboard = () => {
   },[token])
 
   const getData =async()=>{
-    const resp  =await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/home`,{
+    const resp  =await fetch(`https://diaryhelp.myrangolidesign.com/api/home`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
