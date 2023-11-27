@@ -32,11 +32,11 @@ const Navbar = () => {
           {/* Navigation links for larger screens */}
           <Box display={{ base: 'none', md: 'flex' }}>
                 <Link  href={'/dailyprice'}>
-            <Button colorScheme="whiteAlpha" variant="ghost" mr={4}>
+            <Button colorScheme="blackAplha" variant="solid" mr={4}>
               Daily Price
             </Button></Link>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Milk
               </MenuButton>
               <MenuList>
@@ -54,7 +54,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
               Expenses
               </MenuButton>
               <MenuList>
@@ -72,7 +72,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Customers
               </MenuButton>
               <MenuList>
@@ -85,7 +85,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Bill Check
               </MenuButton>
               <MenuList>
@@ -98,13 +98,16 @@ const Navbar = () => {
                 <Link href={'/overallbillcheck'}>
                 <MenuItem>Overall Bill Check</MenuItem>
                 </Link>
+                <Link href={'/expensebillcheck'}>
+                <MenuItem>Expense Bill Check</MenuItem>
+                </Link>
+              </MenuList>
                 <Button onClick={()=>{
                     localStorage.removeItem('myUser');
                     router.push('/login')
-                }} colorScheme="whiteAlpha" variant="ghost">
+                }} colorScheme="blackAlpha" variant="solid">
               Log Out
             </Button>
-              </MenuList>
             </Menu>
             
           </Box>
@@ -116,11 +119,11 @@ const Navbar = () => {
         <Box pb={4} display={{ md: 'none' }}>
           <VStack spacing={4}>
           <Link  href={'/dailyprice'}>
-            <Button colorScheme="whiteAlpha" variant="ghost" mr={4}>
+            <Button colorScheme="blackAplha" variant="solid" mr={4}>
               Daily Price
             </Button></Link>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Milk
               </MenuButton>
               <MenuList>
@@ -138,7 +141,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
               Expenses
               </MenuButton>
               <MenuList>
@@ -156,7 +159,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Customers
               </MenuButton>
               <MenuList>
@@ -169,7 +172,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="whiteAlpha" variant="ghost">
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Bill Check
               </MenuButton>
               <MenuList>
@@ -182,14 +185,17 @@ const Navbar = () => {
                 <Link href={'/overallbillcheck'}>
                 <MenuItem>Overall Bill Check</MenuItem>
                 </Link>
-                <Button onClick={()=>{
-                    localStorage.removeItem('myUser');
-                    router.push('/login')
-                }} colorScheme="whiteAlpha" variant="ghost">
-              Log Out
-            </Button>
+                <Link href={'/expensebillcheck'}>
+                <MenuItem>Expense Bill Check</MenuItem>
+                </Link>
               </MenuList>
             </Menu>
+            <Button onClick={()=>{
+                    localStorage.removeItem('myUser');
+                    router.push('/login')
+                }} colorScheme="blackAplha" variant="solid">
+              Log Out
+            </Button>
           </VStack>
         </Box>
       )}

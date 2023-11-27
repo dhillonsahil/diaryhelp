@@ -8,7 +8,7 @@ const AppFooter = () => {
       <div className="m-auto md:w-10/12 lg:w-8/12 xl:w-6/12">
         <div className="flex flex-wrap items-center justify-between md:flex-nowrap">
           <div
-            className="flex w-full justify-center space-x-12 text-gray-600 dark:text-gray-300 sm:w-7/12 md:justify-start"
+            className="flex w-full justify-center space-x-12 text-gray-600 sm:w-7/12 md:justify-start"
           >
             <ul className="list-inside list-disc space-y-8">
               <li><Link href="/" className="transition hover:text-primary">Home</Link></li>
@@ -53,18 +53,18 @@ const AppFooter = () => {
           <div
             className="m-auto mt-16 w-10/12 space-y-6 text-center sm:mt-auto sm:w-5/12 sm:text-left"
           >
-            <span className="block text-gray-500 dark:text-gray-400"
+            <span className="block text-gray-500 "
               >We change the way you work</span
             >
   
-            <span className="block text-gray-500 dark:text-gray-400">Diary Help &copy; <span id="year">2023</span></span>
+            <span className="block text-gray-500">Diary Help &copy; <span id="year">2023</span></span>
   
             <span className="flex justify-between text-gray-600 ">
               <span  className="font-medium"> Made with ❤️ By Sahil Dhillon</span>
               {/* <span  className="font-medium"> Privacy Policy</span> */}
             </span>
   
-            <span className="block text-gray-500 dark:text-gray-400"
+            <span className="block text-gray-500 "
               >Need help? <Link href="/contact" className="font-semibold text-gray-600 "> Contact Us</Link></span
             >
           </div>

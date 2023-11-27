@@ -1,5 +1,5 @@
 import WithSubnavigation from '@/components/navbar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
@@ -10,11 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
 
 
-const purchaseMilk = () => {
+const sellMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [price,setPrice] = useState('');
-    const [consumerCode, setConsumerCode] = useState('');
+    const [price,setPrice] = useState(0);
+    const [consumerCode, setConsumerCode] = useState(0);
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
     const [weight,setWeight] = useState(0);
@@ -28,6 +28,9 @@ const purchaseMilk = () => {
     const [totalPrice,setTotalPrice]=useState(0);
     const [remarks,setRemarks]=  useState('');
     const router = useRouter();
+    const weightRef = useRef(null);
+    const fatRef = useRef(null);
+    const snfRef = useRef(null);
 
     
 
@@ -70,6 +73,13 @@ const purchaseMilk = () => {
 
           
           // handle functions
+          const handleKeyDown = (e, nextInputRef) => {
+            if (e.key === 'Enter' && nextInputRef && nextInputRef.current) {
+              e.preventDefault();
+              nextInputRef.current.focus();
+            }
+          };
+          
 
         const handleInputChange = (e) => {
             setConsumerCode(e.target.value);
@@ -136,8 +146,8 @@ const purchaseMilk = () => {
             const query = searchQuery.toLowerCase();
             return (
               c_name.toLowerCase().includes(query) ||
-              father_name.toLowerCase().includes(query) ||
-              mobile.includes(query) ||
+              // father_name.toLowerCase().includes(query) ||
+              // mobile.includes(query) ||
               id.toString().includes(query)
             );
           });
@@ -193,21 +203,24 @@ const purchaseMilk = () => {
         const handleSave= async ()=>{
           try {
             // data
+
             if(
               weight == 0 || selectedConsumer == null || totalPrice==0  ||
               (selectedType == 'FatSnf' &&   (fat==0 || (fat>45 && snf==0)))
             ){
               toast.error('Enter Data!', {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 2000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
                 theme: "light",
-            });            
-          }else{
+            }); 
+            return;           
+          }
+
             const data ={
               type:"BuySell",
               token:token,
@@ -237,7 +250,7 @@ const purchaseMilk = () => {
             if(response.success==true){
               toast.success('Inserted Entry!', {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 1500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -252,7 +265,7 @@ const purchaseMilk = () => {
             setTotalPrice(0);
             setSelectedConsumer(null)
             // setMilkRate(0);
-            setConsumerCode('')
+            setConsumerCode(0)
             }else{
               toast.error('Oops ! Try again Or Contact Us', {
                 position: "top-left",
@@ -265,9 +278,8 @@ const purchaseMilk = () => {
                 theme: "light",
             });
             }
-          }
           } catch (error) {
-            console.log("An Error Occurred",error)
+            console.log("An Error Occurred")
           }
         }
     
@@ -321,9 +333,9 @@ const purchaseMilk = () => {
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
- <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
+ <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
                             
-                            <RadioGroup className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
+                            <RadioGroup className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
                                 setPriceType(e);
                               if(e=="Regular"){
                                 getPrices('regular')
@@ -342,25 +354,30 @@ const purchaseMilk = () => {
                                 </Radio>
                               </Stack>
                             </RadioGroup></div>
+                            <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
+             
               <input
                 placeholder="Customer Code"
-                value={consumerCode}
+                type='number'
+                value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
+                onKeyDown={(e) => handleKeyDown(e, weightRef)}
                 id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
-               <input
+               <label className='text-lg font-semibold' htmlFor="consumerSelect">Customer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
+{
+  consumerCode==0 && <>
+  <input
                 placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
+                onKeyDown={(e) => handleKeyDown(e, weightRef)}
                 onChange={handleSearchChange}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
-
-                
-              <label htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
-
+              
      <select  onChange={handleInputChange} size={6} style= {{
   width: '100%',
   padding: '0.5rem',
@@ -369,32 +386,43 @@ const purchaseMilk = () => {
 }}>
      <option value={""}>Select Consumers</option>
          {filteredConsumers.map((consumer) => (
-          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
+          <option className='hover:bg-green-200 text-2xl' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
           </option>
           ))}
 </select> 
+  </>
+}
+               
 
+
+<div className=""><label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Weight :</label></div>
               <input
                 placeholder="Weight"
-                onChange={handleWeight}
                 type='number'
+                onChange={handleWeight}
+                ref={weightRef}
+                onKeyDown={(e) => handleKeyDown(e, priceType!='Regular'?fatRef:null)}
                 value={weight==0?'':weight}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
              {
               priceType!='Regular' && (
-                <div className="flex flex-row">
+                <div className="">
+                   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Fat :</label>
                 <input
+                type='number'
                   placeholder="Fat"
-                  type='number'
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
                   }}
+                  ref={fatRef}
+                  onKeyDown={(e) => handleKeyDown(e, snfRef)}
                   value={fat==0?'':fat}
-                  className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                  className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
                 />
+                 <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Snf :</label>
                  <input
                   placeholder="Snf"
                   type='number'
@@ -404,59 +432,62 @@ const purchaseMilk = () => {
                     
                     }
                   }}
+                  ref={snfRef}
                   value={snf==0?'':snf}
-                  className="ml-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-                />
+                  
+                  className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"/>
                 </div>
               )
              }
-              <div className="flex">
-                <div className="flex-grow w-1/4 pr-2">
+              <div className="">
+                <div className="">
+                <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Price :</label>
                   <input
                     placeholder="Price"
+                    type='number'
                     onChange={(e)=>{
-                      setPrice(e.target.value);
+                      setPrice(e.target.value)
                       if(e.target.value!=0){
                         setTotalPrice(Number(weight)*e.target.value)
                       }else{
                         setTotalPrice(milkrate*Number(weight))
                       }
                     }}
-                    value={price}
-                    className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                    value={price==0?'':price}
+                    className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
                   />
                 </div>
                 
-                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleDateChange} />
+                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
+              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleDateChange} />
 
                
               </div>
              {
               fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight) && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+                <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
+                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
               )
              }
               {
               fat>45 && handleSnfFatPrice(weight) && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+                <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
+                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
               )
              }
              {
               priceType=="Regular"  && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+                <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
               )
              }
-              <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
+              <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
               
               
-              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedShift} onChange={(e)=>{
+              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedShift} onChange={(e)=>{
                setselectedShift(e);
               }}>
              <Stack spacing={5} direction='row'>
@@ -470,27 +501,30 @@ const purchaseMilk = () => {
            </RadioGroup></div>
 
    <div className="flex flex-row">
-   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
+   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
                             
-                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
+                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
                                 setSelectedtype(e);
                                 handlePrice();
                                }}>
                               <Stack spacing={5} direction='row'>
-                                <Radio colorScheme='green' value='Sell'>
+                                <Radio colorScheme='red' value='Sell'>
                                   Sell
                                 </Radio>
-                                <Radio colorScheme='red' value='Buy'>
-                                  Buy
+                                <Radio colorScheme='green' value='Buy'>
+                                  Purchase
                                 </Radio>
                               </Stack>
                             </RadioGroup>
    </div>
+   {/* label */}
+   
+   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Remarks (if any) :</label>
    <input
                 placeholder="Remarks"
                 onChange={(e)=>setRemarks(e.target.value)}
                 value={remarks}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
               />
             </div>
             
@@ -525,7 +559,7 @@ const purchaseMilk = () => {
                    setTotalPrice(0);
                    setSelectedConsumer(null)
                    // setMilkRate(0);
-                   setConsumerCode('')
+                   setConsumerCode(0)
                 }}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-black capitalize rounded-md hover:bg-red-200 hover:fill-current hover:text-red-600 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"
@@ -553,4 +587,4 @@ const purchaseMilk = () => {
   );
 };
 
-export default purchaseMilk;
+export default sellMilk;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import WithSubnavigation from '@/components/navbar';
 import { FormControl, FormLabel, Input, Stack } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react'
@@ -17,7 +17,17 @@ const addcustomer = () => {
   const [address, setAddress] = useState('');
   const [token, setToken] = useState('');
   const router = useRouter();
+  const fnameRef=useRef(null);
+  const mobileRef=useRef(null);
+  const addressRef=useRef(null);
 
+  const handleKeyDown = (e, nextInputRef) => {
+    if (e.key === 'Enter' && nextInputRef && nextInputRef.current) {
+      e.preventDefault();
+      nextInputRef.current.focus();
+    }
+  };
+  
   const onchange = (e) => {
     if (e.target.name == 'name') {
       setName(e.target.value)
@@ -86,7 +96,7 @@ const addcustomer = () => {
     if(resp.success==true){
       toast.success('Customer Added!', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -141,7 +151,7 @@ const addcustomer = () => {
       <WithSubnavigation />
       <div className="flex flex-row my-3 mx-2">
         <Link href={'/addcustomer'}>
-        <span className='p-3 rounded-lg mx-1 bg-red-300'>Add Customers</span></Link>
+        <span className='p-3 rounded-lg text-xl font-semibold mx-1 bg-red-300'>Add Customers</span></Link>
         <Link href={'/viewcustomers'}><span className='p-3 rounded-lg mx-1 hover:bg-green-300'>View Customers</span></Link>
       </div>
       {/*  Form */}
@@ -151,28 +161,28 @@ const addcustomer = () => {
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Full name</FormLabel>
-              <Input borderColor={'black'} value={name} name='name' id='name' onChange={onchange} placeholder='First name' />
+              <Input onKeyDown={(e) => handleKeyDown(e, fnameRef)} borderColor={'black'} size={'lg'} value={name} name='name' id='name' onChange={onchange} placeholder='First name' />
             </FormControl>
           </div>
           {/* Father Name */}
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Father name</FormLabel>
-              <Input borderColor={'black'} value={fatherName} name='fatherName' id='fatherName' onChange={onchange} placeholder='Father name' />
+              <Input onKeyDown={(e) => handleKeyDown(e, mobileRef)} ref={fnameRef} borderColor={'black'} size={'lg'}  value={fatherName} name='fatherName' id='fatherName' onChange={onchange} placeholder='Father name' />
             </FormControl>
           </div>
           {/* Mobile */}
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Mobile Number</FormLabel>
-              <Input borderColor={'black'} value={mobile} name='mobile' id='mobile' onChange={onchange} placeholder='Enter mobile Number' />
+              <Input ref={mobileRef} onKeyDown={(e) => handleKeyDown(e, addressRef)} borderColor={'black'} size={'lg'} value={mobile} name='mobile' id='mobile' onChange={onchange} placeholder='Enter mobile Number' />
             </FormControl>
           </div>
           {/* Address */}
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Address</FormLabel>
-              <Input borderColor={'black'} value={address} name='address' id='address' onChange={onchange} placeholder='Enter Address' />
+              <Input ref={addressRef} borderColor={'black'} size={'lg'}  value={address} name='address' id='address' onChange={onchange} placeholder='Enter Address' />
               <Stack spacing={4} direction='row' mt={3} align='center'>
 
                 <button className="bg-pink-500 text-gray-100 p-4 w-full rounded-full tracking-wide

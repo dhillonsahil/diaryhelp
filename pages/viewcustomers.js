@@ -104,20 +104,20 @@ const viewcustomers = () => {
 
     const match =
       String(customer.id).includes(searchInputLower) ||
-      customer.c_name.toLowerCase().includes(searchInputLower) ||
-      customer.father_name.toLowerCase().includes(searchInputLower) ||
-      customer.uid.toLowerCase().includes(searchInputLower) ||
-      customer.address.toLowerCase().includes(searchInputLower) ||
-      customer.mobile.includes(searchInputLower);
+      customer.c_name.toLowerCase().includes(searchInputLower) 
+      // customer.father_name.toLowerCase().includes(searchInputLower) ||
+      // customer.uid.toLowerCase().includes(searchInputLower) ||
+      // customer.address.toLowerCase().includes(searchInputLower) ||
+      // customer.mobile.includes(searchInputLower);
 
     if (match) {
       return (
         <Tr key={index}>
-          <Td>{customer.id}</Td>
-          <Td>{customer.uid}</Td>
-          <Td>{customer.c_name}</Td>
-          <Td>{customer.father_name}</Td>
-          <Td>{customer.address}</Td>
+          <Td className='text-xl'>{customer.id}</Td>
+          <Td className='text-xl'>{customer.uid}</Td>
+          <Td className='text-xl'>{customer.c_name}</Td>
+          <Td className='text-xl'>{customer.father_name}</Td>
+          <Td className='text-xl'>{customer.address}</Td>
           {/* Add other columns as needed */}
         </Tr>
       );

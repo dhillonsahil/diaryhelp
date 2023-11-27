@@ -12,7 +12,7 @@ import expiryCheck from '@/components/expiryCheck';
 const ViewExpense = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [consumerCode, setConsumerCode] = useState('');
+    const [consumerCode, setConsumerCode] = useState(0);
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
     const [startDate, setStartDate] = useState(new Date());
@@ -27,7 +27,7 @@ const ViewExpense = () => {
 
     const handleViewAnother=()=>{
       setVisible('userInput');
-      setConsumerCode('')
+      setConsumerCode(0)
       setSelectedConsumer(null);
       setSelectedRow({});
     }
@@ -155,7 +155,7 @@ const ViewExpense = () => {
           
 
         const handleSubmit= async ()=>{
-          if(consumerCode=='' ){
+          if(consumerCode==0 ){
             toast.error('Enter Data!', {
               position: "top-left",
               autoClose: 3000,
@@ -236,50 +236,62 @@ const ViewExpense = () => {
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
-
+            <label className='text-xl font-semibold' >Customer Code: </label>
               <input
                 placeholder="Customer Code"
-                value={consumerCode}
+                value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
+                type='number'
                 id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" required
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black" required
               />
-               <input
-                placeholder="Search Customer"
-                value={searchQuery}
-                id='searchQuery'
-                onChange={handleSearchChange}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-              />
-
-                
-              <label htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
-
-     <select  onChange={handleInputChange} size={6} style= {{
-  width: '100%',
-  padding: '0.5rem',
-  boxSizing: 'border-box',
-  border:'1px solid black'
-}}>
-     <option value={""}>Select Consumers</option>
-         {filteredConsumers.map((consumer) => (
-          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
-           {consumer.id} - {consumer.c_name} - {consumer.father_name}
-          </option>
-          ))}
-</select> 
-
+              <label className='text-xl font-semibold my-2' htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
               
+
+{
+  consumerCode==0 && <>  <label className='text-xl font-semibold' >Search : </label>
+  <input
+   placeholder="Search Customer"
+   value={searchQuery}
+   id='searchQuery'
+   onChange={handleSearchChange}
+   className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
+ /> <select  onChange={handleInputChange} size={6} style= {{
+    width: '100%',
+    padding: '0.5rem',
+    boxSizing: 'border-box',
+    border:'1px solid black'
+  }}>
+       <option value={""}>Select Consumers</option>
+           {filteredConsumers.map((consumer) => (
+            <option className='hover:bg-green-200 text-xl' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
+             {consumer.id} - {consumer.c_name} - {consumer.father_name}
+            </option>
+            ))}
+  </select> </>
+  
+                
+}
+                
+              
+
+    
              
-              <div className="flex">
-                <div className="flex-grow w-1/2 pr-2">
-                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>From : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleStartDate} />
+              <div className="">
+                <div className="">
+                  <div className="">
+                  <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>From : </label>
+                  </div>
+               
+              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleStartDate} />
                 </div>                
-               <div className="flex-grow w-1/2 pr-2">
-               <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>To : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={endDate} onChange={handleEndDate} />
+               <div className="">
+                <div className="">
+                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>To : </label>
+                </div>
+               
+              <DatePicker dateFormat={'dd-MM-yyyy'}className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={endDate} onChange={handleEndDate} />
 
                </div>
               </div>
@@ -309,7 +321,7 @@ const ViewExpense = () => {
               </div>
               <div className="flex-initial">
                 <button onClick={()=>{
-                  setConsumerCode('');
+                  setConsumerCode(0);
                   setSelectedConsumer(null);
                 }}
                   type="button"
@@ -390,11 +402,11 @@ const ViewExpense = () => {
     <div className="flex flex-col">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className="bg-gray-50 dark:bg-gray-800">
+                <div className="overflow-hidden border border-gray-200  md:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200 ">
+                        <thead className="bg-gray-50 ">
                             <tr>
-                                <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                <th scope="col" className="py-3.5 px-4 text-xl font-normal text-left rtl:text-right text-gray-900 ">
                                     <div className="flex items-center gap-x-3">
                                        
                                         <button className="flex items-center gap-x-2">
@@ -403,31 +415,31 @@ const ViewExpense = () => {
                                     </div>
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                     Date
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                 Remarks
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                 Weight
                                 </th>
 
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
-                                  Milk Rate
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
+                                  Expense Price
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                 Type
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                {/* <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                 Fat
                                 </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                 Snf
-                                </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                </th> */}
+                                <th scope="col" className="px-4 py-3.5 text-xl font-semibold text-left rtl:text-right text-gray-900 ">
                                 Total
                                 </th>
 
@@ -436,43 +448,43 @@ const ViewExpense = () => {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                        <tbody className="bg-white divide-y divide-gray-200  ">
                             { fetched &&
                               fetched.map((item,index)=>{
                                 return (
                                   <tr key={index}>
-                                <td className="px-4 py-4 text-sm font-medium text-black  whitespace-nowrap">
+                                <td className="px-4 py-4 text-xl font-medium text-black  whitespace-nowrap">
                                     <div className="inline-flex items-center gap-x-3">
                                         <span>{id++}</span>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-black  whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td>
+                                <td className="px-4 py-4 text-xl text-black  whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td>
                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                    <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                    <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 ">
                                        
 
-                                        <h2 className="text-sm font-normal">{item.remarks}</h2>
+                                        <h2 className="text-xl font-normal">{item.remarks}</h2>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-black whitespace-nowrap">
+                                <td className="px-4 py-4 text-xl text-black whitespace-nowrap">
                                     <div className="flex items-center gap-x-2">
                                         <div>
-                                            <h2 className="text-sm font-medium text-black dark:text-white ">{item.weight}</h2>
+                                            <h2 className="text-xl font-medium text-black ">{item.weight}</h2>
                                         </div>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.pprice}</td>
-                                <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                    <div className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${item.ptype=='Buy'?'bg-emerald-300/60':'bg-red-300/60'} dark:bg-gray-800`}>
+                                <td className="px-4 py-4 text-xl text-gray-900  whitespace-nowrap">{item.pprice}</td>
+                                <td className="px-4 py-4 text-xl font-medium text-gray-700 whitespace-nowrap">
+                                    <div className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${item.ptype=='Buy'?'bg-emerald-300/60':'bg-red-300/60'} `}>
                                        
 
-                                        <h2 className="text-sm font-normal">{item.ptype}</h2>
+                                        <h2 className="text-xl font-normal">{item.ptype}</h2>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.fat}</td>
-                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.snf}</td>
-                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.totalprice}</td>
-                                <td className="px-4 py-4 text-sm whitespace-nowrap">
+                                {/* <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.fat}</td>
+                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.snf}</td> */}
+                                <td className="px-4 py-4 text-xl text-gray-900  whitespace-nowrap">{item.totalprice}</td>
+                                <td className="px-4 py-4 text-xl whitespace-nowrap">
                                     <div className="flex items-center gap-x-6">
                                        
 

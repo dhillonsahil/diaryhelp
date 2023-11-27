@@ -17,7 +17,7 @@ import SellDoc from '@/components/SellDoc';
 const SellBill = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [consumerCode, setConsumerCode] = useState('');
+    const [consumerCode, setConsumerCode] = useState(0);
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
     const [startDate, setStartDate] = useState(new Date());
@@ -158,7 +158,7 @@ const SellBill = () => {
         const handleSubmit= async ()=>{
           
 
-          if(consumerCode!=''){
+          if(consumerCode!=0){
           const data={
             token:token,
             cid:selectedConsumer.id,
@@ -244,26 +244,28 @@ const SellBill = () => {
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
-
+            <label className='text-lg font-semibold'>Customer Code</label>
               <input
                 placeholder="Customer Code"
-                value={consumerCode}
+                value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
+                type='number'
                 id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" required
+                className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black" required
               />
+                <label className='text-xl font-semibold' htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
                <input
                 placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-2 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
 
-                
-              <label htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
-
+                {
+                  consumerCode==0 && <>
+                  
      <select  onChange={handleInputChange} size={6} style= {{
   width: '100%',
   padding: '0.5rem',
@@ -272,22 +274,25 @@ const SellBill = () => {
 }}>
      <option value={""}>Select Consumers</option>
          {filteredConsumers.map((consumer) => (
-          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
+          <option className='hover:bg-green-200 text-xl ' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
           </option>
           ))}
 </select> 
+                  </>
+                }
+
 
               
              
               <div className="flex">
                 <div className="flex-grow w-1/2 pr-2">
-                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>From : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleStartDate} />
+                <label htmlFor="date"className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>From : </label>
+              <DatePicker dateFormat={'dd-MM-yyyy'} className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black" selected={startDate} onChange={handleStartDate} />
                 </div>                
                <div className="flex-grow w-1/2 pr-2">
-               <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>To : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={endDate} onChange={handleEndDate} />
+               <label htmlFor="date"className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>To : </label>
+              <DatePicker dateFormat={'dd-MM-yyyy'} className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black" selected={endDate} onChange={handleEndDate} />
 
                </div>
               </div>
@@ -317,7 +322,7 @@ const SellBill = () => {
               </div>
               <div className="flex-initial">
                 <button onClick={()=>{
-                  setConsumerCode('');
+                  setConsumerCode(0);
                   setSelectedConsumer(null);
                   setFetched(null)
                 }}
@@ -381,42 +386,42 @@ const SellBill = () => {
     <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
       <div className="overflow-hidden">
         <table
-          className="min-w-full border text-center text-sm font-light dark:border-neutral-500">
-          <thead className="border-b font-medium dark:border-neutral-500">
+          className="min-w-full border text-center text-sm font-light ">
+          <thead className="border-b font-medium ">
             <tr>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Sr No.
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Date & Shift
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Weight
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Fat
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Snf
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Milk Rate
               </th>
               <th
                 scope="col"
-                className="border-r px-2 py-4 dark:border-neutral-500">
+                className="border-r px-2 py-4 ">
                 <div className="flex flex-col">
                   <div className="">Credit</div>
                   <div className="text-sm">(दूध वाले ने खरीदा)</div>
@@ -424,7 +429,7 @@ const SellBill = () => {
               </th>
               <th
                 scope="col"
-                className="border-r px-2 py-4 dark:border-neutral-500">
+                className="border-r px-2 py-4 ">
                 <div className="flex flex-col">
                   <div className="">Debit</div>
                   <div className="text-sm">(दूध वाले ने बेचा)</div>
@@ -432,7 +437,7 @@ const SellBill = () => {
               </th>
               <th
                 scope="col"
-                className="border-r px-6 py-4 dark:border-neutral-500">
+                className="border-r px-6 py-4 ">
                 Remarks
               </th>
             </tr>
@@ -455,31 +460,31 @@ const SellBill = () => {
                   {String(fdate(new Date(item.pdate)))} {item.pshift!=""?"-":''} {item.pshift=="Morning"?"M":""} {item.pshift=="Evening"?"E":""}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.weight}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.fat}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.snf}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.pprice}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
+                  className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.remarks}
                 </td>
               </tr>

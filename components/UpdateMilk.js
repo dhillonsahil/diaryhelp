@@ -184,7 +184,7 @@ const UpdateMilk = (props) => {
           if(response.success==true){
             toast.success('Updated Successfully !', {
               position: "top-left",
-              autoClose: 3000,
+              autoClose: 1500,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -256,9 +256,9 @@ const UpdateMilk = (props) => {
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
- <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
+ <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
                             
-                            <RadioGroup className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
+                            <RadioGroup className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
                                 setPriceType(e);
                               if(e=="Regular"){
                                 getPrices('regular')
@@ -279,16 +279,18 @@ const UpdateMilk = (props) => {
                             </RadioGroup></div>
               
                 
-              
+                            <label className='text-xl font-semibold' htmlFor="consumerSelect">Weight: </label>
               <input
                 placeholder="Weight"
                 onChange={handleWeight}
                 value={weight}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                type='number'
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
              {
               priceType!='Regular' && (
-                <div className="flex flex-row">
+                <div className="">
+                  <label className='text-xl font-semibold' >Fat: </label>
                 <input
                   placeholder="Fat"
                   onChange={(e)=>{
@@ -296,8 +298,10 @@ const UpdateMilk = (props) => {
                     
                   }}
                   value={fat}
-                  className="mr-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                  type='number'
+                  className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
                 />
+                <label className='text-xl font-semibold'>Snf: </label>
                  <input
                   placeholder="Snf"
                   onChange={(e)=>{
@@ -306,14 +310,16 @@ const UpdateMilk = (props) => {
                     
                     }
                   }}
+                  type='number'
                   value={snf}
-                  className="ml-2 text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                  className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
                 />
                 </div>
               )
              }
-              <div className="flex">
-                <div className="flex-grow w-1/4 pr-2">
+              <div className="">
+                <div className="">
+                <label className='text-xl font-semibold' >Price: </label>
                   <input
                     placeholder="Price"
                     onChange={(e)=>{
@@ -326,43 +332,43 @@ const UpdateMilk = (props) => {
                       }
                     }}
                     value={price}
-                    className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                    className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
                   />
                 </div>
                 
-                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleDateChange} />
+                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
+              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleDateChange} />
 
                
               </div>
              {
               fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight==''?props.weight:Number(weight)) && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Saved Price :{previousPrice}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
+                <label htmlFor="milkrate"  className={`${selectedType=='Sell'?'text-red-500':"text-green-600"} text-lg mx-3`} >Milk Rate :{milkrate}</label>
+                <label htmlFor="price"  className={`${selectedType=='Sell'?'text-red-500':"text-green-600"} text-lg mx-3`}>Saved Price :{previousPrice}</label>
+                <label htmlFor="price"  className={`${selectedType=='Sell'?'text-red-500':"text-green-600"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
               )
              }
               {
               fat>45 && handleSnfFatPrice(weight==''?props.weight:Number(weight)) && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Saved Price :{previousPrice}</label>
-                <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}
+                <label htmlFor="milkrate"  className={`${selectedType=='Sell'?'text-red-500':"text-green-600"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
+                <label htmlFor="price"  className={`${selectedType=='Sell'?'text-red-500':"text-green-600"} text-lg mx-3`}>Saved Price :{previousPrice}</label>
+                <label htmlFor="price"  className={`${selectedType=='Sell'?'text-red-500':"text-green-600"} text-lg mx-3`}>Total Price :{totalPrice}
                 </label></>
               )
              }
              {
               priceType=="Regular"  && (
                <>
-                <label htmlFor="milkrate" className='text-green-500 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
+                <label htmlFor="milkrate" className='text-green-700 mx-3'>Milk Rate :{price==''?milkrate:price}</label>
                 <label htmlFor="price" className='text-red-500 mx-3'>Total Price :{totalPrice}</label></>
               )
              }
-              <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
+              <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
               
               
-              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedShift} onChange={(e)=>{
+              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedShift} onChange={(e)=>{
                setselectedShift(e);
               }}>
              <Stack spacing={5} direction='row'>
@@ -376,9 +382,9 @@ const UpdateMilk = (props) => {
            </RadioGroup></div>
 
    <div className="flex flex-row">
-   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
+   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-lg transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
                             
-                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
+                            <RadioGroup className=' px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
                                 setSelectedtype(e);
                                 handlePrice();
                                }}>
@@ -392,11 +398,12 @@ const UpdateMilk = (props) => {
                               </Stack>
                             </RadioGroup>
    </div>
+   <label className='text-xl font-semibold' >Remarks (if any): </label>
    <input
                 placeholder="Remarks"
                 onChange={(e)=>setRemarks(e.target.value)}
                 value={remarks}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
             </div>
             

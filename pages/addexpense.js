@@ -14,7 +14,7 @@ const purchaseMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [price,setPrice] = useState(0);
-    const [consumerCode, setConsumerCode] = useState('');
+    const [consumerCode, setConsumerCode] = useState(0);
     const [selectedConsumer, setSelectedConsumer] = useState(null);
     const [customers,setCustomers]=useState([]);
     const [selecteditem,setSelectedItem]=useState(null);
@@ -131,7 +131,7 @@ const purchaseMilk = () => {
                   if(response.success){
                     toast.success('Added Successfully !', {
                       position: "top-left",
-                      autoClose: 3000,
+                      autoClose: 1500,
                       hideProgressBar: false,
                       closeOnClick: true,
                       pauseOnHover: true,
@@ -140,7 +140,7 @@ const purchaseMilk = () => {
                       theme: "light",
                   });
                   // router.refresh();
-                  setConsumerCode('');
+                  setConsumerCode(0);
                   setSelectedConsumer(null);
                   setSelectedItem(null);
                   setSelectedtype('Sell')
@@ -173,7 +173,7 @@ const purchaseMilk = () => {
                 }else{
                   toast.success('Expense Added Successfully!', {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 1500,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -181,7 +181,7 @@ const purchaseMilk = () => {
                     progress: undefined,
                     theme: "light",
                 });
-                setConsumerCode('');
+                setConsumerCode(0);
                   setSelectedConsumer(null);
                   setSelectedItem(null);
                   setSelectedtype('Sell');
@@ -205,6 +205,13 @@ const purchaseMilk = () => {
           }
           
           // handle functions
+          const handleKeyDown = (e, nextInputRef) => {
+            if (e.key === 'Enter' && nextInputRef && nextInputRef.current) {
+              e.preventDefault();
+              nextInputRef.current.focus();
+            }
+          };
+          
 
         const handleInputChange = (e) => {
             setConsumerCode(e.target.value);
@@ -292,27 +299,28 @@ const purchaseMilk = () => {
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
- 
+            <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Customer Code :</label>
               <input
                 placeholder="Customer Code"
-                value={consumerCode}
+                value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
+                type='number'
                 name='consumerCode'
                 id='consumerCode'
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" required
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black" required
               />
-               <input
-                placeholder="Search Customer"
+              {
+                consumerCode==0 && <>
+                
+                <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Search Customer :</label>
+                <input
                 value={searchQuery}
+                placeholder="Search Customer"
                 id='searchQuery'
                 onChange={handleSearchChange}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
               />
-
-                
-              <label htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
-
-     <select  onChange={handleInputChange} size={6} style= {{
+                 <select  onChange={handleInputChange} size={6} style= {{
   width: '100%',
   padding: '0.5rem',
   boxSizing: 'border-box',
@@ -320,16 +328,25 @@ const purchaseMilk = () => {
 }}>
      <option value={""}>Select Consumers</option>
          {filteredConsumers.map((consumer) => (
-          <option className='hover:bg-green-200' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
+          <option className='hover:bg-green-200 text-xl' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
           </option>
           ))}
 </select> 
 
+                </>
+              }
+              
+
+                
+              <label htmlFor="consumerSelect" className='text-lg font-semibold'>Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
+
+  
               
         
-              <div className="flex">
-                <div className="flex-grow w-1/4 pr-2">
+              <div className="">
+                <div className="">
+              <label  className='text-lg font-normal'>Price : </label>
                   <input
                     placeholder="Price"
                     type='number'
@@ -338,29 +355,29 @@ const purchaseMilk = () => {
                     //   pending
                     }}
                     value={price==0?'':price}
-                    className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                    className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
                   />
                 </div>
                 
-                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400' selected={startDate} onChange={handleDateChange} />
+                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-lg transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
+              <DatePicker dateFormat={'dd-MM-yyyy'}  className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleDateChange} />
 
                
               </div>
              
              
 
-   <div className="flex flex-row">
-   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
+   <div className="">
+   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Debit or Credit Type :</label>
                             
-                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
+                            <RadioGroup className=' px-4 py-2.5 mt-2 text-lg transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
                                 setSelectedtype(e);
                                }}>
                               <Stack spacing={5} direction='row'>
-                                <Radio colorScheme='green' value='Sell'>
+                                <Radio colorScheme='red' value='Sell'>
                                   Debit (बेचा)
                                 </Radio>
-                                <Radio colorScheme='red' value='Buy'>
+                                <Radio colorScheme='green' value='Buy'>
                                   Credit (लिया)
                                 </Radio>
                               </Stack>
@@ -368,7 +385,7 @@ const purchaseMilk = () => {
    </div>
 
   
-   <label htmlFor="consumerSelect">Selected Item: {selecteditem!=null ? selecteditem.itemName :""}</label>
+   <label className='text-lg font-semibold'>Selected Item: {selecteditem!=null ? selecteditem.itemName :""}</label>
 
 <select  onChange={handleItemChange} size={5} style= {{
 width: '100%',
@@ -378,25 +395,26 @@ border:'1px solid black'
 }}>
 <option value={""}>Select Item</option>
     {items.map((item) => (
-     <option className='hover:bg-green-200' key={item.id} value={item.id} defaultValue={selecteditem?.id === item.id}>
+     <option className='hover:bg-green-200 text-lg' key={item.id} value={item.id} defaultValue={selecteditem?.id === item.id}>
       {item.id} - {item.itemName} - ₹{item.itemprice} - Left Quantity : {item.itemquantity}
      </option>
      ))}
 </select> 
 
-<label htmlFor="consumerSelect">Enter quantity (default 1): {selecteditem!=null ? selecteditem.itemName :""}</label>
+<label className='text-lg font-semibold'>Enter quantity (default 1): {selecteditem!=null ? selecteditem.itemName :""}</label>
 
  <input
                 placeholder="Quantity"
                 onChange={(e)=>setQuant(e.target.value)}
                 value={quant==0?'':quant}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
               />
+              <label className='text-lg font-semibold'>Remarks (if any) : </label>
    <input
                 placeholder="Remarks"
                 onChange={(e)=>setRemarks(e.target.value)}
                 value={remarks}
-                className="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
+                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
               />
             </div>
             
@@ -429,7 +447,7 @@ border:'1px solid black'
                    setPrice(0);
                    setSelectedConsumer(null)
                    // setMilkRate(0);
-                   setConsumerCode('')
+                   setConsumerCode(0)
                 }}
                   type="button"
                   className="flex items-center px-5 py-2.5 font-medium tracking-wide text-black capitalize rounded-md hover:bg-red-200 hover:fill-current hover:text-red-600 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"

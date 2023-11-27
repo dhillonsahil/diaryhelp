@@ -336,7 +336,7 @@ const ViewPrice = ({fetchedPrice,setIV,setUpdateId})=>{
  
 <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-2">
   <h2 className='w-full text-center text-xl font-bold py-4'>View or Update Prices</h2>
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
         <thead className="text-xs text-gray-700 uppercase bg-gray-200 ">
             <tr>
                 
@@ -361,7 +361,7 @@ const ViewPrice = ({fetchedPrice,setIV,setUpdateId})=>{
               return (
                 <tr className="bg-white border-b hover:bg-gray-50 text-black">
                
-               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                    {item.id}
                </th>
                <td className="px-6 py-4">

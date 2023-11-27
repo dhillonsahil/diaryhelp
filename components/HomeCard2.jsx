@@ -120,7 +120,7 @@ const HomeCard2 = () => {
             </svg>
           </div>
         </Link>
-        <Link className='max-w-sm' href="/billprint">
+        <Link className='max-w-sm' href="/overallbillcheck">
           <div
             className="flex items-center space-x-4 p-3.5 rounded-full bg-gray-100"
           >
