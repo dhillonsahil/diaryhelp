@@ -94,7 +94,7 @@ const ViewExpense = () => {
       }else{
         toast.error('Enter Correct Diary Contact Number!', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -111,6 +111,11 @@ const ViewExpense = () => {
 
         const handleInputChange = (e) => {
             setConsumerCode(e.target.value);
+            if(e.target.value==0 || e.target.value==''){
+              setConsumerCode(0);
+                  setSelectedConsumer(null);
+                  setFetched(null)
+            }
             const selected = customers.find((consumer) => consumer.id === parseInt(e.target.value));
             setSelectedConsumer(selected);
           };
@@ -181,7 +186,7 @@ const ViewExpense = () => {
         }else{
           toast.error('Select Customer!', {
             position: "top-left",
-            autoClose: 3000,
+            autoClose: 500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -244,7 +249,6 @@ const ViewExpense = () => {
             <div className="px-5 pb-5">
             <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
               <input
-                placeholder="Customer Code"
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 type='number'
@@ -258,7 +262,6 @@ const ViewExpense = () => {
                 consumerCode==0 && <div>
                   <label htmlFor="customercode" className='font-semobild text-lg'>Search Customer</label>
                   <input
-                placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
@@ -477,11 +480,11 @@ const ViewExpense = () => {
                   {item.pprice}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 ">
+                  className="text-green-500 whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 ">
+                  className="text-red-500 whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td

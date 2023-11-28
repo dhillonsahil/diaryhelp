@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
 
 
-const sellMilk = () => {
+const PurchaseMilk = () => {
     const [token, setToken] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [price,setPrice] = useState(0);
@@ -31,6 +31,7 @@ const sellMilk = () => {
     const weightRef = useRef(null);
     const fatRef = useRef(null);
     const snfRef = useRef(null);
+    const saveref=useRef(null);
 
     
 
@@ -77,6 +78,11 @@ const sellMilk = () => {
             if (e.key === 'Enter' && nextInputRef && nextInputRef.current) {
               e.preventDefault();
               nextInputRef.current.focus();
+              // scroll down
+              nextInputRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
             }
           };
           
@@ -210,7 +216,7 @@ const sellMilk = () => {
             ){
               toast.error('Enter Data!', {
                 position: "top-left",
-                autoClose: 2000,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -229,7 +235,7 @@ const sellMilk = () => {
               pdate:formatDateForSQL(startDate),
               pprice:milkrate,
               pshift:selectedShift,
-              totalprice:totalPrice,
+              totalprice:totalPrice.toFixed(2),
               cuid:selectedConsumer.uid,
               cname:selectedConsumer.c_name,
               fname:selectedConsumer.father_name,
@@ -250,7 +256,7 @@ const sellMilk = () => {
             if(response.success==true){
               toast.success('Inserted Entry!', {
                 position: "top-left",
-                autoClose: 1500,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -258,18 +264,38 @@ const sellMilk = () => {
                 progress: undefined,
                 theme: "light",
             });
-            setWeight('');
-            setFat('');
-            setSnf('');
-            setPrice('');
+            setWeight(0);
+            setFat(0);
+            setSnf(0);
+            setPrice(0);
             setTotalPrice(0);
             setSelectedConsumer(null)
             // setMilkRate(0);
             setConsumerCode(0)
-            }else{
+            }else if(response.success=='duplicate'){
+              toast.error('Already Inserted', {
+                position: "top-left",
+                autoClose: 500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            setWeight(0);
+            setFat(0);
+            setSnf(0);
+            setPrice(0);
+            setTotalPrice(0);
+            setSelectedConsumer(null)
+            // setMilkRate(0);
+            setConsumerCode(0)
+            }
+            else{
               toast.error('Oops ! Try again Or Contact Us', {
                 position: "top-left",
-                autoClose: 2000,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -339,9 +365,9 @@ const sellMilk = () => {
                                 setPriceType(e);
                               if(e=="Regular"){
                                 getPrices('regular')
-                                setFat('');
-                                setSnf('');
-                                setWeight('')
+                                setFat(0);
+                                setSnf(0);
+                                setWeight(0)
                                 setTotalPrice(0)
                               }
 ;                               }}>
@@ -357,7 +383,6 @@ const sellMilk = () => {
                             <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
              
               <input
-                placeholder="Customer Code"
                 type='number'
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
@@ -370,7 +395,6 @@ const sellMilk = () => {
 {
   consumerCode==0 && <>
   <input
-                placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onKeyDown={(e) => handleKeyDown(e, weightRef)}
@@ -398,7 +422,6 @@ const sellMilk = () => {
 
 <div className=""><label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Weight :</label></div>
               <input
-                placeholder="Weight"
                 type='number'
                 onChange={handleWeight}
                 ref={weightRef}
@@ -412,7 +435,6 @@ const sellMilk = () => {
                    <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Fat :</label>
                 <input
                 type='number'
-                  placeholder="Fat"
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
@@ -424,7 +446,6 @@ const sellMilk = () => {
                 />
                  <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Snf :</label>
                  <input
-                  placeholder="Snf"
                   type='number'
                   onChange={(e)=>{
                     {
@@ -434,7 +455,7 @@ const sellMilk = () => {
                   }}
                   ref={snfRef}
                   value={snf==0?'':snf}
-                  
+                  onKeyDown={(e) => handleKeyDown(e, saveref)}
                   className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"/>
                 </div>
               )
@@ -443,7 +464,6 @@ const sellMilk = () => {
                 <div className="">
                 <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Price :</label>
                   <input
-                    placeholder="Price"
                     type='number'
                     onChange={(e)=>{
                       setPrice(e.target.value)
@@ -467,21 +487,21 @@ const sellMilk = () => {
               fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight) && (
                <>
                 <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
+                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</label></>
               )
              }
               {
               fat>45 && handleSnfFatPrice(weight) && (
                <>
                 <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
+                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</label></>
               )
              }
              {
               priceType=="Regular"  && (
                <>
                 <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{price==''?milkrate:price}</label>
-                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice}</label></>
+                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</label></>
               )
              }
               <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
@@ -521,7 +541,6 @@ const sellMilk = () => {
    
    <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Remarks (if any) :</label>
    <input
-                placeholder="Remarks"
                 onChange={(e)=>setRemarks(e.target.value)}
                 value={remarks}
                 className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
@@ -533,8 +552,9 @@ const sellMilk = () => {
             <div className="flex flex-row-reverse p-3">
               <div className="flex-initial pl-3">
                 <button onClick={handleSave}
+                ref={saveref}
                   type="button"
-                  className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out"
+                  className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize bg-green-600 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -552,10 +572,10 @@ const sellMilk = () => {
               </div>
               <div className="flex-initial">
                 <button onClick={()=>{
-                   setWeight('');
-                   setFat('');
-                   setSnf('');
-                   setPrice('');
+                   setWeight(0);
+                   setFat(0);
+                   setSnf(0);
+                   setPrice(0);
                    setTotalPrice(0);
                    setSelectedConsumer(null)
                    // setMilkRate(0);
@@ -574,7 +594,7 @@ const sellMilk = () => {
                     <path d="M8 9h8v10H8z" opacity=".3"></path>
                     <path d="M15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"></path>
                   </svg>
-                  <span className="pl-2 mx-1">Delete</span>
+                  <span className="pl-2 mx-1">Clear</span>
                 </button>
               </div>
             </div>
@@ -587,4 +607,4 @@ const sellMilk = () => {
   );
 };
 
-export default sellMilk;
+export default PurchaseMilk;

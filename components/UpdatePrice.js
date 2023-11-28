@@ -87,7 +87,7 @@ const UpdatePrice = (props) => {
           <div className="h-2 bg-purple-400 rounded-t-md"></div>
           <div className="px-8 py-6">
             <label className="block font-semibold">New Price</label>
-            <input type="text" placeholder="Price" value={updatedPrice==0?'':updatedPrice} onChange={(e)=>setUpdatedPrice(e.target.value)} className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" />
+            <input type="text"  value={updatedPrice==0?'':updatedPrice} onChange={(e)=>setUpdatedPrice(e.target.value)} className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" />
             
             <div className="flex justify-between items-baseline">
               <button onClick={()=>{

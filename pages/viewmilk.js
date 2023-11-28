@@ -125,7 +125,7 @@ const ViewMilk = () => {
             if(response.success==true){
               toast.success('Deleted Successfully !', {
                 position: "top-left",
-                autoClose: 1500,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -137,7 +137,7 @@ const ViewMilk = () => {
             }else{
               toast.error('Unable to delete !', {
                 position: "top-left",
-                autoClose: 1500,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -225,7 +225,6 @@ const ViewMilk = () => {
             <div className="px-5 pb-5">
               <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
               <input
-                placeholder="Customer Code"
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
@@ -237,7 +236,6 @@ const ViewMilk = () => {
 
                {
                 consumerCode==0 && <> <input
-                placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
@@ -436,7 +434,8 @@ const ViewMilk = () => {
                                         <span>{id++}</span>
                                     </div>
                                 </td>
-                                <td className="px-4 py-4 text-xl text-black  whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td>
+                                {/* <td className="px-4 py-4 text-xl text-black  whitespace-nowrap">{new Date(item.pdate).toISOString().split('T')[0].split('-').reverse().join('-')}</td> */}
+                                <td className="px-4 py-4 text-xl text-black  whitespace-nowrap">{format(new Date(item.pdate), 'dd-MM-yyyy')}</td>
                                 <td className="px-4 py-4 text-lg font-medium text-gray-700 whitespace-nowrap">
                                     <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 ">
                                        

@@ -281,7 +281,6 @@ const UpdateMilk = (props) => {
                 
                             <label className='text-xl font-semibold' htmlFor="consumerSelect">Weight: </label>
               <input
-                placeholder="Weight"
                 onChange={handleWeight}
                 value={weight}
                 type='number'
@@ -292,7 +291,6 @@ const UpdateMilk = (props) => {
                 <div className="">
                   <label className='text-xl font-semibold' >Fat: </label>
                 <input
-                  placeholder="Fat"
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
@@ -303,7 +301,6 @@ const UpdateMilk = (props) => {
                 />
                 <label className='text-xl font-semibold'>Snf: </label>
                  <input
-                  placeholder="Snf"
                   onChange={(e)=>{
                     {
                       setSnf(e.target.value)
@@ -321,7 +318,6 @@ const UpdateMilk = (props) => {
                 <div className="">
                 <label className='text-xl font-semibold' >Price: </label>
                   <input
-                    placeholder="Price"
                     onChange={(e)=>{
                       setPrice(e.target.value)
                       if(e.target.value!=0){
@@ -400,7 +396,6 @@ const UpdateMilk = (props) => {
    </div>
    <label className='text-xl font-semibold' >Remarks (if any): </label>
    <input
-                placeholder="Remarks"
                 onChange={(e)=>setRemarks(e.target.value)}
                 value={remarks}
                 className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"

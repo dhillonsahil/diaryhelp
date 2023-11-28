@@ -54,7 +54,7 @@ export default function Contact() {
       if (response.success === true) {
         toast.success('Message Sent Successfully', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -65,7 +65,7 @@ export default function Contact() {
       } else {
         toast.error('An Error occurred !', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -77,7 +77,7 @@ export default function Contact() {
     } else {
       toast.error(`An error`, {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

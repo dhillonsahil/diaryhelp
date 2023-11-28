@@ -60,7 +60,7 @@ export default function Signup() {
             if(resp.success==true){
                 toast.success('Inserted successfully', {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 500,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -72,7 +72,7 @@ export default function Signup() {
             }else{
                 toast.error('An error occurred', {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 2000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -86,7 +86,7 @@ export default function Signup() {
     }else{
       toast.error('Enter Data', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -130,7 +130,7 @@ export default function Signup() {
                       </div>
 
                     </div>
-                    <input value={name} onChange={onchange} name="name" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" id='name' type="text" placeholder="SAHIL MOHIT" />
+                    <input value={name} onChange={onchange} name="name" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" id='name' type="text" />
                   </div>
                   <div className="m-2">
                     <div className="flex justify-between items-center">
@@ -139,7 +139,7 @@ export default function Signup() {
                       </div>
 
                     </div>
-                    <input value={diaryName} onChange={onchange} name="diaryName" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" id='diaryName' type="text" placeholder="Enter your name" />
+                    <input value={diaryName} onChange={onchange} name="diaryName" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" id='diaryName' type="text"  />
                   </div>
                   <div className="m-2">
                     <div className="flex justify-between items-center">
@@ -148,11 +148,11 @@ export default function Signup() {
                       </div>
 
                     </div>
-                    <input value={mobile} onChange={onchange} name="mobile" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" id='mobile' type="text" placeholder="9998887776  8877997788" />
+                    <input value={mobile} onChange={onchange} name="mobile" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" id='mobile' type="text"  />
                   </div>
                   <div>
                     <div className="text-sm font-bold mt-4 text-gray-700 tracking-wide">Diary Address</div>
-                    <input value={address} onChange={onchange} name="address" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" type="address" id="address" placeholder="PABRA HISAR" />
+                    <input value={address} onChange={onchange} name="address" className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500" type="address" id="address" />
                   </div>
 
                   <div className="m-6">

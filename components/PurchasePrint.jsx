@@ -126,7 +126,7 @@ const PurchaseDoc = forwardRef((props, ref) => {
                 className="border-r   ">
                 <div className="flex flex-col">
                   <div className="">Credit</div>
-                  <div className="text-xs">(दूध वाले ने खरीदा)</div>
+                  {/* <div className="text-xs">(दूध वाले ने खरीदा)</div> */}
                 </div>
               </th>
              
@@ -167,7 +167,7 @@ const PurchaseDoc = forwardRef((props, ref) => {
                   {item.pprice}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r   ">
+                  className="text-green-600 whitespace-nowrap border-r   ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
                

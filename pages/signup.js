@@ -45,7 +45,7 @@ export default function Signup() {
      if(response.success==true){
       toast.success('Account Created Successfully!', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -58,7 +58,7 @@ export default function Signup() {
       }else if(response.message=="Account Already Exist"){
         toast.error('Account Already Exist', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -70,7 +70,7 @@ export default function Signup() {
         }else{
         toast.error('An error occurred', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

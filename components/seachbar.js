@@ -20,7 +20,7 @@ export const SearchBar = ({searchInput,setSearchInput}) => {
           pointerEvents="none"
           children={<Search2Icon color="gray.600" />}
         />
-        <Input value={searchInput} onChange={handleInputChange} type="text" placeholder="Search..." border="1px solid #949494" />
+        <Input value={searchInput} onChange={handleInputChange} type="text"  border="1px solid #949494" />
         <InputRightAddon
           p={0}
           border="none"

@@ -47,7 +47,7 @@ const DialyPrice = () => {
     if(response.success==true){
       toast.success('Inserted Successfully', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -60,7 +60,7 @@ const DialyPrice = () => {
     }else if(response.success==false && response.message=='Data already inserted'){
       toast.error('Data Already Inserted!', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -72,7 +72,7 @@ const DialyPrice = () => {
     else{
       toast.error('Oops ! An Error Occurred', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -105,7 +105,7 @@ const DialyPrice = () => {
     if(response.success==true){
       toast.success('Updated Successfully', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -119,7 +119,7 @@ const DialyPrice = () => {
     }else{
       toast.error('An Error Occurred', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -181,7 +181,7 @@ const DialyPrice = () => {
       }else{
         toast.error('Unable to fetch Error ! Try Reloading', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -256,7 +256,6 @@ const InsertPrice = ({value,setValue,cattle,setCattle,reset,price,setPrice,title
                     value={price}
                     onChange={(e)=>setPrice(e.target.value)}
                     className="w-11/12  text-black placeholder:text-gray-500 p-2"
-                    placeholder="Example 50"
                   />
                 </div>
               </div>
@@ -400,7 +399,7 @@ const UpdatePrice = ({updatedPrice,setUpdatedPrice,setIV,handleUpdate})=>{
           <div className="h-2 bg-purple-400 rounded-t-md"></div>
           <div className="px-8 py-6">
             <label className="block font-semibold">New Price</label>
-            <input type="text" placeholder="Price" value={updatedPrice} onChange={(e)=>setUpdatedPrice(e.target.value)} className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" />
+            <input type="text"  value={updatedPrice} onChange={(e)=>setUpdatedPrice(e.target.value)} className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" />
             
             <div className="flex justify-between items-baseline">
               <button onClick={()=>{

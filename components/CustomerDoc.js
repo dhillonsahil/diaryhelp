@@ -174,11 +174,11 @@ const CustomerDoc = forwardRef((props, ref) => {
                   {item.pprice}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r   ">
+                  className="text-green-600 whitespace-nowrap border-r   ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r   ">
+                  className="text-red-500 whitespace-nowrap border-r   ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td
@@ -194,9 +194,9 @@ const CustomerDoc = forwardRef((props, ref) => {
           </tbody>
         </table>
         <div className='flex border-2 border-black flex-row justify-between'>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Purchase : {Math.round(totalReceived)}</div>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Sell : {Math.round(totalDue)}</div>
-          <div  className="whitespace-nowrap px-6 py-4  text-black font-bold text-sm"> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div>
+          <div className=" whitespace-nowrap px-6 py-4 text-green-600  font-bold text-sm">Total Purchase By milkman : {Math.round(totalReceived)}</div>
+          <div className="whitespace-nowrap px-6 py-4 font-bold text-sm text-red-500" >Total Sell by milkman : {Math.round(totalDue)}</div>
+          <div  className={`whitespace-nowrap px-6 py-4  text-black font-bold text-sm ${Math.round(totalDue)>Math.round(totalReceived)?'text-red-500':'text-green-600'}`}> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div>
         </div>
     </div>
   );

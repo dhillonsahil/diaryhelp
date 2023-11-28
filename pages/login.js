@@ -35,7 +35,7 @@ export default function Login() {
             localStorage.setItem("myUser",JSON.stringify({token : response.token }))
             toast.success('Logged In!', {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -47,7 +47,7 @@ export default function Login() {
         }else if(response.success=="Check Your Credentials"){
             toast.error('Check Your Credentials !', {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -58,7 +58,7 @@ export default function Login() {
         }else{
             toast.error('An Error occurred !', {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 500,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -73,7 +73,7 @@ export default function Login() {
 }else{
     toast.error('Enter Data!', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

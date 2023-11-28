@@ -113,6 +113,11 @@ const SellBill = () => {
 
         const handleInputChange = (e) => {
             setConsumerCode(e.target.value);
+            if(e.target.value ==0 || e.target.value==''){
+              setConsumerCode(0);
+              setSelectedConsumer(null);
+              setFetched(null)
+            }
             const selected = customers.find((consumer) => consumer.id === parseInt(e.target.value));
             setSelectedConsumer(selected);
           };
@@ -183,7 +188,7 @@ const SellBill = () => {
         }else{
           toast.error('Select Customer!', {
             position: "top-left",
-            autoClose: 3000,
+            autoClose: 500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -246,7 +251,6 @@ const SellBill = () => {
             <div className="px-5 pb-5">
             <label className='text-lg font-semibold'>Customer Code</label>
               <input
-                placeholder="Customer Code"
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
@@ -256,7 +260,6 @@ const SellBill = () => {
               />
                 <label className='text-xl font-semibold' htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
                <input
-                placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
@@ -419,14 +422,7 @@ const SellBill = () => {
                 className="border-r px-6 py-4 ">
                 Milk Rate
               </th>
-              <th
-                scope="col"
-                className="border-r px-2 py-4 ">
-                <div className="flex flex-col">
-                  <div className="">Credit</div>
-                  <div className="text-sm">(दूध वाले ने खरीदा)</div>
-                </div>
-              </th>
+              
               <th
                 scope="col"
                 className="border-r px-2 py-4 ">
@@ -475,12 +471,12 @@ const SellBill = () => {
                   className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.pprice}
                 </td>
-                <td
+                {/* <td
                   className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
-                </td>
+                </td> */}
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 ">
+                  className="text-red-500 whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td
@@ -516,7 +512,7 @@ const SellBill = () => {
           <button className='bg-red-600 p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={handleDownloadPDF}
             >Download Pdf</button>
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
-          {fetched.length>0 && <SellDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
+          {fetched.length>0 && consumerCode!=0 && <SellDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           
       </div>
     </div>

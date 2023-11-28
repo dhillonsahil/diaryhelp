@@ -167,7 +167,7 @@ const SellDoc = forwardRef((props, ref) => {
                 </td>
                 
                 <td
-                  className="whitespace-nowrap border-r   ">
+                  className="text-red-500 whitespace-nowrap border-r   ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
                 </td>
                 <td

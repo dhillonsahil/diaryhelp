@@ -112,6 +112,11 @@ const PurchaseBill = () => {
 
         const handleInputChange = (e) => {
             setConsumerCode(e.target.value);
+            if(e.target.value ==0 || e.target.value==''){
+              setConsumerCode(0);
+              setSelectedConsumer(null);
+              setFetched(null)
+            }
             const selected = customers.find((consumer) => consumer.id === parseInt(e.target.value));
             setSelectedConsumer(selected);
           };
@@ -182,7 +187,7 @@ const PurchaseBill = () => {
         }else{
           toast.error('Select Customer!', {
             position: "top-left",
-            autoClose: 3000,
+            autoClose: 500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -245,7 +250,6 @@ const PurchaseBill = () => {
             <div className="px-5 pb-5">
             <label className='text-lg font-semibold'>Customer Code</label>
               <input
-                placeholder="Customer Code"
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
@@ -259,7 +263,6 @@ const PurchaseBill = () => {
                 consumerCode==0 && <div>
                   <label className='text-lg font-semibold'>Search Customer</label>
                <input
-                placeholder="Search Customer"
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
@@ -426,17 +429,10 @@ const PurchaseBill = () => {
                 className="border-r px-2 py-4 ">
                 <div className="flex flex-col">
                   <div className="">Credit</div>
-                  <div className="text-sm">(दूध वाले ने खरीदा)</div>
+                  {/* <div className="text-sm">(दूध वाले ने खरीदा)</div> */}
                 </div>
               </th>
-              <th
-                scope="col"
-                className="border-r px-2 py-4 ">
-                <div className="flex flex-col">
-                  <div className="">Debit</div>
-                  <div className="text-sm">(दूध वाले ने बेचा)</div>
-                </div>
-              </th>
+             
               <th
                 scope="col"
                 className="border-r px-6 py-4 ">
@@ -478,13 +474,13 @@ const PurchaseBill = () => {
                   {item.pprice}
                 </td>
                 <td
-                  className="whitespace-nowrap border-r px-6 py-4 ">
+                  className="text-green-500 whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Buy"?item.totalprice:"-"}
                 </td>
-                <td
-                  className="whitespace-nowrap border-r px-6 py-4 ">
+                {/* <td
+                  className="text-red-500 whitespace-nowrap border-r px-6 py-4 ">
                   {item.ptype=="Sell"?item.totalprice:"-"}
-                </td>
+                </td> */}
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 ">
                   {item.remarks}

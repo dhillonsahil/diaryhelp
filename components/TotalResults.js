@@ -57,7 +57,6 @@ const TotalResults = (props) => {
             setSale(response.sale);
             setPurchase(response.purchase);
         }
-        console.log(response.data)
     
   }
 
@@ -71,8 +70,8 @@ const TotalResults = (props) => {
   return (
     <div>
         <div className="flex m-2 flex-col lg:flex-row">
-            <div className="lg:w-1/3 mx-auto rounded-lg text-black px-6 py-4 font-semibold bg-gray-100 w-full m-2">Total Sale : {sale}</div>
-            <div className="lg:w-1/3 mx-auto rounded-lg text-black font-semibold px-6 py-4 bg-gray-100 w-full m-2">Total Purchase : {purchase}</div>
+            <div className="lg:w-1/3 mx-auto rounded-lg text-black px-6 py-4 font-semibold bg-gray-100 w-full m-2">Total Sale : {sale.toFixed(2)}</div>
+            <div className="lg:w-1/3 mx-auto rounded-lg text-black font-semibold px-6 py-4 bg-gray-100 w-full m-2">Total Purchase : {purchase.toFixed(2)}</div>
         </div>
       <div className='text-center text-xl font-semibold' >Customer's Details</div>
       <div className="">
@@ -95,11 +94,11 @@ const TotalResults = (props) => {
               ).map((item,i)=>{
                 return (
                     <tr key={i} className="text-black font-semibold hover:bg-gray-50">
-                         <td class="px-6 py-4">{item.cid}</td>
-                         <td class="px-6 py-4">{item.cname} S/d/w {item.fname}</td>
-                         <td class="px-6 py-4">{Math.round(item.amountReceived)}</td>
-                         <td class="px-6 py-4">{Math.round(item.amountDue)}</td>
-                         <td class="px-6 py-4">{Math.round(item.amountReceived)-Math.round(item.amountDue)}</td>
+                         <td className="px-6 py-4">{item.cid}</td>
+                         <td className="px-6 py-4">{item.cname} S/d/w {item.fname}</td>
+                         <td className="px-6 py-4">{Math.round(item.amountReceived)}</td>
+                         <td className="px-6 py-4">{Math.round(item.amountDue)}</td>
+                         <td className={`px-6 py-4 ${item.amountDue>item.amountReceived?'text-red-500':'text-green-600'}`} >₹ {Math.round(item.amountReceived)-Math.round(item.amountDue)}</td>
                    
                     
                    

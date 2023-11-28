@@ -114,7 +114,7 @@ const BuffaloRateList = (props) => {
                   {
               snfValues.map((item,i)=>{
                   return (
-                      <th className=" text-end border-black border-solid border-2" key={i}>{item/10}   </th>
+                      <th className=" text-end text-sm border-black border-solid border-2" key={i}>{item/10}   </th>
                   )
               })
       }
@@ -128,7 +128,7 @@ const BuffaloRateList = (props) => {
               return (
 
                 // start here
-<tr className="border-black border-solid border-2">
+<tr key={i} className="border-black border-solid border-2">
                   <td className="  border-black border-solid border-2">
                       
                       <div className="flex flex-col justify-start ">

@@ -96,7 +96,7 @@ const addcustomer = () => {
     if(resp.success==true){
       toast.success('Customer Added!', {
         position: "top-left",
-        autoClose: 1500,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -110,7 +110,7 @@ const addcustomer = () => {
     }else{
       toast.error('An Error occurred !', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -122,7 +122,7 @@ const addcustomer = () => {
 }else{
   toast.error('Enter Details', {
     position: "top-left",
-    autoClose: 3000,
+    autoClose: 500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -161,28 +161,28 @@ const addcustomer = () => {
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Full name</FormLabel>
-              <Input onKeyDown={(e) => handleKeyDown(e, fnameRef)} borderColor={'black'} size={'lg'} value={name} name='name' id='name' onChange={onchange} placeholder='First name' />
+              <Input onKeyDown={(e) => handleKeyDown(e, fnameRef)} borderColor={'black'} size={'lg'} value={name} name='name' id='name' onChange={onchange}  />
             </FormControl>
           </div>
           {/* Father Name */}
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Father name</FormLabel>
-              <Input onKeyDown={(e) => handleKeyDown(e, mobileRef)} ref={fnameRef} borderColor={'black'} size={'lg'}  value={fatherName} name='fatherName' id='fatherName' onChange={onchange} placeholder='Father name' />
+              <Input onKeyDown={(e) => handleKeyDown(e, mobileRef)} ref={fnameRef} borderColor={'black'} size={'lg'}  value={fatherName} name='fatherName' id='fatherName' onChange={onchange} />
             </FormControl>
           </div>
           {/* Mobile */}
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Mobile Number</FormLabel>
-              <Input ref={mobileRef} onKeyDown={(e) => handleKeyDown(e, addressRef)} borderColor={'black'} size={'lg'} value={mobile} name='mobile' id='mobile' onChange={onchange} placeholder='Enter mobile Number' />
+              <Input ref={mobileRef} onKeyDown={(e) => handleKeyDown(e, addressRef)} borderColor={'black'} size={'lg'} value={mobile} name='mobile' id='mobile' onChange={onchange}  />
             </FormControl>
           </div>
           {/* Address */}
           <div className='my-2 mx-2'>
             <FormControl isRequired>
               <FormLabel>Address</FormLabel>
-              <Input ref={addressRef} borderColor={'black'} size={'lg'}  value={address} name='address' id='address' onChange={onchange} placeholder='Enter Address' />
+              <Input ref={addressRef} borderColor={'black'} size={'lg'}  value={address} name='address' id='address' onChange={onchange}  />
               <Stack spacing={4} direction='row' mt={3} align='center'>
 
                 <button className="bg-pink-500 text-gray-100 p-4 w-full rounded-full tracking-wide

@@ -43,7 +43,7 @@ export default function Forgot() {
     if (res.success) {
       toast.success('Link sent Successfully', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -54,7 +54,7 @@ export default function Forgot() {
     } else {
       toast.error(res.error, {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -69,7 +69,7 @@ export default function Forgot() {
     if(pass!=cpass){
       toast.error('Password and Confirm Password are different', {
         position: "top-left",
-        autoClose: 3000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -92,7 +92,7 @@ export default function Forgot() {
       if(res.success){
         toast.success('Password Updated successfully', {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -103,7 +103,7 @@ export default function Forgot() {
       }else{
         toast.error(res.error, {
           position: "top-left",
-          autoClose: 3000,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

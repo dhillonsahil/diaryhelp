@@ -81,7 +81,7 @@ const ManageItems = () => {
       if(response.success==true){
         toast.success('Item Added !', {
           position: "top-left",
-          autoClose: 1500,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -97,7 +97,7 @@ const ManageItems = () => {
       }else{
         toast.error('An Error occurred !', {
           position: "top-left",
-          autoClose: 1500,
+          autoClose: 500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -152,7 +152,7 @@ const ManageItems = () => {
               id="fName"
               value={itemName}
               onChange={(e)=>setItemName(e.target.value)}
-              placeholder="Ghee / Khal"
+             
               className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" required
             />
           </div>
@@ -171,8 +171,7 @@ const ManageItems = () => {
               id="lName"
               value={quantity==0?'':quantity}
               onChange={(e)=>setQuantity(e.target.value)}
-              placeholder="100"
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" required
+             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" required
             />
           </div>
         </div>
@@ -188,7 +187,6 @@ const ManageItems = () => {
           type="number"
           name="guest"
           id="guest"
-          placeholder="650"
           value={price==0?'':price}
           onChange={(e)=>setPrice(e.target.value)}
           min="0"

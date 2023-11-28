@@ -9,7 +9,7 @@ const TotalCustomers = (props) => {
             <div className="bg-white p-5">
                 <div className="sm:flex sm:items-start">
                     <div className="text-center sm:mt-0 sm:ml-2 sm:text-left">
-                        <h3 className="text-sm leading-6 font-medium text-gray-400">Total Subscribers</h3>
+                        <h3 className="text-sm leading-6 font-medium text-gray-400">Total Customers</h3>
                         <p className="text-3xl font-bold text-black">{props.totalCust ?props.totalCust :0}</p>
                     </div>
                 </div>
