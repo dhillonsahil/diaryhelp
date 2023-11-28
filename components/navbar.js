@@ -44,6 +44,10 @@ const Navbar = () => {
 
                 <MenuItem>Sell Milk</MenuItem>
                 </Link>
+                <Link href={'/sellsnf'}>
+
+                <MenuItem>Sell Fat Snf</MenuItem>
+                </Link>
                 <Link href={'/purchasemilk'}>
 
                 <MenuItem>Purchase Milk</MenuItem>
@@ -130,6 +134,10 @@ const Navbar = () => {
                 <Link href={'/sellmilk'}>
 
                 <MenuItem>Sell Milk</MenuItem>
+                </Link>
+                <Link href={'/sellsnf'}>
+
+                <MenuItem>Sell Fat Snf</MenuItem>
                 </Link>
                 <Link href={'/purchasemilk'}>
 

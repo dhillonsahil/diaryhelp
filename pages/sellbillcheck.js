@@ -245,7 +245,7 @@ const SellBill = () => {
                 </g>
               </g>
             </svg>
-            <span className="pl-2 mx-1">Purchase Bill Check</span>
+            <span className="pl-2 mx-1">Sell Bill Check</span>
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
@@ -259,15 +259,16 @@ const SellBill = () => {
                 className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black" required
               />
                 <label className='text-xl font-semibold' htmlFor="consumerSelect">Selected Consumer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
-               <input
+              
+
+                {
+                  consumerCode==0 && <>
+                   <input
                 value={searchQuery}
                 id='searchQuery'
                 onChange={handleSearchChange}
                 className="text-black my-2 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
-
-                {
-                  consumerCode==0 && <>
                   
      <select  onChange={handleInputChange} size={6} style= {{
   width: '100%',
@@ -444,9 +445,9 @@ const SellBill = () => {
               (currentPage - 1) * entriesPerPage,
               currentPage * entriesPerPage
             )
-.map((item)=>{
+.map((item,index)=>{
               return (
-                <tr className="text-black border-b font-bold">
+                <tr key={index} className="text-black border-b font-bold">
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 font-medium ">
                   {id++}
@@ -508,9 +509,15 @@ const SellBill = () => {
               Next
             </button>
           </div>
+          <div className="">
+
           <button className='bg-black p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={() => setTimeout(() => handlePrint(), 100)}>Print Bill</button>
+          </div>
+          <div className="">
+
           <button className='bg-red-600 p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={handleDownloadPDF}
             >Download Pdf</button>
+          </div>
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
           {fetched.length>0 && consumerCode!=0 && <SellDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           

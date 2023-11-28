@@ -289,13 +289,18 @@ const ViewExpense = () => {
 
               
              
-              <div className="flex">
-                <div className="flex-grow w-1/2 pr-2">
+              <div className="">
+                <div className="">
+                <div className="">
                 <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>From : </label>
+                </div>
               <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleStartDate} />
                 </div>                
-               <div className="flex-grow w-1/2 pr-2">
-               <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>To : </label>
+               <div className="">
+                <div className="">
+                <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>To : </label>
+                </div>
+              
               <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={endDate} onChange={handleEndDate} />
 
                </div>
@@ -452,9 +457,9 @@ const ViewExpense = () => {
               (currentPage - 1) * entriesPerPage,
               currentPage * entriesPerPage
             )
-.map((item)=>{
+.map((item,index)=>{
               return (
-                <tr className="text-black border-b font-bold">
+                <tr key={index} className="text-black border-b font-bold">
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 font-medium ">
                   {id++}
@@ -516,9 +521,15 @@ const ViewExpense = () => {
               Next
             </button>
           </div>
+          <div className="">
+
           <button className='bg-black p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={() => setTimeout(() => handlePrint(), 100)}>Print Bill</button>
+          </div>
+          <div className="">
+
           <button className='bg-red-600 p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={handleDownloadPDF}
             >Download Pdf</button>
+          </div>
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
           {fetched.length>0 && <CustomerDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           

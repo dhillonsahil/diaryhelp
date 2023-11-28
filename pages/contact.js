@@ -62,6 +62,9 @@ export default function Contact() {
           progress: undefined,
           theme: "light",
         });
+        setName('');
+        setMobile('');
+        setMessage('');
       } else {
         toast.error('An Error occurred !', {
           position: "top-left",

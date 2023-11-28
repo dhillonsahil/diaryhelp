@@ -545,7 +545,7 @@ border:'1px solid black'
             
           </tbody>
         </table>
-            <div className="flex mx-4 justify-between p-3">
+            <div className=" mx-4 justify-between p-3">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
@@ -563,9 +563,14 @@ border:'1px solid black'
               Next
             </button>
           </div>
+          <div className="">
           <button className='bg-black p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={() => setTimeout(() => handlePrint(), 100)}>Print Bill</button>
+          </div>
+          <div className="">
           <button className='bg-red-600 p-4 text-center text-white rounded-lg m-2 w-[95vw] mx-4' onClick={handleDownloadPDF}
-            >Download Pdf</button>
+            >Download Pdf</button> 
+          </div>
+          
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
           {fetched.length>0 && consumerCode!=0 && <PrintDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           
