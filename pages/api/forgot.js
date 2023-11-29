@@ -88,7 +88,7 @@ const forgot = async (req, res) => {
   const option = {
     from: 'sahil2002427@gmail.com',
     to: customerMail,
-    subject: 'Reset Password - Diary Help',
+    subject: 'Reset Password - Milk Manage',
     text: `To Reset Your Password Click on the Link https://diaryhelp.myrangolidesign.com/forgot?id=${resetToken}`
   };
 

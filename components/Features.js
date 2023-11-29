@@ -13,7 +13,7 @@ const Features = () => {
         A technology-first approach to Calculations
         and Management
       </h2>
-      <p className="text-gray-600 ">Diary Help is a website that helps you manage your dairy business with ease. Whether you are a milk producer, seller, or consumer, you can use our website to keep track of your transactions, expenses, and profits.
+      <p className="text-gray-600 ">Milk Manage is a website that helps you manage your dairy business with ease. Whether you are a milk producer, seller, or consumer, you can use our website to keep track of your transactions, expenses, and profits.
 
 </p>
     </div>
@@ -27,7 +27,7 @@ const Features = () => {
             className="w-12"
             width="512"
             height="512"
-            alt="Diary Help Milk Management"
+            alt="Milk Manage Milk Management"
           />
 
           <div className="space-y-2">
@@ -49,7 +49,7 @@ const Features = () => {
             className="w-12"
             width="512"
             height="512"
-            alt="Diary Help Milk Management"
+            alt="Milk Manage Milk Management"
           />
 
           <div className="space-y-2">
@@ -72,7 +72,7 @@ Buy or sell milk and update your consumption records. You can also view your dai
             className="w-12"
             width="512"
             height="512"
-            alt="Diary Help Milk Management"
+            alt="Milk Manage Milk Management"
           />
 
           <div className="space-y-2">

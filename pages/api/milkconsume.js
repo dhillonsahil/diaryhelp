@@ -83,7 +83,7 @@ const handler = async (req, res) => {
 
                                             if(rows.length>0){
                                                 if(ptype.toLowerCase()=="sell"){
-                                                    const amount=rows[0].amountDue + totalprice;
+                                                    const amount=Number(rows[0].amountDue) + Number(totalprice);
                                                     connection.query(`update ${username}_totalcalc set amountDue=? where cuid=? and cid=?`,[amount,cuid,cid], (error, rows, fields) => {
                                                         if (error) {
                                                             console.log(error);
@@ -105,7 +105,7 @@ const handler = async (req, res) => {
                                                         });
                                                     });
                                                 } else if(ptype.toLowerCase()=="buy"){
-                                                    const amount=rows[0].amountReceived + totalprice;
+                                                    const amount=Number(rows[0].amountReceived) + Number(totalprice);
                                                     connection.query(`update ${username}_totalcalc set amountReceived=? where cuid=? and cid=?`,[amount,cuid,cid], (error, rows, fields) => {
                                                         if (error) {
                                                             console.log(error);

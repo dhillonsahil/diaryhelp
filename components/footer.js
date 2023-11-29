@@ -95,7 +95,7 @@ export default function Footer() {
             ml: 8,
           }}>
           {/* <Logo /> */}
-          <h1 className='text-black'>Diary Help</h1>
+          <h1 className='text-black'>Milk Manage</h1>
         </Flex>
         <Text pt={6} fontSize={'medium'} textAlign={'center'}>
          Created with ❤️ by Sahil Dhillon

@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <title>Diary Help - Milk Management System</title>
+      <title>Milk Manage - Milk Management System</title>
       <body>
         <Main />
         <NextScript />

@@ -25,7 +25,7 @@ const Stats = () => {
             Connect with our passionate team for help
           </h2>
           <p className="my-8 text-gray-600 dark:text-gray-300">
-            If you still have any questions or concerns, please do not hesitate to contact us. We are always happy to help you and provide you with the best service possible. You can reach us by phone, email. We will get back to you as soon as possible. Thank you for choosing Diary Help Name.
+            If you still have any questions or concerns, please do not hesitate to contact us. We are always happy to help you and provide you with the best service possible. You can reach us by phone, email. We will get back to you as soon as possible. Thank you for choosing Milk Manage.
 
 
           </p>

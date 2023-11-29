@@ -10,7 +10,7 @@ const AppHeader = () => {
                 <div className="relative z-20 w-full flex justify-between lg:w-max md:px-0">
                     <Link href="/" aria-label="logo" className="flex space-x-2 items-center">
                         
-                        <span className="text-2xl font-bold text-gray-900 ">Diary Help</span>
+                        <span className="text-2xl font-bold text-gray-900 ">Milk Manage</span>
                     </Link>
                     
                     <div className="relative flex items-center lg:hidden max-h-10">

@@ -32,7 +32,7 @@ const handler = async(req,res)=>{
                       }else{
                         // if ptype buy then we have to reduce amountReceived
                         // console.log("Rows",rows)
-                        pool.query(`update ${username}_totalcalc set amountReceived=? where cuid=? and cid=?`,[rows[0].amountReceived-totalPrice,cuid,cid],(error,rows)=>{
+                        pool.query(`update ${username}_totalcalc set amountReceived=? where cuid=? and cid=?`,[Number(rows[0].amountReceived)-Number(totalPrice),cuid,cid],(error,rows)=>{
                             if(error){
                                 res.status(500).json({error:error.message,success:false})
                             }else{
@@ -78,7 +78,7 @@ const handler = async(req,res)=>{
                     if(oldptype=="Buy"){
                         // if same new ptype
                       if(utype=="Buy"){
-                        connection.query(`update ${username}_totalcalc set amountReceived=amountReceived-?+? where cid=?`,[prevprice,utotalprice,cid],(error,rows)=>{
+                        connection.query(`update ${username}_totalcalc set amountReceived=amountReceived-?+? where cid=?`,[Number(prevprice),Number(utotalprice),cid],(error,rows)=>{
                             if (error) {
                                 console.log(error);
                                 connection.rollback(() => {
@@ -116,7 +116,7 @@ const handler = async(req,res)=>{
                         })
                       }else{
                         // if changed purchase type
-                        connection.query(`update ${username}_totalcalc set amountReceived=amountReceived-? , amountDue=amountDue+? where cid=?`,[prevprice,utotalprice,cid],(error,rows)=>{
+                        connection.query(`update ${username}_totalcalc set amountReceived=amountReceived-? , amountDue=amountDue+? where cid=?`,[Number(prevprice),Number(utotalprice),cid],(error,rows)=>{
                             if (error) {
                                 console.log(error);
                                 connection.rollback(() => {
@@ -156,7 +156,7 @@ const handler = async(req,res)=>{
                     }else if(oldptype=="Sell"){
                         // 
                         if(utype=="Sell"){
-                            connection.query(`update ${username}_totalcalc set amountDue=amountDue-?+? where cid=?`,[prevprice,utotalprice,cid],(error,rows)=>{
+                            connection.query(`update ${username}_totalcalc set amountDue=amountDue-?+? where cid=?`,[Number(prevprice),Number(utotalprice),cid],(error,rows)=>{
                                 if (error) {
                                     console.log(error);
                                     connection.rollback(() => {
@@ -193,7 +193,7 @@ const handler = async(req,res)=>{
                                 
                             })
                         }else{
-                            connection.query(`update ${username}_totalcalc set amountDue=amountDue-? ,amountReceived=amountReceived+? where cid=?`,[prevprice,utotalprice,cid],(error,rows)=>{
+                            connection.query(`update ${username}_totalcalc set amountDue=amountDue-? ,amountReceived=amountReceived+? where cid=?`,[Number(prevprice),Number(utotalprice),cid],(error,rows)=>{
                                 if (error) {
                                     console.log(error);
                                     connection.rollback(() => {

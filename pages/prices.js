@@ -45,7 +45,7 @@ export default function ThreeTierPricing() {
         </Heading>
         <Text fontSize="lg" color={'gray.800'}>
           Start with 3-days free trial. No credit card needed. 
-          Contact Us to get subscription. <span className='text-blue-500'><Link href="/contact">Click Here</Link></span>
+          Contact Us For Offers. <span className='text-blue-500'><Link href="/contact">Click Here</Link></span>
         </Text>
       </VStack>
       <Stack
@@ -145,7 +145,7 @@ export default function ThreeTierPricing() {
                 ₹
                 </Text>
                 <Text fontSize="5xl" fontWeight="900">
-                  5000
+                  7000
                 </Text>
                 <Text fontSize="3xl" color="gray.500">
                   /year
@@ -206,7 +206,7 @@ export default function ThreeTierPricing() {
                 ₹
               </Text>
               <Text fontSize="5xl" fontWeight="900">
-                6000
+                8000
               </Text>
               <Text fontSize="3xl" color="gray.500">
                 /year 

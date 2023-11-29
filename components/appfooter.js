@@ -57,7 +57,7 @@ const AppFooter = () => {
               >We change the way you work</span
             >
   
-            <span className="block text-gray-500">Diary Help &copy; <span id="year">2023</span></span>
+            <span className="block text-gray-500">Milk Manage &copy; <span id="year">2023</span></span>
   
             <span className="flex justify-between text-gray-600 ">
               <span  className="font-medium"> Made with ❤️ By Sahil Dhillon</span>

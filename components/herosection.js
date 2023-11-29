@@ -10,8 +10,8 @@ const HeroSection = () => {
     <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
     <div className="relative pt-36 ml-auto">
             <div className="lg:w-2/3 text-center mx-auto">
-                <h1 className="text-gray-900  font-bold text-5xl md:text-6xl xl:text-7xl">Milk Management got easy with <span className="text-primary text-blue-500">Diary Help.</span></h1>
-                <p className="mt-8 text-gray-700 ">Spending all the time on too much milk calculations. In Diary Help enter your data while buying or selling then no need for calculations. Bill can be generated in seconds.</p>
+                <h1 className="text-gray-900  font-bold text-5xl md:text-6xl xl:text-7xl">Milk Management got easy with <span className="text-primary text-blue-500">Milk Manage.</span></h1>
+                <p className="mt-8 text-gray-700 ">Spending all the time on too much milk calculations. In Milk Manage enter your data while buying or selling then no need for calculations. Bill can be generated in seconds.</p>
                 <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
                     <Link
                       href="/signup"
