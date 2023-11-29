@@ -347,7 +347,7 @@ const SellMilk = () => {
                 pauseOnHover
                 theme="light"
             />
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex h-screen ">
       <div className="m-auto">
         <div>
           <button
@@ -414,7 +414,7 @@ const SellMilk = () => {
                 id='consumerCode'
                 className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
-               <label className='text-lg font-semibold' htmlFor="consumerSelect">Customer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
+               <label className='text-lg font-semibold' htmlFor="consumerSelect">Customer: {selectedConsumer!=null ? selectedConsumer.c_name :""} {selectedConsumer!=null ?`S/d/w ${ selectedConsumer.father_name}`:""}</label>
 {
   consumerCode==0 && <>
   <input 
@@ -431,7 +431,6 @@ const SellMilk = () => {
   boxSizing: 'border-box',
   border:'1px solid black'
 }}>
-     <option value={""}>Select Consumers</option>
          {filteredConsumers.map((consumer) => (
           <option className='hover:bg-green-200 text-2xl' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}

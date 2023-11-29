@@ -7,23 +7,24 @@ const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const router = useRouter();
   return (
-    <Box bg="gray.800" py={4} px={8}>
+    <Box  py={4} px={8}>
       <Flex alignItems="center">
         <Link href={'/dashboard'} >
-        <Text color="white" fontSize="xl" fontWeight="bold">
+        <Text color="black" fontSize="xl" fontWeight="bold">
           Home
         </Text>
         </Link>
         <Spacer />
         <Flex alignItems="center">
           {/* Hamburger icon for mobile */}
-          <Box display={{ base: 'block', md: 'none' }}>
+          <Box textColor={'black'} display={{ base: 'block', md: 'none' }}>
             <IconButton
               icon={<HamburgerIcon />}
-              size="md"
+              size="lg"
               fontSize="lg"
               aria-label="Open Menu"
               colorScheme="whiteAlpha"
+              color={'black'}
               variant="ghost"
               onClick={onToggle}
             />
@@ -32,11 +33,11 @@ const Navbar = () => {
           {/* Navigation links for larger screens */}
           <Box display={{ base: 'none', md: 'flex' }}>
                 <Link  href={'/dailyprice'}>
-            <Button colorScheme="blackAplha" variant="solid" mr={4}>
+            <Button colorScheme="blackAplha" textColor={'black'} variant="solid" mr={4}>
               Daily Price
             </Button></Link>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton textColor={'black'} as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Milk
               </MenuButton>
               <MenuList>
@@ -58,7 +59,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton textColor={'black'} as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
               Expenses
               </MenuButton>
               <MenuList>
@@ -76,7 +77,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton  textColor='black' as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Customers
               </MenuButton>
               <MenuList>
@@ -89,7 +90,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton textColor={'black'} as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Bill Check
               </MenuButton>
               <MenuList>
@@ -109,7 +110,7 @@ const Navbar = () => {
                 <Button onClick={()=>{
                     localStorage.removeItem('myUser');
                     router.push('/login')
-                }} colorScheme="blackAlpha" variant="solid">
+                }} textColor={'black'} bgColor={'pink'} colorScheme="whiteAlpha" variant="solid">
               Log Out
             </Button>
             </Menu>
@@ -123,11 +124,11 @@ const Navbar = () => {
         <Box pb={4} display={{ md: 'none' }}>
           <VStack spacing={4}>
           <Link  href={'/dailyprice'}>
-            <Button colorScheme="blackAplha" variant="solid" mr={4}>
+            <Button textColor={'black'} colorScheme="blackAplha" variant="solid" mr={4}>
               Daily Price
             </Button></Link>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton  textColor={'black'} as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Milk
               </MenuButton>
               <MenuList>
@@ -149,7 +150,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton textColor={'black'}  as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
               Expenses
               </MenuButton>
               <MenuList>
@@ -167,7 +168,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton textColor={'black'} as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Customers
               </MenuButton>
               <MenuList>
@@ -180,7 +181,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
+              <MenuButton textColor={'black'} as={Button} rightIcon={<ChevronDownIcon />} colorScheme="blackAplha" variant="solid">
                 Bill Check
               </MenuButton>
               <MenuList>
@@ -201,7 +202,7 @@ const Navbar = () => {
             <Button onClick={()=>{
                     localStorage.removeItem('myUser');
                     router.push('/login')
-                }} colorScheme="blackAplha" variant="solid">
+                }} colorScheme="whiteAlpha"  textColor={'black'} bgColor={'pink'} variant="solid">
               Log Out
             </Button>
           </VStack>

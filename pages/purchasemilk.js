@@ -340,7 +340,7 @@ const PurchaseMilk = () => {
                 pauseOnHover
                 theme="light"
             />
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex h-screen ">
       <div className="m-auto">
         <div>
           <button
@@ -368,9 +368,9 @@ const PurchaseMilk = () => {
           </button>
           <div className="mt-5 bg-white rounded-lg shadow">
             <div className="px-5 pb-5">
- <div className="flex flex-row">           <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
+ <div className="flex flex-row">           <label htmlFor="type" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Price Type : </label>
                             
-                            <RadioGroup className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={priceType} onChange={(e)=>{
+                            <RadioGroup className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' id='type' defaultValue={priceType} onChange={(e)=>{
                                 setPriceType(e);
                               if(e=="Regular"){
                                 getPrices('regular')
@@ -389,7 +389,7 @@ const PurchaseMilk = () => {
                                 </Radio>
                               </Stack>
                             </RadioGroup></div>
-                            <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
+                            <label htmlFor="consumerCode" className='font-semobild text-lg'>Customer Code</label>
              
               <input 
                 type='number'
@@ -407,7 +407,7 @@ const PurchaseMilk = () => {
                 id='consumerCode'
                 className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
-               <label className='text-lg font-semibold' htmlFor="consumerSelect">Customer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
+               <label className='text-lg font-semibold' htmlFor="searchQuery">Customer: {selectedConsumer!=null ? selectedConsumer.c_name :""} {selectedConsumer!=null ?`S/d/w ${ selectedConsumer.father_name}`:""}</label>
 {
   consumerCode==0 && <>
   <input 
@@ -424,7 +424,6 @@ const PurchaseMilk = () => {
   boxSizing: 'border-box',
   border:'1px solid black'
 }}>
-     <option value={""}>Select Consumers</option>
          {filteredConsumers.map((consumer) => (
           <option className='hover:bg-green-200 text-2xl' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
@@ -436,12 +435,13 @@ const PurchaseMilk = () => {
                
 
 
-<div className=""><label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Weight :</label></div>
+<div className=""><label className='text-lg my-2 font-semibold' htmlFor="weight"> Weight :</label></div>
               <input
               onWheel={(e) => e.target.blur()}
                 type='number'
                 onChange={handleWeight}
                 ref={weightRef}
+                id='weight'
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
@@ -454,13 +454,14 @@ const PurchaseMilk = () => {
              {
               priceType!='Regular' && (
                 <div className="">
-                   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Fat :</label>
+                   <label className='text-lg my-2 font-semibold' htmlFor="fat"> Fat :</label>
                 <input
                 type='number'
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
                   }}
+                  id='fat'
                   onWheel={(e) => e.target.blur()}
                   ref={fatRef}
                   onKeyDown={(e) => 
@@ -473,7 +474,7 @@ const PurchaseMilk = () => {
                   value={fat==0?'':fat}
                   className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
                 />
-                 <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Snf :</label>
+                 <label className='text-lg my-2 font-semibold' htmlFor="snf"> Snf :</label>
                  <input
                   type='number'
                   onWheel={(e) => e.target.blur()}
@@ -483,6 +484,7 @@ const PurchaseMilk = () => {
                     
                     }
                   }}
+                  id='snf'
                   ref={snfRef}
                   value={snf==0?'':snf}
                   onKeyDown={(e) =>
@@ -498,7 +500,7 @@ const PurchaseMilk = () => {
              }
               <div className="">
                 <div className="">
-                <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Price :</label>
+                <label className='text-lg my-2 font-semibold' htmlFor="price"> Price :</label>
                   <input
                     type='number'
                     onChange={(e)=>{
@@ -509,6 +511,7 @@ const PurchaseMilk = () => {
                         setTotalPrice(milkrate*Number(weight))
                       }
                     }}
+                    id='price'
                     onKeyDown={(e)=>{
                       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                         e.preventDefault();
@@ -521,35 +524,35 @@ const PurchaseMilk = () => {
                 </div>
                 
                 <label htmlFor="date" className='px-4 py-2.5 mt-2 text-xl transition duration-500 ease-in-out transform border-transparent rounded-lg   ring-offset-current ring-offset-2 ring-gray-400'>Select Date : </label>
-              <DatePicker dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleDateChange} />
+              <DatePicker id='date' dateFormat={'dd-MM-yyyy'} className='border-black border-2 px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg text-xl ring-offset-current ring-offset-2 ' selected={startDate} onChange={handleDateChange} />
 
                
               </div>
              {
               fat>10 && fat<=45 && snf >10 && handleSnfFatPrice(weight) && (
                <>
-                <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</label></>
+                <span className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</span>
+                <span  className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</span></>
               )
              }
               {
               fat>45 && handleSnfFatPrice(weight) && (
                <>
-                <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</label>
-                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</label></>
+                <span  className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{milkrate}</span>
+                <span  className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</span></>
               )
              }
              {
               priceType=="Regular"  && (
                <>
-                <label htmlFor="milkrate" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{price==''?milkrate:price}</label>
-                <label htmlFor="price" className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</label></>
+                <span className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Milk Rate :{price==''?milkrate:price}</span>
+                <span  className={`${selectedType=='Sell'?'text-red-500':"text-green-500"} text-lg mx-3`}>Total Price :{totalPrice.toFixed(2)}</span></>
               )
              }
               <div className="flex flex-row"><label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Select Shift : </label>
               
               
-              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedShift} onChange={(e)=>{
+              <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' id='shift' defaultValue={selectedShift} onChange={(e)=>{
                setselectedShift(e);
               }}>
              <Stack spacing={5} direction='row'>
@@ -563,9 +566,9 @@ const PurchaseMilk = () => {
            </RadioGroup></div>
 
    <div className="flex flex-row">
-   <label htmlFor="shift" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
+   <label htmlFor="buytype" className='px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'>Type : </label>
                             
-                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' defaultValue={selectedType} onChange={(e)=>{
+                            <RadioGroup className=' px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white  focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ' id='buytype' defaultValue={selectedType} onChange={(e)=>{
                                 setSelectedtype(e);
                                 handlePrice();
                                }}>
@@ -581,10 +584,11 @@ const PurchaseMilk = () => {
    </div>
    {/* label */}
    
-   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Remarks (if any) :</label>
+   <label className='text-lg my-2 font-semibold' htmlFor="remarks">Remarks (if any) :</label>
    <input
                 onChange={(e)=>setRemarks(e.target.value)}
                 value={remarks}
+                id='remarks'
                 className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
               />
             </div>

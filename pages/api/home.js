@@ -64,7 +64,6 @@ const handler = async (req, res) => {
           }
           let sale = 0, purchase = 0;
           let eventingSale=0,eveingPurchase=0;
-          let milkcollected=0,milksold=0;
           rows.forEach(item => {
             if (item.ptype == "Buy") {
               if(item.pshift=='Morning'){
@@ -72,18 +71,32 @@ const handler = async (req, res) => {
               }else{
                 eveingPurchase+= item.totalprice;
               }
-              milkcollected+=item.weight;
             } else {
               if(item.pshift=='Morning'){
                 sale += item.totalprice;
               }else{
                 eventingSale+=item.totalprice;
               }
-              milksold+=item.weight;
             }
           });
           connection.release();
-          return res.status(200).json({ success: true, message: "Data fetched successfully", sale, milkcollected,milksold,purchase,eveingPurchase,eventingSale });
+          return res.status(200).json({ success: true, message: "Data fetched successfully", sale,purchase,eveingPurchase,eventingSale });
+        });
+      });
+    }else if (type=='todayentries'){
+      const { cdate } = req.body;
+      pool.getConnection((err, connection) => {
+        if (err) {
+          return res.status(400).json({ success: false, message: 'Unable to retrieve' });
+        }
+        connection.query(`select * from ${username}_milk where pdate=?`, [cdate], (error, rows) => {
+          if (error) {
+            connection.release();
+            console.log(error);
+            return res.status(400).json({ success: false, message: 'Unable to retrieve' });
+          }
+          connection.release();
+          return res.status(200).json({ success: true, message: "Data fetched successfully",data:rows });
         });
       });
     }
