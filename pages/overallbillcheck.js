@@ -36,11 +36,44 @@ const ViewExpense = () => {
     const [selectedRow,setSelectedRow]=useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const entriesPerPage = 10;
+    const [totalDue,setTotalDue]=useState(0);
+  const [totalReceived,setTotalReceived]=useState(0);
+  const [totalmilk,setTotalMilk]=useState(0);
+  const [custprice,setCustPrice] = useState(null);
+  const [prevDue,setPrevDue]=useState(0);
+  const [prevReceived,setPrevReceived]=useState(0);
   
     const router = useRouter();
 
     // useEffect(() => {
     // }, [fetched]);
+
+    useEffect(()=>{
+      try {
+          var due =0;
+          var received=0;
+          var milk=0;
+          fetched.forEach(item => {
+              if(item.ptype=="Sell"){
+                  due+=item.totalprice;
+              }else{
+                  received+=item.totalprice;
+              }
+              if(item.pshift!=""){
+               milk+= item.weight
+              }
+          });
+          //  total due means this months total due
+          setTotalMilk(milk)
+          setTotalDue(due);
+          setTotalReceived(received);
+          // alert(received)
+          getData(due.toFixed(2),received.toFixed(2));
+      } catch (error) {
+          
+      }
+    },[fetched])
+  
     
     const componentRef = useRef(null);
 
@@ -59,44 +92,6 @@ const ViewExpense = () => {
       }
     };
 
-    // const handleDownloadPDF = () => {
-    //   const doc = new jsPDF();
-  
-    //   // Add content to the PDF
-      
-    //   // Replace the placeholder text with your actual content
-    //   doc.text(<PdfContent selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} />, 10, 10);
-  
-    //   // Save the PDF
-    //   doc.save('bill.pdf');
-    // };
-    
-    // const handleDownloadPDF = () => {
-    //   const doc = new jsPDF();
-    
-    //   if(fetched){
-    //     const pdfContentString = PdfContent({ selectedConsumer, startDate, endDate, token, fetched });
-    
-    //     // Convert the component content to a string
-    //     const contentString = pdfContentString.props.children.toString();
-      
-    //     doc.text(contentString, 10, 10);
-      
-    //     // Save the PDF
-    //     doc.save('bill.pdf');
-
-    //   }
-    //   // Add content to the PDF
-    //   // Replace the placeholder text with your actual content
-     
-    // };
-    
-    // const handleDownloadPDF = () => {
-    //   if (fetched && componentRef.current) {
-    //     const  html2pdf  =require('html2pdf.js')
-    //     html2pdf(componentRef.current);
-    //   }
-    // };
     const handleDownloadPDF = () => {
       if (fetched && componentRef.current) {
             const  html2pdf  =require('html2pdf.js')
@@ -115,9 +110,79 @@ const ViewExpense = () => {
       }
     };
 
-  
-    
+    // useEffect(()=>{
+    //   try {
+    //     if(token.length>0){
+    //       getData();
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },[token])
 
+    
+  
+    // const getData =async(tsell,treceive)=>{
+    //   const resp  =await fetch(`http://localhost:3000/api/home`,{
+    //     method:"POST",
+    //     headers:{
+    //       "Content-Type":"application/json",
+    //     },body:JSON.stringify({
+    //       token:token,
+    //       type:"totalspecific",
+    //       cid:consumerCode
+    //     })
+    //   })
+    //   const response = await resp.json();
+    //   if(response.success==true){
+    //     alert(treceive)
+    //     setPrevDue(Number(response.data.amountDue).toFixed(2)-Number(tsell))
+    //     setPrevReceived(Number(response.data.amamountReceived).toFixed(2) - treceive)
+    //     // alert(response.data.amountDue)
+    //     console.log(Number(treceive))
+    //     // alert("td ",tp)
+    //     // alert(response.data.amountReceived)
+    //   }
+    // }
+
+    const getData = async (tsell, treceive) => {
+      try {
+        const resp = await fetch(`http://localhost:3000/api/home`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            type: "totalspecific",
+            cid: consumerCode,
+          }),
+        });
+        const response = await resp.json();
+    
+        console.log("Response from server:", response);
+    
+        if (response.success === true) {
+          console.log("tsell:", tsell);
+          console.log("treceive:", treceive);
+    
+          const amountDue = Number(response.data.amountDue).toFixed(2);
+          const amountReceived = Number(response.data.amountReceived).toFixed(2);
+    
+          console.log("amountReceived:", response.data.amountReceived);
+
+          console.log("amountDue:", amountDue);
+          console.log("amountReceived:", amountReceived);
+  
+          setCustPrice(response.data)
+          setPrevDue(amountDue - tsell);
+          setPrevReceived(amountReceived - treceive);
+        }
+      } catch (error) {
+        console.error("Error in getData:", error);
+      }
+    };
+    
     useEffect(() => {
       const tok =async()=>{
         let store = JSON.parse(localStorage.getItem('myUser'));
@@ -512,15 +577,15 @@ border:'1px solid black'
                 </td>
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 ">
-                  {item.weight}
+                  {item.pshift==""?"":item.weight}
                 </td>
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 ">
-                  {item.fat}
+                  {item.pshift==""?"":item.fat}
                 </td>
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 ">
-                  {item.snf}
+                  {item.pshift==""?"":item.snf}
                 </td>
                 <td
                   className="whitespace-nowrap border-r px-6 py-4 ">
@@ -545,6 +610,23 @@ border:'1px solid black'
             
           </tbody>
         </table>
+        <div className='flex border-2 border-black flex-row justify-between'>
+          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Purchase : {Math.round(totalReceived)}</div>
+          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Sell : {Math.round(totalDue)}</div>
+          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Milk : {totalmilk.toFixed(2)} Kg</div>
+          <div className={`${prevDue>prevReceived?'text-red-500':'text-green-600'} whitespace-nowrap px-6 py-4 text-black font-bold text-sm`}>Previous Balance : {Math.round(prevReceived-prevDue)}</div>
+          <div  onClick={()=>{
+                          if(Math.round(custprice.amountDue)==Math.round(custprice.amountReceived)){
+                            // do nothing
+                          }else if(Math.round(custprice.amountDue)>Math.round(custprice.amountReceived)){
+                            router.push(`/addexpensebuy?amount=${Math.round(custprice.amountDue)-Math.round(custprice.amountReceived)}&cid=${selectedConsumer.id}&mtype=Cash`)
+                          }else{
+                            router.push(`/addexpense?amount=${Math.round(custprice.amountReceived)-Math.round(custprice.amountReceived)}&cid=${item.cid}&&mtype=Cash`)
+
+                          }
+                         }} className={`whitespace-nowrap cursor-pointer ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : ₹{Math.round(custprice.amountReceived)-Math.round(custprice.amountDue)}</div>
+          {/* <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div> */}
+        </div>
             <div className=" mx-4 justify-between p-3">
             <button
               onClick={handlePrevPage}
@@ -572,7 +654,7 @@ border:'1px solid black'
           </div>
           
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
-          {fetched.length>0 && consumerCode!=0 && <PrintDoc  selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
+          {fetched.length>0 && consumerCode!=0 && <PrintDoc prevBalance={prevReceived-prevDue}   selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           
       </div>
     </div>

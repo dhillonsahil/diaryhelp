@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import expiryCheck from '@/components/expiryCheck';
-
+import { useRouter as uR } from 'next/router';
 
 const purchaseMilk = () => {
     const [token, setToken] = useState('');
@@ -24,8 +24,9 @@ const purchaseMilk = () => {
     const [items,setItems]=useState([]);
     const router = useRouter();
     const [quant,setQuant]=useState(1)
+    const rtr = uR();
     
-
+    
     useEffect(() => {
       const tok =async()=>{
         let store = JSON.parse(localStorage.getItem('myUser'));
@@ -42,7 +43,27 @@ const purchaseMilk = () => {
         
       }
     }, []);
-          
+    
+    useEffect(()=>{
+      const {amount,cid,mtype}=rtr.query;
+      if(amount && cid  && mtype){
+        console.log(amount,cid,mtype)
+        setPrice(amount);
+       
+        setTimeout(()=>{
+          handleCust(Number(cid))
+        },500)
+        if (mtype === 'Cash') {
+          setRemarks('Cash');
+          // Assuming there is an item in your items array representing Cash
+          const cashItem = items.find((item) => item.itemName === 'Cash');
+          setSelectedItem(cashItem);
+        }
+      }
+    },[customers])
+
+    
+
           useEffect(() => {
             if(token.length>0){
       
@@ -109,7 +130,7 @@ const purchaseMilk = () => {
               })
 
               const response = await resp.json();
-              if(response.success==true){
+              if(response.success==true && !remarks.toLowerCase().includes('cash')){
                 // update stock
                 if(selecteditem){
                   const dt={
@@ -189,7 +210,19 @@ const purchaseMilk = () => {
                 }
                
 
-              }else if(response.success=='duplicate'){
+              }else if(response.success==true){
+                toast.success('Added Successfully !', {
+                  position: "top-left",
+                  autoClose: 500,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+              });
+              }
+              else if(response.success=='duplicate'){
                 toast.error('Inserted Already', {
                   position: "top-left",
                   autoClose: 500,
@@ -216,14 +249,12 @@ const purchaseMilk = () => {
             }
           }
           
-          // handle functions
-          const handleKeyDown = (e, nextInputRef) => {
-            if (e.key === 'Enter' && nextInputRef && nextInputRef.current) {
-              e.preventDefault();
-              nextInputRef.current.focus();
-            }
+        
+          const handleCust = (e) => {
+            setConsumerCode(e);
+            const selected = customers.find((consumer) => consumer.id === parseInt(e));
+            setSelectedConsumer(selected);
           };
-          
 
         const handleInputChange = (e) => {
             setConsumerCode(e.target.value);
@@ -246,6 +277,11 @@ const purchaseMilk = () => {
         };
     
         const handleItemChange = (e) => {
+          if(e.target.value=='Cash'){
+            setSelectedItem({ amount:price,itemName:"Cash"  })
+            setRemarks('Cash');
+            return;
+          }
           const itemId = e.target.value;
           const selected = items.find((item) => item.id === parseInt(itemId));
           setSelectedItem(selected);
@@ -253,7 +289,7 @@ const purchaseMilk = () => {
         };
 
         
-    const filteredConsumers = customers.filter((consumer) => {
+    const filteredConsumers = customers ?customers.filter((consumer) => {
       const { c_name, father_name, mobile, id } = consumer;
       const query = searchQuery.toLowerCase();
       return (
@@ -262,7 +298,7 @@ const purchaseMilk = () => {
         mobile.includes(query) ||
         id.toString().includes(query)
       );
-    });
+    }):[];
 
         
 
@@ -313,6 +349,7 @@ const purchaseMilk = () => {
             <div className="px-5 pb-5">
             <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Customer Code :</label>
               <input
+              onWheel={(e)=>e.target.blur()}
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 type='number'
@@ -337,6 +374,7 @@ const purchaseMilk = () => {
   border:'1px solid black'
 }}>
      <option value={""}>Select Consumers</option>
+     
          {filteredConsumers.map((consumer) => (
           <option className='hover:bg-green-200 text-xl' key={consumer.id} value={consumer.id} defaultValue={selectedConsumer?.id === consumer.id}>
            {consumer.id} - {consumer.c_name} - {consumer.father_name}
@@ -358,6 +396,7 @@ const purchaseMilk = () => {
                 <div className="">
               <label  className='text-lg font-normal'>Price : </label>
                   <input
+                  onWheel={(e)=>e.target.blur()}
                     type='number'
                     onChange={(e)=>{
                       setPrice(e.target.value);
@@ -402,7 +441,7 @@ padding: '0.5rem',
 boxSizing: 'border-box',
 border:'1px solid black'
 }}>
-<option value={""}>Select Item</option>
+<option value={"Cash"}>Cash</option>
     {items.map((item) => (
      <option className='hover:bg-green-200 text-lg' key={item.id} value={item.id} defaultValue={selecteditem?.id === item.id}>
       {item.id} - {item.itemName} - ₹{item.itemprice} - Left Quantity : {item.itemquantity}
@@ -410,13 +449,18 @@ border:'1px solid black'
      ))}
 </select> 
 
-<label className='text-lg font-semibold'>Enter quantity (default 1): {selecteditem!=null ? selecteditem.itemName :""}</label>
 
- <input
-                onChange={(e)=>setQuant(e.target.value)}
-                value={quant==0?'':quant}
-                className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
-              />
+{
+  !remarks.toLowerCase().includes('cash') &&
+  <>
+<label className='text-lg font-semibold'>Enter quantity (default 1): {selecteditem!=null ? selecteditem.itemName :""}</label>
+  
+  <input
+   onChange={(e)=>setQuant(e.target.value)}
+   value={quant==0?'':quant}
+   className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
+ /></>
+}
               <label className='text-lg font-semibold'>Remarks (if any) : </label>
    <input
                 onChange={(e)=>setRemarks(e.target.value)}

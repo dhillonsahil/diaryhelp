@@ -194,9 +194,10 @@ const PrintDoc = forwardRef((props, ref) => {
           </tbody>
         </table>
         <div className='flex border-2 border-black flex-row justify-between'>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Purchase : {Math.round(totalReceived)}</div>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Sell : {Math.round(totalDue)}</div>
-          <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : ₹{Math.round(totalReceived)-Math.round(totalDue)}</div>
+          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Purchase : ₹{Math.round(totalReceived)}</div>
+          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Sell : ₹{Math.round(totalDue)}</div>
+          <div className={`${props.prevBalance<0?'text-red-500':'text-green-600'} whitespace-nowrap px-6 py-4 text-black font-bold text-sm`}>Previous Balance: ₹{Math.round(props.prevBalance)}</div>
+          <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : ₹{props.prevBalance<0?Math.round(totalReceived)-Math.round(totalDue+props.prevBalance):Math.round(totalReceived+props.prevBalance)-Math.round(totalDue)}</div>
           {/* <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div> */}
         </div>
     </div>

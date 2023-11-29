@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { format } from 'date-fns';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useRouter } from 'next/navigation';
 
 const TotalResults = (props) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -19,6 +20,7 @@ const TotalResults = (props) => {
     const token=props.token;
     const entriesPerPage = 10;
     const milkEntriesperPage = 25;
+    const router = useRouter();
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
       };
@@ -204,7 +206,16 @@ const TotalResults = (props) => {
                          <td className="p-2">{item.cname} S/d/w {item.fname}</td>
                          <td className="p-2 text-green-600 font-semibold">{Math.round(item.amountReceived)}</td>
                          <td className="p-2 text-red-500 font-semibold">{Math.round(item.amountDue)}</td>
-                         <td className={`p-2 ${Number(item.amountDue)>Number(item.amountReceived)?'text-red-500':'text-green-600'}`} >₹ {Math.round(item.amountReceived)-Math.round(item.amountDue)}</td>
+                         <td  onClick={()=>{
+                          if(Math.round(item.amountDue)==Math.round(item.amountReceived)){
+                            // do nothing
+                          }else if(Math.round(item.amountDue)>Math.round(item.amountReceived)){
+                            router.push(`/addexpensebuy?amount=${Math.round(item.amountDue)-Math.round(item.amountReceived)}&cid=${item.cid}&mtype=Cash`)
+                          }else{
+                            router.push(`/addexpense?amount=${Math.round(item.amountReceived)-Math.round(item.amountDue)}&cid=${item.cid}&&mtype=Cash`)
+
+                          }
+                         }} className={`cursor-pointer p-2 ${Number(item.amountDue)>Number(item.amountReceived)?'text-red-500':'text-green-600'}`} >₹ {Math.round(item.amountReceived)-Math.round(item.amountDue)}</td>
                    
                     
                    

@@ -56,7 +56,7 @@ const handler = async (req, res) => {
         if (err) {
           return res.status(400).json({ success: false, message: 'Unable to retrieve' });
         }
-        connection.query(`select * from ${username}_milk where pdate=?`, [tdate], (error, rows) => {
+        connection.query(`select * from ${username}_milk where pdate=? and pshift!=""`, [tdate], (error, rows) => {
           if (error) {
             connection.release();
             console.log(error);
@@ -97,6 +97,21 @@ const handler = async (req, res) => {
           }
           connection.release();
           return res.status(200).json({ success: true, message: "Data fetched successfully",data:rows });
+        });
+      });
+    }else if (type=='totalspecific'){
+      const {cid}=req.body;
+      pool.getConnection((err, connection) => {
+        if (err) {
+          return res.status(400).json({ success: false, message: 'Unable to retrieve' });
+        }
+        connection.query(`select * from ${username}_totalcalc where cid=?`,[cid], (error, rows) => {
+          if (error) {
+            connection.release();
+            return res.status(400).json({ success: false, message: 'Unable to retrieve' });
+          }
+          connection.release();
+          return res.status(200).json({ success: true, data: rows[0] });
         });
       });
     }

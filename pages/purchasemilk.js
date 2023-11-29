@@ -417,7 +417,8 @@ const PurchaseMilk = () => {
                 onChange={handleSearchChange}
                 className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
-              
+
+
      <select  onChange={handleInputChange} size={6} style= {{
   width: '100%',
   padding: '0.5rem',
