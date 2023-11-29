@@ -33,7 +33,7 @@ export default function Signup() {
     e.preventDefault()
     const emailLower = email.toLowerCase()
     const data = { name, emailLower, password , diaryName,mobile }
-    let res = await fetch(`https://diaryhelp.myrangolidesign.com/api/signup`, {
+    let res = await fetch(`http://localhost:3000/api/signup`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

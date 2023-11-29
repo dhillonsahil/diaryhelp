@@ -63,15 +63,27 @@ const handler = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Unable to retrieve' });
           }
           let sale = 0, purchase = 0;
+          let eventingSale=0,eveingPurchase=0;
+          let milkcollected=0,milksold=0;
           rows.forEach(item => {
             if (item.ptype == "Buy") {
-              purchase += item.totalprice;
+              if(item.pshift=='Morning'){
+                purchase += item.totalprice;
+              }else{
+                eveingPurchase+= item.totalprice;
+              }
+              milkcollected+=item.weight;
             } else {
-              sale += item.totalprice;
+              if(item.pshift=='Morning'){
+                sale += item.totalprice;
+              }else{
+                eventingSale+=item.totalprice;
+              }
+              milksold+=item.weight;
             }
           });
           connection.release();
-          return res.status(200).json({ success: true, message: "Data fetched successfully", sale, purchase });
+          return res.status(200).json({ success: true, message: "Data fetched successfully", sale, milkcollected,milksold,purchase,eveingPurchase,eventingSale });
         });
       });
     }

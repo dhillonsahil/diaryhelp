@@ -83,7 +83,7 @@ const addcustomer = () => {
     }
 
 
-    const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/addcustomer`,{
+    const response = await fetch(`http://localhost:3000/api/addcustomer`,{
       method:"POST",
       headers: {
         'Content-Type': 'application/json'

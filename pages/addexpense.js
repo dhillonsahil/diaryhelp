@@ -47,7 +47,7 @@ const purchaseMilk = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
+                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ const purchaseMilk = () => {
           }, [token]); 
 
           const fetchItems =async()=>{
-            const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/items`,{
+            const resp = await fetch(`http://localhost:3000/api/items`,{
               method:"POST",
               headers:{
                 "Content-Type":"application/json",
@@ -100,7 +100,7 @@ const purchaseMilk = () => {
                   remarks:remarks
               }
 
-              const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/milkconsume`,{
+              const resp = await fetch(`http://localhost:3000/api/milkconsume`,{
                 method:"POST",
                 headers:{
                   "Content-Type":"application/json",
@@ -119,7 +119,7 @@ const purchaseMilk = () => {
                     token:token
                   };
   
-                  const resp=  await fetch(`https://diaryhelp.myrangolidesign.com/api/items`,{
+                  const resp=  await fetch(`http://localhost:3000/api/items`,{
                     method:"POST",
                     headers:{
                       "Content-Type":"application/json",

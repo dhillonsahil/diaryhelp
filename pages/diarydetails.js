@@ -49,7 +49,7 @@ export default function Signup() {
   const handleSave =async(e)=>{
     e.preventDefault();
     if(token.length>0 && name.length>0 && address.length>0 && mobile.length>9 && diaryName.length>0){
-            const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/getdetails`,{
+            const response = await fetch(`http://localhost:3000/api/getdetails`,{
               method:"POST",
               headers: {
                 'Content-Type': 'application/json'

@@ -43,7 +43,7 @@ const CustomerDoc = forwardRef((props, ref) => {
    if(token.length>0){
     try {
         const getDt =async()=>{
-            const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/getdetails`,{
+            const resp = await fetch(`http://localhost:3000/api/getdetails`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",

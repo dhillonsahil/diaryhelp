@@ -3,13 +3,13 @@ const { parse } = require('url')
 const next = require('next')
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = "https://diaryhelp.myrangolidesign.com"
+const hostname = "http://localhost:3000"
 const port = process.env.PORT || 3000
 
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
 const corsOptions = {
-  origin: 'https://diaryhelp.myrangolidesign.com', // Replace with your actual front-end origin
+  origin: 'http://localhost:3000', // Replace with your actual front-end origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Enable credentials (cookies, Authorization headers, etc.)
   optionsSuccessStatus: 204, // Respond with a 204 status for preflight requests

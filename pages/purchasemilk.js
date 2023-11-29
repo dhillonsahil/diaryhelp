@@ -32,6 +32,7 @@ const PurchaseMilk = () => {
     const fatRef = useRef(null);
     const snfRef = useRef(null);
     const saveref=useRef(null);
+    const consumerCodeRef = useRef(null);
 
     
 
@@ -56,7 +57,7 @@ const PurchaseMilk = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
+                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -75,6 +76,7 @@ const PurchaseMilk = () => {
           
           // handle functions
           const handleKeyDown = (e, nextInputRef) => {
+            
             if (e.key === 'Enter' && nextInputRef && nextInputRef.current) {
               e.preventDefault();
               nextInputRef.current.focus();
@@ -166,7 +168,7 @@ const PurchaseMilk = () => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
+            const fetchPrices= await fetch(`http://localhost:3000/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -185,7 +187,7 @@ const PurchaseMilk = () => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
+            const fetchPrices= await fetch(`http://localhost:3000/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -245,7 +247,7 @@ const PurchaseMilk = () => {
               weight:Number(weight)
             }
 
-            const resp  =await fetch(`https://diaryhelp.myrangolidesign.com/api/milkconsume`,{
+            const resp  =await fetch(`http://localhost:3000/api/milkconsume`,{
               method:"POST",
               headers:{
                 'Content-Type': 'application/json'
@@ -272,6 +274,13 @@ const PurchaseMilk = () => {
             setSelectedConsumer(null)
             // setMilkRate(0);
             setConsumerCode(0)
+            if (consumerCodeRef.current) {
+              consumerCodeRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+              consumerCodeRef.current.focus();
+            }
             }else if(response.success=='duplicate'){
               toast.error('Already Inserted', {
                 position: "top-left",
@@ -382,19 +391,26 @@ const PurchaseMilk = () => {
                             </RadioGroup></div>
                             <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
              
-              <input
+              <input 
                 type='number'
+                ref={consumerCodeRef}
+                onWheel={(e) => e.target.blur()}
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
-                onKeyDown={(e) => handleKeyDown(e, weightRef)}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                  }
+                  handleKeyDown(e, weightRef)
+                }}
                 id='consumerCode'
                 className="text-black w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
                <label className='text-lg font-semibold' htmlFor="consumerSelect">Customer: {selectedConsumer!=null ? selectedConsumer.c_name :""}</label>
 {
   consumerCode==0 && <>
-  <input
+  <input 
                 value={searchQuery}
                 id='searchQuery'
                 onKeyDown={(e) => handleKeyDown(e, weightRef)}
@@ -420,33 +436,47 @@ const PurchaseMilk = () => {
                
 
 
-<div className=""><label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Weight :</label></div>
+<div className=""><label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Weight :</label></div>
               <input
+              onWheel={(e) => e.target.blur()}
                 type='number'
                 onChange={handleWeight}
                 ref={weightRef}
-                onKeyDown={(e) => handleKeyDown(e, priceType!='Regular'?fatRef:null)}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                  }
+                  handleKeyDown(e, priceType!='Regular'?fatRef:null)
+                }}
                 value={weight==0?'':weight}
                 className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-2xl font-bold ring-offset-2 border-2 border-black"
               />
              {
               priceType!='Regular' && (
                 <div className="">
-                   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Fat :</label>
+                   <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Fat :</label>
                 <input
                 type='number'
                   onChange={(e)=>{
                     setFat(e.target.value);
                     
                   }}
+                  onWheel={(e) => e.target.blur()}
                   ref={fatRef}
-                  onKeyDown={(e) => handleKeyDown(e, snfRef)}
+                  onKeyDown={(e) => 
+                    {
+                      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                      }
+                      handleKeyDown(e, snfRef)}
+                    }
                   value={fat==0?'':fat}
                   className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"
                 />
-                 <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Snf :</label>
+                 <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Snf :</label>
                  <input
                   type='number'
+                  onWheel={(e) => e.target.blur()}
                   onChange={(e)=>{
                     {
                       setSnf(e.target.value)
@@ -455,14 +485,20 @@ const PurchaseMilk = () => {
                   }}
                   ref={snfRef}
                   value={snf==0?'':snf}
-                  onKeyDown={(e) => handleKeyDown(e, saveref)}
+                  onKeyDown={(e) =>
+                    {
+                      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                      }
+                     handleKeyDown(e, saveref)}
+                  }  
                   className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"/>
                 </div>
               )
              }
               <div className="">
                 <div className="">
-                <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect">Enter Price :</label>
+                <label className='text-lg my-2 font-semibold' htmlFor="consumerSelect"> Price :</label>
                   <input
                     type='number'
                     onChange={(e)=>{
@@ -472,6 +508,12 @@ const PurchaseMilk = () => {
                       }else{
                         setTotalPrice(milkrate*Number(weight))
                       }
+                    }}
+                    onKeyDown={(e)=>{
+                      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                      }
+                      handleKeyDown(e, saveref)
                     }}
                     value={price==0?'':price}
                     className="text-black my-1 w-full px-4 py-2.5 mt-2 transition duration-500 ease-in-out transform  rounded-lg  text-xl font-bold ring-offset-2 border-2 border-black"

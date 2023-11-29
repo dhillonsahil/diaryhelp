@@ -22,7 +22,7 @@ export default function Login() {
         if(email.length>0 && password.length > 0){
         const emailLower=email.toLowerCase()
         const data = { emailLower, password }
-        let res = await fetch(`https://diaryhelp.myrangolidesign.com/api/login`, {
+        let res = await fetch(`http://localhost:3000/api/login`, {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'

@@ -46,7 +46,7 @@ const CowRateList = (props) => {
 
 
     const getVal =async(data)=>{
-        const resp= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
+        const resp= await fetch(`http://localhost:3000/api/milkprice`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
@@ -65,7 +65,7 @@ const CowRateList = (props) => {
             stype:'cowsnf',
             token:token
         }
-        const resp= await fetch(`https://diaryhelp.myrangolidesign.com/api/milkprice`,{
+        const resp= await fetch(`http://localhost:3000/api/milkprice`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',

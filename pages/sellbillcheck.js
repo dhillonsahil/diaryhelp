@@ -93,7 +93,7 @@ const SellBill = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
+                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ const SellBill = () => {
             type:'Sell'
           }
 
-          const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/billcheck`,{
+          const resp = await fetch(`http://localhost:3000/api/billcheck`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'

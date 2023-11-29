@@ -55,7 +55,7 @@ const ViewMilk = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
+                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ const ViewMilk = () => {
 
           const handleDelete =async()=>{
             setModelVisible(false);
-            const resp = await fetch(`https://diaryhelp.myrangolidesign.com/api/modifymilk`,{
+            const resp = await fetch(`http://localhost:3000/api/modifymilk`,{
               method:"POST",
               headers: {
                 'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ const ViewMilk = () => {
             startDate:formatDateForSQL(startDate),
             endDate:formatDateForSQL(endDate)
           }
-          const fetchPrices= await fetch(`https://diaryhelp.myrangolidesign.com/api/viewmilk`,{
+          const fetchPrices= await fetch(`http://localhost:3000/api/viewmilk`,{
           method:"POST",
           headers: {
             'Content-Type': 'application/json'
@@ -225,6 +225,7 @@ const ViewMilk = () => {
             <div className="px-5 pb-5">
               <label htmlFor="customercode" className='font-semobild text-lg'>Customer Code</label>
               <input
+              onWheel={(e) => e.target.blur()}
                 value={consumerCode==0?'':consumerCode}
                 onChange={handleInputChange}
                 name='consumerCode'
@@ -404,17 +405,17 @@ const ViewMilk = () => {
                                 </th>
 
                                 <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
-                                  Milk Rate
-                                </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
-                                Type
-                                </th>
-                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Fat
                                 </th>
                                 <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Snf
                                 </th>
+                                <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
+                                  Milk Rate
+                                </th>
+                               
+                               
+                               
                                 <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-900 ">
                                 Total
                                 </th>
@@ -450,17 +451,18 @@ const ViewMilk = () => {
                                         </div>
                                     </div>
                                 </td>
+                                <td className="px-4 py-4 text-lg text-gray-900  whitespace-nowrap">{item.fat}</td>
+                                <td className="px-4 py-4 text-lg text-gray-900  whitespace-nowrap">{item.snf}</td>
                                 <td className="px-4 py-4 text-lg text-gray-900  whitespace-nowrap">{item.pprice}</td>
-                                <td className="px-4 py-4 text-lg font-medium text-gray-700 whitespace-nowrap">
+                                {/* <td className="px-4 py-4 text-lg font-medium text-gray-700 whitespace-nowrap">
                                     <div className={`inline-flex text-lg items-center px-3 py-1 rounded-full gap-x-2 ${item.ptype=='Buy'?'bg-emerald-300/60':'bg-red-300/60'} `}>
                                        
 
                                         <h2 className="text-lg font-normal">{item.ptype}</h2>
                                     </div>
-                                </td>
-                                <td className="px-4 py-4 text-lg text-gray-900  whitespace-nowrap">{item.fat}</td>
-                                <td className="px-4 py-4 text-lg text-gray-900  whitespace-nowrap">{item.snf}</td>
-                                <td className="px-4 py-4 text-sm text-gray-900  whitespace-nowrap">{item.totalprice}</td>
+                                </td> */}
+                               
+                                <td className={`px-4 py-4 text-sm font-semibold text-gray-900  whitespace-nowrap ${item.ptype=='Buy'?'text-green-600':'text-red-500'}`}>{item.totalprice}</td>
                                 <td className="px-4 py-4 text-lg whitespace-nowrap">
                                     <div className="flex items-center gap-x-6">
                                         <button onClick={()=>{

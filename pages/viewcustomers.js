@@ -47,7 +47,7 @@ const viewcustomers = () => {
       if(token.length>0){
 
         const user = async(req,res)=>{
-          const response = await fetch(`https://diaryhelp.myrangolidesign.com/api/viewcustomers`,{
+          const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
