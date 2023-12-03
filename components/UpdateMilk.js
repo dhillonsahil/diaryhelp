@@ -113,7 +113,7 @@ const UpdateMilk = (props) => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`http://localhost:3000/api/milkprice`,{
+            const fetchPrices= await fetch(`https://milkmanage.in/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -132,7 +132,7 @@ const UpdateMilk = (props) => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`http://localhost:3000/api/milkprice`,{
+            const fetchPrices= await fetch(`https://milkmanage.in/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -157,7 +157,7 @@ const UpdateMilk = (props) => {
         const handleUpdate =async()=>{
 
           try {
-            const resp = await fetch(`http://localhost:3000/api/modifymilk`,{
+            const resp = await fetch(`https://milkmanage.in/api/modifymilk`,{
               method:"PUT",
               headers:{
                 'Content-Type': 'application/json'

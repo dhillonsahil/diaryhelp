@@ -77,7 +77,7 @@ const ViewExpense = () => {
 
 
     const getCustomers=async(num)=>{
-      const resp = await fetch(`http://localhost:3000/api/custbill`,{
+      const resp = await fetch(`https://milkmanage.in/api/custbill`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"
@@ -170,7 +170,7 @@ const ViewExpense = () => {
             type:'overall'
           }
 
-          const resp = await fetch(`http://localhost:3000/api/billcheck`,{
+          const resp = await fetch(`https://milkmanage.in/api/billcheck`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'

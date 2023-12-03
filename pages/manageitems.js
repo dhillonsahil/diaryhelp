@@ -42,7 +42,7 @@ const ManageItems = () => {
 
     // fetch items
     const fetchItems =async()=>{
-      const resp = await fetch(`http://localhost:3000/api/items`,{
+      const resp = await fetch(`https://milkmanage.in/api/items`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json",
@@ -61,7 +61,7 @@ const ManageItems = () => {
     // handle add item
     const handleAdd =async(e)=>{
       e.preventDefault();
-      const resp = await fetch(`http://localhost:3000/api/items`,{
+      const resp = await fetch(`https://milkmanage.in/api/items`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json'

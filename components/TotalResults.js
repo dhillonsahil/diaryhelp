@@ -78,7 +78,7 @@ const TotalResults = (props) => {
 
 
   const getCalcs=async()=>{
-    const resp  =await fetch(`http://localhost:3000/api/home`,{
+    const resp  =await fetch(`https://milkmanage.in/api/home`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -105,7 +105,7 @@ const TotalResults = (props) => {
   };
   const totalEntries=async(date)=>{
     
-    const resp  =await fetch(`http://localhost:3000/api/home`,{
+    const resp  =await fetch(`https://milkmanage.in/api/home`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -124,7 +124,7 @@ const TotalResults = (props) => {
 
   const getDaily=async()=>{
     
-        const resp  =await fetch(`http://localhost:3000/api/home`,{
+        const resp  =await fetch(`https://milkmanage.in/api/home`,{
           method:"POST",
           headers:{
             "Content-Type":"application/json",

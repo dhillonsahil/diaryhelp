@@ -46,7 +46,7 @@ const BuffaloRateList = (props) => {
     },[token])
 
     const getVal =async(data)=>{
-        const resp= await fetch(`http://localhost:3000/api/milkprice`,{
+        const resp= await fetch(`https://milkmanage.in/api/milkprice`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
@@ -65,7 +65,7 @@ const BuffaloRateList = (props) => {
             stype:'buffalosnf',
             token:token
         }
-        const resp= await fetch(`http://localhost:3000/api/milkprice`,{
+        const resp= await fetch(`https://milkmanage.in/api/milkprice`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',

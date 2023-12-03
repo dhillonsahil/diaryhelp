@@ -110,44 +110,11 @@ const ViewExpense = () => {
       }
     };
 
-    // useEffect(()=>{
-    //   try {
-    //     if(token.length>0){
-    //       getData();
-    //     }
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },[token])
-
+   
     
-  
-    // const getData =async(tsell,treceive)=>{
-    //   const resp  =await fetch(`http://localhost:3000/api/home`,{
-    //     method:"POST",
-    //     headers:{
-    //       "Content-Type":"application/json",
-    //     },body:JSON.stringify({
-    //       token:token,
-    //       type:"totalspecific",
-    //       cid:consumerCode
-    //     })
-    //   })
-    //   const response = await resp.json();
-    //   if(response.success==true){
-    //     alert(treceive)
-    //     setPrevDue(Number(response.data.amountDue).toFixed(2)-Number(tsell))
-    //     setPrevReceived(Number(response.data.amamountReceived).toFixed(2) - treceive)
-    //     // alert(response.data.amountDue)
-    //     console.log(Number(treceive))
-    //     // alert("td ",tp)
-    //     // alert(response.data.amountReceived)
-    //   }
-    // }
-
     const getData = async (tsell, treceive) => {
       try {
-        const resp = await fetch(`http://localhost:3000/api/home`, {
+        const resp = await fetch(`https://milkmanage.in/api/home`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -160,29 +127,24 @@ const ViewExpense = () => {
         });
         const response = await resp.json();
     
-        console.log("Response from server:", response);
-    
-        if (response.success === true) {
-          console.log("tsell:", tsell);
-          console.log("treceive:", treceive);
-    
+   
+        if (response.success === true && response.data !== null) {
           const amountDue = Number(response.data.amountDue).toFixed(2);
-          const amountReceived = Number(response.data.amountReceived).toFixed(2);
-    
-          console.log("amountReceived:", response.data.amountReceived);
+          const amountReceived = response?.data?.amountReceived;
 
-          console.log("amountDue:", amountDue);
-          console.log("amountReceived:", amountReceived);
-  
-          setCustPrice(response.data)
+          // const amountReceived = Number(response.data.amountReceived).toFixed(2);
+        
+          setCustPrice(response.data);
           setPrevDue(amountDue - tsell);
-          setPrevReceived(amountReceived - treceive);
+          setPrevReceived(Number(amountReceived).toFixed(2) - treceive);
         }
+        
       } catch (error) {
         console.error("Error in getData:", error);
       }
     };
     
+
     useEffect(() => {
       const tok =async()=>{
         let store = JSON.parse(localStorage.getItem('myUser'));
@@ -204,7 +166,7 @@ const ViewExpense = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
+                const response = await fetch(`https://milkmanage.in/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -283,7 +245,7 @@ const ViewExpense = () => {
             type:'overall'
           }
 
-          const resp = await fetch(`http://localhost:3000/api/billcheck`,{
+          const resp = await fetch(`https://milkmanage.in/api/billcheck`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -616,15 +578,15 @@ border:'1px solid black'
           <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Milk : {totalmilk.toFixed(2)} Kg</div>
           <div className={`${prevDue>prevReceived?'text-red-500':'text-green-600'} whitespace-nowrap px-6 py-4 text-black font-bold text-sm`}>Previous Balance : {Math.round(prevReceived-prevDue)}</div>
           <div  onClick={()=>{
-                          if(Math.round(custprice.amountDue)==Math.round(custprice.amountReceived)){
+                          if(Math.round(custprice?.amountDue)==Math.round(custprice?.amountReceived)){
                             // do nothing
-                          }else if(Math.round(custprice.amountDue)>Math.round(custprice.amountReceived)){
-                            router.push(`/addexpensebuy?amount=${Math.round(custprice.amountDue)-Math.round(custprice.amountReceived)}&cid=${selectedConsumer.id}&mtype=Cash`)
+                          }else if(Math.round(custprice?.amountDue)>Math.round(custprice?.amountReceived)){
+                            router.push(`/addexpensebuy?amount=${Math.round(custprice?.amountDue)-Math.round(custprice?.amountReceived)}&cid=${selectedConsumer.id}&mtype=Cash`)
                           }else{
-                            router.push(`/addexpense?amount=${Math.round(custprice.amountReceived)-Math.round(custprice.amountReceived)}&cid=${item.cid}&&mtype=Cash`)
+                            router.push(`/addexpense?amount=${Math.round(custprice?.amountReceived)-Math.round(custprice?.amountReceived)}&cid=${item.cid}&&mtype=Cash`)
 
                           }
-                         }} className={`whitespace-nowrap cursor-pointer ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : ₹{Math.round(custprice.amountReceived)-Math.round(custprice.amountDue)}</div>
+                         }} className={`whitespace-nowrap cursor-pointer ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : ₹{Math.round(custprice?.amountReceived)-Math.round(custprice?.amountDue)}</div>
           {/* <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div> */}
         </div>
             <div className=" mx-4 justify-between p-3">
@@ -654,7 +616,7 @@ border:'1px solid black'
           </div>
           
           {/* {fetched.length>0 && <PrintDoc fetched={fetched}  ref={componentRef} /> } */}
-          {fetched.length>0 && consumerCode!=0 && <PrintDoc prevBalance={prevReceived-prevDue}   selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
+          {fetched.length>0 && consumerCode!=0 && <PrintDoc totalMilk={totalmilk} prevBalance={prevReceived-prevDue}   selectedConsumer={selectedConsumer} startDate={startDate} endDate={endDate} token={token} fetched={fetched} ref={(el) => (componentRef.current = el)} />}
           
       </div>
     </div>

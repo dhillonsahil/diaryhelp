@@ -31,7 +31,7 @@ export default function Forgot() {
   const sendLink = async (e) => {
     const customerMail =email.toLowerCase()
     e.preventDefault();
-    let sent = await fetch(`http://localhost:3000/api/forgot`, {
+    let sent = await fetch(`https://milkmanage.in/api/forgot`, {
       method: "POST",
       headers: {
         'Content-type': 'application/json'
@@ -78,7 +78,7 @@ export default function Forgot() {
         theme: "light",
         });
     }else{
-      let updt= await fetch(`http://localhost:3000/api/resetpass`,{
+      let updt= await fetch(`https://milkmanage.in/api/resetpass`,{
         method:"POST",
         headers:{
           'Content-type':'application/json'

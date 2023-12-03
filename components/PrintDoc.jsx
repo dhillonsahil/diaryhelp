@@ -8,6 +8,7 @@ const PrintDoc = forwardRef((props, ref) => {
   const [totalReceived,setTotalReceived]=useState(0);
   const [token,setToken]=useState(props.token);
   const [diary,setDiary]=useState({});
+  const [totalmilk,setTotalMilk]=useState(props.totalMilk);
   const consumer=props.selectedConsumer;
   const startDate=props.startDate
   const endDate=props.endDate;
@@ -23,14 +24,18 @@ const PrintDoc = forwardRef((props, ref) => {
     try {
         var due =0;
         var received=0;
+        var milk=0;
         fetched.forEach(item => {
             if(item.ptype=="Sell"){
                 due+=item.totalprice;
             }else{
                 received+=item.totalprice;
             }
+            if(item.pshift!=""){
+              milk+= item.weight
+             }
         });
-
+        setTotalMilk(milk)
         setTotalDue(due);
         setTotalReceived(received);
     } catch (error) {
@@ -43,7 +48,7 @@ const PrintDoc = forwardRef((props, ref) => {
    if(token.length>0){
     try {
         const getDt =async()=>{
-            const resp = await fetch(`http://localhost:3000/api/getdetails`,{
+            const resp = await fetch(`https://milkmanage.in/api/getdetails`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
@@ -194,10 +199,11 @@ const PrintDoc = forwardRef((props, ref) => {
           </tbody>
         </table>
         <div className='flex border-2 border-black flex-row justify-between'>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Purchase : ₹{Math.round(totalReceived)}</div>
-          <div className="whitespace-nowrap px-6 py-4 text-black font-bold text-sm">Total Sell : ₹{Math.round(totalDue)}</div>
+          <div className="whitespace-nowrap px-1 py-4  font-bold text-sm text-green-600">Total Purchase : ₹{Math.round(totalReceived)}</div>
+          <div className="whitespace-nowrap px-1 py-4  font-bold text-sm text-red-500">Total Sell : ₹{Math.round(totalDue)}</div>
+          <div className="whitespace-nowrap px-1 py-4 text-black font-bold text-sm">Total Milk : {totalmilk?.toFixed(2)}</div>
           <div className={`${props.prevBalance<0?'text-red-500':'text-green-600'} whitespace-nowrap px-6 py-4 text-black font-bold text-sm`}>Previous Balance: ₹{Math.round(props.prevBalance)}</div>
-          <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : ₹{props.prevBalance<0?Math.round(totalReceived)-Math.round(totalDue+props.prevBalance):Math.round(totalReceived+props.prevBalance)-Math.round(totalDue)}</div>
+          <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-1 py-4  text-black font-bold text-sm`}> Overall : ₹{Math.round(totalReceived-totalDue)+Math.round(props.prevBalance)}</div>
           {/* <div  className={`whitespace-nowrap ${totalDue>totalReceived?'text-red-500':'text-green-500'} px-6 py-4  text-black font-bold text-sm`}> Overall : {Math.round(totalDue)>Math.round(totalReceived)?`₹ ${Math.round(totalDue)-Math.round(totalReceived)}  ( दूध वाला लेगा)`:`₹ ${Math.round(totalReceived-totalDue)} ( दूध वाला देगा )`}</div> */}
         </div>
     </div>

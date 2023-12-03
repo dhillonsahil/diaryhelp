@@ -57,7 +57,7 @@ const SellMilk = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
+                const response = await fetch(`https://milkmanage.in/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -168,7 +168,7 @@ const SellMilk = () => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`http://localhost:3000/api/milkprice`,{
+            const fetchPrices= await fetch(`https://milkmanage.in/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -187,7 +187,7 @@ const SellMilk = () => {
               stype:stype
             }
             
-            const fetchPrices= await fetch(`http://localhost:3000/api/milkprice`,{
+            const fetchPrices= await fetch(`https://milkmanage.in/api/milkprice`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'
@@ -247,7 +247,7 @@ const SellMilk = () => {
               weight:Number(weight)
             }
 
-            const resp  =await fetch(`http://localhost:3000/api/milkconsume`,{
+            const resp  =await fetch(`https://milkmanage.in/api/milkconsume`,{
               method:"POST",
               headers:{
                 'Content-Type': 'application/json'

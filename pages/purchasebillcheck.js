@@ -92,7 +92,7 @@ const PurchaseBill = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
+                const response = await fetch(`https://milkmanage.in/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -171,7 +171,7 @@ const PurchaseBill = () => {
             type:'Buy'
           }
 
-          const resp = await fetch(`http://localhost:3000/api/billcheck`,{
+          const resp = await fetch(`https://milkmanage.in/api/billcheck`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json'

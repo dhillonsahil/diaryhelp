@@ -68,7 +68,7 @@ const purchaseMilk = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
+                const response = await fetch(`https://milkmanage.in/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ const purchaseMilk = () => {
           }, [token]); 
 
           const fetchItems =async()=>{
-            const resp = await fetch(`http://localhost:3000/api/items`,{
+            const resp = await fetch(`https://milkmanage.in/api/items`,{
               method:"POST",
               headers:{
                 "Content-Type":"application/json",
@@ -121,7 +121,7 @@ const purchaseMilk = () => {
                   remarks:remarks
               }
 
-              const resp = await fetch(`http://localhost:3000/api/milkconsume`,{
+              const resp = await fetch(`https://milkmanage.in/api/milkconsume`,{
                 method:"POST",
                 headers:{
                   "Content-Type":"application/json",
@@ -140,7 +140,7 @@ const purchaseMilk = () => {
                     token:token
                   };
   
-                  const resp=  await fetch(`http://localhost:3000/api/items`,{
+                  const resp=  await fetch(`https://milkmanage.in/api/items`,{
                     method:"POST",
                     headers:{
                       "Content-Type":"application/json",
@@ -166,6 +166,7 @@ const purchaseMilk = () => {
                   setSelectedItem(null);
                   setSelectedtype('Sell')
                   setRemarks('')
+                  setPrice(0);
                   const updatedItems = items.map((item) => {
                     if (item.id === selecteditem.id) {
                       // Update the quantity for the selected item
@@ -221,6 +222,11 @@ const purchaseMilk = () => {
                   progress: undefined,
                   theme: "light",
               });
+              setConsumerCode(0);
+              setSelectedConsumer(null);
+              setSelectedItem(null);
+              setSelectedtype('Sell');
+              setRemarks('');
               }
               else if(response.success=='duplicate'){
                 toast.error('Inserted Already', {
@@ -497,6 +503,9 @@ border:'1px solid black'
                   
                    setPrice(0);
                    setSelectedConsumer(null)
+                   setPrice(0);
+                  //  setRemarks('');
+                  //  setSelectedItem(null)
                    // setMilkRate(0);
                    setConsumerCode(0)
                 }}

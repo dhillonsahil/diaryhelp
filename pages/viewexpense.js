@@ -53,7 +53,7 @@ const ViewExpense = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
+                const response = await fetch(`https://milkmanage.in/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ const ViewExpense = () => {
 
           const handleDelete =async()=>{
             setModelVisible(false);
-            const resp = await fetch(`http://localhost:3000/api/modifymilk`,{
+            const resp = await fetch(`https://milkmanage.in/api/modifymilk`,{
               method:"POST",
               headers: {
                 'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ const ViewExpense = () => {
             startDate:formatDateForSQL(startDate),
             endDate:formatDateForSQL(endDate)
           }
-          const fetchPrices= await fetch(`http://localhost:3000/api/expense`,{
+          const fetchPrices= await fetch(`https://milkmanage.in/api/expense`,{
           method:"POST",
           headers: {
             'Content-Type': 'application/json'

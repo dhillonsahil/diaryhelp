@@ -69,7 +69,7 @@ const purchaseMilk = () => {
             if(token.length>0){
       
               const user = async(req,res)=>{
-                const response = await fetch(`http://localhost:3000/api/viewcustomers`,{
+                const response = await fetch(`https://milkmanage.in/api/viewcustomers`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ const purchaseMilk = () => {
           }, [token]); 
 
           const fetchItems =async()=>{
-            const resp = await fetch(`http://localhost:3000/api/items`,{
+            const resp = await fetch(`https://milkmanage.in/api/items`,{
               method:"POST",
               headers:{
                 "Content-Type":"application/json",
@@ -122,7 +122,7 @@ const purchaseMilk = () => {
                   remarks:remarks
               }
 
-              const resp = await fetch(`http://localhost:3000/api/milkconsume`,{
+              const resp = await fetch(`https://milkmanage.in/api/milkconsume`,{
                 method:"POST",
                 headers:{
                   "Content-Type":"application/json",
@@ -141,7 +141,7 @@ const purchaseMilk = () => {
                     token:token
                   };
   
-                  const resp=  await fetch(`http://localhost:3000/api/items`,{
+                  const resp=  await fetch(`https://milkmanage.in/api/items`,{
                     method:"POST",
                     headers:{
                       "Content-Type":"application/json",
@@ -222,6 +222,11 @@ const purchaseMilk = () => {
                   progress: undefined,
                   theme: "light",
               });
+              setConsumerCode(0);
+              setSelectedConsumer(null);
+              setSelectedItem(null);
+              setSelectedtype('Sell');
+              setRemarks('');
               }
               else if(response.success=='duplicate'){
                 toast.error('Inserted Already', {

@@ -42,7 +42,7 @@ export default function Contact() {
   const handleSubmit = async () => {
     if (name.length > 0 && mobile.length === 10 && message.length > 0) {
       const data = { uname: name, mobile, message };
-      const res = await fetch(`http://localhost:3000/api/contact`, {
+      const res = await fetch(`https://milkmanage.in/api/contact`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'

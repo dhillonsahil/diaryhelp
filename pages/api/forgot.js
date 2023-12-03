@@ -89,7 +89,7 @@ const forgot = async (req, res) => {
     from: 'sahil2002427@gmail.com',
     to: customerMail,
     subject: 'Reset Password - Milk Manage',
-    text: `To Reset Your Password Click on the Link http://localhost:3000/forgot?id=${resetToken}`
+    text: `To Reset Your Password Click on the Link https://milkmanage.in/forgot?id=${resetToken}`
   };
 
   transporter.sendMail(option, async function (error, info) {

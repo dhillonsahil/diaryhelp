@@ -41,7 +41,7 @@ const dashboard = () => {
   },[token])
 
   const getData =async()=>{
-    const resp  =await fetch(`http://localhost:3000/api/home`,{
+    const resp  =await fetch(`https://milkmanage.in/api/home`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json",

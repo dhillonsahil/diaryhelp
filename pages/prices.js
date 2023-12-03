@@ -64,7 +64,7 @@ export default function ThreeTierPricing() {
                 ₹
               </Text>
               <Text fontSize="5xl" fontWeight="900">
-                599
+                1299
               </Text>
               <Text fontSize="3xl" color="gray.500">
                 /month
@@ -145,7 +145,7 @@ export default function ThreeTierPricing() {
                 ₹
                 </Text>
                 <Text fontSize="5xl" fontWeight="900">
-                  7000
+                  10,000
                 </Text>
                 <Text fontSize="3xl" color="gray.500">
                   /year
@@ -199,14 +199,14 @@ export default function ThreeTierPricing() {
         <PriceWrapper>
           <Box py={4} px={12}>
             <Text fontWeight="500" fontSize="2xl">
-              Custom Features
+              6 Months
             </Text>
             <HStack justifyContent="center">
               <Text fontSize="3xl" fontWeight="600">
                 ₹
               </Text>
               <Text fontSize="5xl" fontWeight="900">
-                8000
+                6500
               </Text>
               <Text fontSize="3xl" color="gray.500">
                 /year 
